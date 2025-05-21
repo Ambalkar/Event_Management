@@ -1,4 +1,3 @@
-# Event_Management
 # Event Management System
 
 ## Project Description
