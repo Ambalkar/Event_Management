@@ -1,0 +1,19 @@
+event-management
+├── src
+│   └── main
+│       ├── java
+│       │   └── com
+│       │       └── example
+│       │           └── eventmanagement
+│       │               ├── model
+│       │               │   └── Event.java
+│       │               ├── servlet
+│       │               └── util
+│       ├── resources
+│       └── webapp
+│           └── WEB-INF
+│               └── views
+├── Dockerfile
+├── .dockerignore
+├── pom.xml
+└── README.md
