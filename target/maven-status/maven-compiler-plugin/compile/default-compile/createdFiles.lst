@@ -1,0 +1,8 @@
+com\example\eventmanagement\model\Event.class
+com\example\eventmanagement\servlet\UserServlet.class
+com\example\eventmanagement\util\DBConnection.class
+com\example\eventmanagement\model\User.class
+com\example\eventmanagement\model\Participation.class
+com\example\eventmanagement\servlet\TestDBServlet.class
+com\example\eventmanagement\servlet\AdminServlet.class
+com\example\eventmanagement\servlet\MyEventsServlet.class
