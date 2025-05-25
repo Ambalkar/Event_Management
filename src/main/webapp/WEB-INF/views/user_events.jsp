@@ -7,13 +7,11 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user.css">
 </head>
 <body>
-    <div class="container">
-        <nav class="navigation-bar">
-            <h1>Available Events</h1>
+    <div class="container">        <nav class="navigation-bar">
+            <h1>Events</h1>
             <div class="nav-links">
                 <a href="user" class="nav-link">Available Events</a>
-                <a href="my-events" class="nav-link active">My Events</a>
-                <span class="user-email">${sessionScope.userEmail}</span>
+                <a href="myEvents" class="nav-link">My Events</a>
             </div>
         </nav>
         

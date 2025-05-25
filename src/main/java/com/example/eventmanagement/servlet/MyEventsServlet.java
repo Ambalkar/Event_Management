@@ -18,41 +18,31 @@ import com.example.eventmanagement.model.Event;
 import com.example.eventmanagement.model.Participation;
 import com.example.eventmanagement.util.DBConnection;
 
-@WebServlet("/my-events")
+@WebServlet("/myEvents")
 public class MyEventsServlet extends HttpServlet {
+
     private static final long serialVersionUID = 1L;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            // Get email from session
-            String email = (String) request.getSession().getAttribute("userEmail");
-            
-            if (email == null || email.isEmpty()) {
-                response.sendRedirect("login"); // Redirect to login if no email in session
-                return;
-            }
-            
-            List<Participation> participations = new ArrayList<>();
+        List<Participation> participations = new ArrayList<>();
 
-            try (Connection conn = DBConnection.getConnection()) {
-                String sql = "SELECT p.id, p.participant_id, p.name as participant_name, p.email, p.registration_date, " +
-                            "e.event_id, e.name as event_name, e.date, e.location, e.description " +
-                            "FROM participations p " +
-                            "JOIN events e ON p.event_id = e.event_id " +
-                            "WHERE p.email = ? ORDER BY p.registration_date DESC";
-                
-                PreparedStatement stmt = conn.prepareStatement(sql);
-                stmt.setString(1, email);
+        try (Connection conn = DBConnection.getConnection()) {
+            String sql = "SELECT u.name AS participant_name, u.email, u.digital_id, "
+                    + "e.event_id, e.name AS event_name, e.date, e.location, e.description "
+                    + "FROM users u "
+                    + "JOIN events e ON u.booked_event_id = e.event_id "
+                    + "ORDER BY e.date DESC";
+
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 ResultSet rs = stmt.executeQuery();
 
                 while (rs.next()) {
                     Participation participation = new Participation();
-                    participation.setId(rs.getInt("id"));
-                    participation.setParticipantId(rs.getString("participant_id"));
                     participation.setName(rs.getString("participant_name"));
                     participation.setEmail(rs.getString("email"));
-                    participation.setRegistrationDate(rs.getTimestamp("registration_date").toLocalDateTime());
+                    participation.setParticipantId(rs.getString("digital_id"));
 
                     Event event = new Event();
                     event.setId(rs.getInt("event_id"));
@@ -64,13 +54,14 @@ public class MyEventsServlet extends HttpServlet {
                     participation.setEvent(event);
                     participations.add(participation);
                 }
-
-                request.setAttribute("participations", participations);
-                request.getRequestDispatcher("/WEB-INF/views/my_events.jsp").forward(request, response);
-
-            } catch (SQLException e) {
-                request.setAttribute("error", "Database error: " + e.getMessage());
-                request.getRequestDispatcher("/WEB-INF/views/error.jsp").forward(request, response);
             }
+
+            request.setAttribute("participations", participations);
+            request.getRequestDispatcher("/WEB-INF/views/my_events.jsp").forward(request, response);
+
+        } catch (SQLException e) {
+            request.setAttribute("error", "Database error: " + e.getMessage());
+            request.getRequestDispatcher("/WEB-INF/views/error.jsp").forward(request, response);
         }
+    }
 }

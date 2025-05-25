@@ -126,74 +126,75 @@
 
 .my-events-list {
     display: grid;
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 25px;
     padding: 20px 0;
 }
 
 .participant-card {
     background: #ffffff;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
 }
 
-.participant-details {
-    background: #f8f9fa;
-    padding: 15px;
-    border-radius: 6px;
+.participant-card:hover {
+    transform: translateY(-5px);
+}
+
+.participant-details, .event-details {
     margin: 15px 0;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
 }
 
-.participant-details p {
-    margin: 8px 0;
-}
-
-.navigation {
-    margin-top: 20px;
-    text-align: center;
-}
-
-.btn-secondary {
-    background-color: #6c757d;
-    color: white;
-    padding: 8px 16px;
+.digital-id {
+    font-family: 'Courier New', monospace;
+    background: #e9ecef;
+    padding: 8px 12px;
     border-radius: 4px;
-    text-decoration: none;
+    font-size: 1.1em;
+    letter-spacing: 1px;
     display: inline-block;
+    margin-top: 5px;
 }
 
-.btn-secondary:hover {
-    background-color: #5a6268;
+.event-title {
+    color: #2c3e50;
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 10px;
 }
 
 .navigation-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 0;
-    margin-bottom: 2rem;
-    border-bottom: 1px solid #eee;
+    margin-bottom: 30px;
+    padding: 15px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .nav-links {
     display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem;
-    background-color: #fff;
-    border-bottom: 1px solid #dee2e6;
+    gap: 15px;
 }
 
 .nav-link {
-    padding: 0.5rem 1rem;
     text-decoration: none;
-    color: #333;
+    color: #2c3e50;
+    padding: 8px 16px;
     border-radius: 4px;
     transition: background-color 0.2s;
 }
 
 .nav-link:hover {
-    background-color: #f0f0f0;
+    background-color: #f0f2f5;
 }
 
 .nav-link.active {

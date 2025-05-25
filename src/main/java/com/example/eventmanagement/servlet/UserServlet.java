@@ -78,9 +78,8 @@ public class UserServlet extends HttpServlet {
                 LOGGER.log(Level.SEVERE, "Error closing database resources", e);
             }
         }
-    }
+    }    // Handle event booking
 
-    // Handle event booking
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int eventId = Integer.parseInt(request.getParameter("event_id"));
@@ -110,36 +109,21 @@ public class UserServlet extends HttpServlet {
             }
 
             // Generate digital ID
-            String digitalId = UUID.randomUUID().toString();
+            String digitalId = UUID.randomUUID().toString().substring(0, 8).toUpperCase();
 
-            // Insert or update user booking
-            String userCheckSql = "SELECT user_id FROM users WHERE email = ?";
-            PreparedStatement userCheckStmt = conn.prepareStatement(userCheckSql);
-            userCheckStmt.setString(1, userEmail);
-            ResultSet userRs = userCheckStmt.executeQuery();
+            // Create or update user record with booking
+            String upsertSql = "INSERT INTO users (name, email, booked_event_id, digital_id) VALUES (?, ?, ?, ?) "
+                    + "ON DUPLICATE KEY UPDATE name = ?, booked_event_id = ?, digital_id = ?";
 
-            if (userRs.next()) {
-                // Update existing user booking
-                int userId = userRs.getInt("user_id");
-                String updateSql = "UPDATE users SET name = ?, booked_event_id = ?, digital_id = ? WHERE user_id = ?";
-                PreparedStatement updateStmt = conn.prepareStatement(updateSql);
-                updateStmt.setString(1, userName);
-                updateStmt.setInt(2, eventId);
-                updateStmt.setString(3, digitalId);
-                updateStmt.setInt(4, userId);
-                updateStmt.executeUpdate();
-            } else {
-                // Insert new user booking
-                String insertSql = "INSERT INTO users (name, email, booked_event_id, digital_id) VALUES (?, ?, ?, ?)";
-                PreparedStatement insertStmt = conn.prepareStatement(insertSql);
-                insertStmt.setString(1, userName);
-                insertStmt.setString(2, userEmail);
-                insertStmt.setInt(3, eventId);
-                insertStmt.setString(4, digitalId);
-                insertStmt.executeUpdate();
-            }
-
-            // Update current guests count
+            PreparedStatement upsertStmt = conn.prepareStatement(upsertSql);
+            upsertStmt.setString(1, userName);
+            upsertStmt.setString(2, userEmail);
+            upsertStmt.setInt(3, eventId);
+            upsertStmt.setString(4, digitalId);
+            upsertStmt.setString(5, userName);
+            upsertStmt.setInt(6, eventId);
+            upsertStmt.setString(7, digitalId);
+            upsertStmt.executeUpdate();            // Update current guests count
             String updateGuestsSql = "UPDATE events SET current_guests = current_guests + 1 WHERE event_id = ?";
             PreparedStatement updateGuestsStmt = conn.prepareStatement(updateGuestsSql);
             updateGuestsStmt.setInt(1, eventId);
