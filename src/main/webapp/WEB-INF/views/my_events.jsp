@@ -46,31 +46,38 @@
             text-decoration: none;
             color: white;
             background: #007bff;
-        }
-        .btn:hover {
+        }        .btn:hover {
             background: #0056b3;
+        }        .header-section {
+            position: relative;
+            text-align: center;
+            margin-bottom: 20px;
+            padding-top: 20px;
+        }
+        .header-section h1 {
+            margin: 0;
         }
         .home-btn {
-    display: inline-block;
-    margin-left: 15px;
-    padding: 10px 20px;
-    background-color: #6c757d;
-    color: white;
-    text-decoration: none;
-    border-radius: 4px;
-}
-
-.home-btn:hover {
-    background-color: #5a6268;
-}
+            position: absolute;
+            right: 0;
+            top: 0;
+            display: inline-block;
+            padding: 5px 10px;
+            background-color: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+        .home-btn:hover {
+            background-color: #5a6268;
+        }
     </style>
 </head>
-<body>
-    <div class="container">
-        <h1>My Events</h1>
-         <div class="header-section">
-           
-            <a href="${pageContext.request.contextPath}/index.jsp" class="btn btn-secondary home-btn">Home</a>
+<body>    <div class="container">
+        <div class="header-section">
+            <a href="${pageContext.request.contextPath}/index.jsp" class="home-btn">Home</a>
+            <h1>My Events</h1>
         </div>
         <div class="my-events-list">
             <c:forEach var="participation" items="${participations}">

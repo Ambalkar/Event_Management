@@ -38,28 +38,37 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
-        }        .header-section {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            gap: 20px;
+        }
+        .header-section {
+            padding: 10px 0;
             margin-bottom: 20px;
+            position: relative;
         }
         .home-btn {
+            display: inline-block;
             text-decoration: none;
-            padding: 6px 12px;
+            padding: 5px 10px;
             background-color: #6c757d;
             color: white;
-            border-radius: 4px;
+            border-radius: 3px;
             font-size: 14px;
+            position: absolute;
+            left: 0;
+            top: 0;
         }
         .home-btn:hover {
             background-color: #5a6268;
         }
+        h1 {
+            text-align: center;
+            margin: 0 auto;
+            padding-top: 5px;
+        }
     </style>
 </head>
 <body>
-<div class="container">    <div class="header-section">
+<div class="container">
+    <div class="header-section">
         <a href="${pageContext.request.contextPath}/index.jsp" class="home-btn">Home</a>
         <h1>Event Booking</h1>
     </div>

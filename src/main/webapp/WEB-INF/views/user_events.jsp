@@ -6,13 +6,12 @@
     <title>Event Booking - Event Management System</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user.css">
 </head>
-<body>
-     <div class="header-section">
-            <h1>Admin Dashboard</h1>
-            <a href="${pageContext.request.contextPath}/index.jsp" class="btn btn-secondary home-btn">Home</a>
-        </div>
-    <div class="container">        <nav class="navigation-bar">
+<body>    <div class="container">
+        <div class="header-section">
+            <a href="${pageContext.request.contextPath}/index.jsp" class="home-btn">Home</a>
             <h1>Events</h1>
+        </div>
+        <nav class="navigation-bar">
             <div class="nav-links">
                 <a href="user" class="nav-link">Available Events</a>
                 <a href="myEvents" class="nav-link">My Events</a>
