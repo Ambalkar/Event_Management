@@ -78,6 +78,22 @@ h1, h2 {
     background-color: #c0392b;
 }
 
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    text-decoration: none;
+    color: white;
+}
+
 .event-table {
     width: 100%;
     border-collapse: collapse;
@@ -123,4 +139,27 @@ h1, h2 {
 
 .text-center {
     text-align: center;
+}
+
+.header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px 0;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.home-btn {
+    display: inline-block;
+    margin-left: 15px;
+    padding: 10px 20px;
+    background-color: #6c757d;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.home-btn:hover {
+    background-color: #5a6268;
 }

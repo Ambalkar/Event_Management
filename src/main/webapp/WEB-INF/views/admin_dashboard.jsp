@@ -8,7 +8,10 @@
 </head>
 <body>
     <div class="container">
-        <h1>Admin Dashboard</h1>
+        <div class="header-section">
+            <h1>Admin Dashboard</h1>
+            <a href="${pageContext.request.contextPath}/index.jsp" class="btn btn-secondary home-btn">Home</a>
+        </div>
 
         <div class="event-form">
             <h2>Add New Event</h2>

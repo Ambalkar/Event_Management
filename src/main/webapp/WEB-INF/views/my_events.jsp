@@ -50,12 +50,28 @@
         .btn:hover {
             background: #0056b3;
         }
+        .home-btn {
+    display: inline-block;
+    margin-left: 15px;
+    padding: 10px 20px;
+    background-color: #6c757d;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.home-btn:hover {
+    background-color: #5a6268;
+}
     </style>
 </head>
 <body>
     <div class="container">
         <h1>My Events</h1>
-        
+         <div class="header-section">
+           
+            <a href="${pageContext.request.contextPath}/index.jsp" class="btn btn-secondary home-btn">Home</a>
+        </div>
         <div class="my-events-list">
             <c:forEach var="participation" items="${participations}">
                 <div class="event-card">

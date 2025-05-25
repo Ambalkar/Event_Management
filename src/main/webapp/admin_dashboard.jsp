@@ -10,8 +10,12 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin.css">
 </head>
 <body>
+    
 <div class="container">
-    <h1>Admin Dashboard</h1>
+    <div class="header-section">
+        <h1>Admin Dashboard</h1>
+        <a href="${pageContext.request.contextPath}/index.jsp" class="btn btn-secondary home-btn">Home</a>
+    </div>
 
     <c:if test="${not empty error}">
         <div class="alert alert-danger">${error}</div>

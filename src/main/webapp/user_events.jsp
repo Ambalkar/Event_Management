@@ -4,6 +4,7 @@
 <html>
 <head>
     <title>User Event Booking - Event Management System</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user.css">
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
         table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
@@ -33,10 +34,35 @@
             background-color: #d4edda;
             color: #155724;
         }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }        .header-section {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .home-btn {
+            text-decoration: none;
+            padding: 6px 12px;
+            background-color: #6c757d;
+            color: white;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .home-btn:hover {
+            background-color: #5a6268;
+        }
     </style>
 </head>
 <body>
-<h1>Event Booking</h1>
+<div class="container">    <div class="header-section">
+        <a href="${pageContext.request.contextPath}/index.jsp" class="home-btn">Home</a>
+        <h1>Event Booking</h1>
+    </div>
 
 <%
     String errorMessage = (String) request.getAttribute("errorMessage");
@@ -91,6 +117,6 @@
         }
     %>
 </table>
-
+</div>
 </body>
 </html>

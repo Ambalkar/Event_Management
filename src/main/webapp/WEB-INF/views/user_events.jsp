@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user.css">
 </head>
 <body>
+     <div class="header-section">
+            <h1>Admin Dashboard</h1>
+            <a href="${pageContext.request.contextPath}/index.jsp" class="btn btn-secondary home-btn">Home</a>
+        </div>
     <div class="container">        <nav class="navigation-bar">
             <h1>Events</h1>
             <div class="nav-links">

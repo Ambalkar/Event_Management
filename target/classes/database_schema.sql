@@ -37,16 +37,7 @@ CREATE TABLE IF NOT EXISTS participations (
     UNIQUE KEY unique_participant (email, event_id)
 );
 
--- Sample data for events
-INSERT INTO events (name, date, location, description, guest_limit, current_guests) VALUES
-('Tech Conference 2024', '2024-09-15', 'Convention Center', 'Annual technology conference.', 100, 0),
-('Music Festival', '2024-08-20', 'City Park', 'Outdoor music festival.', 200, 0),
-('Art Exhibition', '2024-10-05', 'Art Gallery', 'Modern art exhibition.', 50, 0);
 
--- Sample data for users
-INSERT INTO users (name, email) VALUES
-('Alice Johnson', 'alice@example.com'),
-('Bob Smith', 'bob@example.com');
 
 -- Indexes
 CREATE INDEX idx_event_date ON events(date);
