@@ -8,6 +8,128 @@
 <head>
     <title>Admin Dashboard - Event Management System</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin.css">
+    
+    <style>
+        .event-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+        }
+
+        .event-table th,
+        .event-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        /* Column width specifications */
+        .event-table td:nth-child(1) { /* ID column */
+            width: 5%;
+        }
+
+        .event-table td:nth-child(2) { /* Name column */
+            width: 15%;
+        }
+
+        .event-table td:nth-child(3) { /* Date column */
+            width: 12%;
+        }
+
+        .event-table td:nth-child(4) { /* Location column */
+            width: 15%;
+        }
+
+        .event-table td:nth-child(5) { /* Description column */
+            width: 25%;
+        }
+
+        .event-table td:nth-child(6) { /* Guest Limit column */
+            width: 8%;
+        }
+
+        .event-table td:nth-child(7) { /* Current Guests column */
+            width: 8%;
+        }
+
+        .event-table td:nth-child(8) { /* Actions column */
+            width: 12%;
+        }
+
+        /* Input styling */
+        .event-table input[type="date"] {
+            width: 100%;
+            max-width: 140px;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: var(--input-background);
+            color: var(--text-primary);
+        }
+
+        .event-table input[type="text"],
+        .event-table input[type="number"],
+        .event-table textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: var(--input-background);
+            color: var(--text-primary);
+        }
+
+        /* Form input styling */
+.event-form .form-group {
+    margin-bottom: 1.5rem;
+    width: 100%;
+}
+
+.event-form .form-control {
+    width: 100%;
+    max-width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--input-background);
+    color: var(--text-primary);
+}
+
+/* Specific date input styling */
+.event-form input[type="date"].form-control {
+    width: auto;
+    min-width: 200px;
+    max-width: 200px;
+    appearance: none;
+    -webkit-appearance: none;
+    padding: 0.75rem;
+}
+
+/* Make form layout more consistent */
+.event-form {
+    background: var(--card-background);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 3rem;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+    .event-form input[type="date"].form-control {
+        width: 100%;
+        max-width: 100%;
+    }
+}
+
+        /* Responsive adjustments */
+        @media screen and (max-width: 1024px) {
+            .event-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
+    </style>
 </head>
 <body>
     
@@ -76,14 +198,14 @@
             <c:forEach var="event" items="${events}">                <tr>
     <form method="post" action="${pageContext.request.contextPath}/admin" class="event-form">
         <input type="hidden" name="event_id" value="${event.id}">
-        <td>${event.id}</td>
-        <td><input type="text" name="name" value="${event.name}" class="form-control" required></td>
-        <td><input type="date" name="date" value="${event.date}" class="form-control" required></td>
-        <td><input type="text" name="location" value="${event.location}" class="form-control" required></td>
-        <td><textarea name="description" class="form-control">${event.description}</textarea></td>
-        <td><input type="number" name="guest_limit" value="${event.guestLimit}" class="form-control" min="1" required></td>
-        <td>${event.currentGuests}</td>
-        <td>
+        <td class="id-cell">${event.id}</td>
+        <td class="name-cell"><input type="text" name="name" value="${event.name}" required></td>
+        <td class="date-cell"><input type="date" name="date" value="${event.date}" required></td>
+        <td class="location-cell"><input type="text" name="location" value="${event.location}" required></td>
+        <td class="description-cell"><textarea name="description">${event.description}</textarea></td>
+        <td class="guest-limit-cell"><input type="number" name="guest_limit" value="${event.guestLimit}" min="1" required></td>
+        <td class="current-guests-cell">${event.currentGuests}</td>
+        <td class="actions-cell">
             <button type="submit" name="action" value="update" class="btn btn-primary">Update</button>
             <button type="submit" name="action" value="delete" class="btn btn-danger" 
                     onclick="return confirm('Are you sure you want to delete this event?')">Delete</button>

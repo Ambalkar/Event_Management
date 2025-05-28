@@ -160,26 +160,49 @@
         }
 
         .form-group input[type="date"] {
+            width: 100%;    /* Make it full width like other inputs */
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            background: var(--input-background);
+            color: var(--text-primary);
+            font-size: 1rem;
             position: relative;
-            padding-right: 2.5rem;
             cursor: pointer;
-            background: var(--input-background) url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%2360a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>') no-repeat right 0.75rem center;
-            background-size: 1.25rem;
         }
 
+        /* Table specific date column styling */
+        .event-table .date-column {
+            width: 15%;  /* Match other columns */
+        }
+
+        .event-table input[type="date"] {
+            width: 100%;
+            min-width: unset;
+            padding: 0.5rem;
+        }
+
+        /* Remove default date picker styling */
+        .form-group input[type="date"]::-webkit-inner-spin-button,
         .form-group input[type="date"]::-webkit-calendar-picker-indicator {
             opacity: 0;
             position: absolute;
             right: 0;
             top: 0;
+            bottom: 0;
             width: 100%;
-            height: 100%;
             cursor: pointer;
         }
 
-        .form-group input[type="date"]:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.3);
+        /* Add custom date format placeholder */
+        .form-group input[type="date"]::before {
+            content: attr(placeholder);
+            position: absolute;
+            color: var(--text-secondary);
+        }
+
+        .form-group input[type="date"]:focus::before {
+            display: none;
         }
 
         .form-group input[type="file"] {
@@ -399,7 +422,8 @@
         }
 
         .event-table .date-column {
-            width: 12%;
+            width: 15%;  /* Match other columns */
+            white-space: normal;  /* Allow text to wrap */
         }
 
         .event-table .location-column {
@@ -482,6 +506,11 @@
             
             .event-table .btn {
                 width: 100%;
+            }
+
+            .event-table .date-column {
+                min-width: unset;
+                width: 15%;
             }
         }
     </style>
