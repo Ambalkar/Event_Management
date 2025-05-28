@@ -111,19 +111,16 @@ public class UserServlet extends HttpServlet {
             // Generate digital ID
             String digitalId = UUID.randomUUID().toString().substring(0, 8).toUpperCase();
 
-            // Create or update user record with booking
-            String upsertSql = "INSERT INTO users (name, email, booked_event_id, digital_id) VALUES (?, ?, ?, ?) "
-                    + "ON DUPLICATE KEY UPDATE name = ?, booked_event_id = ?, digital_id = ?";
+            // Insert new booking record
+            String insertSql = "INSERT INTO users (name, email, booked_event_id, digital_id) VALUES (?, ?, ?, ?)";
+            PreparedStatement insertStmt = conn.prepareStatement(insertSql);
+            insertStmt.setString(1, userName);
+            insertStmt.setString(2, userEmail);
+            insertStmt.setInt(3, eventId);
+            insertStmt.setString(4, digitalId);
+            insertStmt.executeUpdate();
 
-            PreparedStatement upsertStmt = conn.prepareStatement(upsertSql);
-            upsertStmt.setString(1, userName);
-            upsertStmt.setString(2, userEmail);
-            upsertStmt.setInt(3, eventId);
-            upsertStmt.setString(4, digitalId);
-            upsertStmt.setString(5, userName);
-            upsertStmt.setInt(6, eventId);
-            upsertStmt.setString(7, digitalId);
-            upsertStmt.executeUpdate();            // Update current guests count
+            // Update current guests count
             String updateGuestsSql = "UPDATE events SET current_guests = current_guests + 1 WHERE event_id = ?";
             PreparedStatement updateGuestsStmt = conn.prepareStatement(updateGuestsSql);
             updateGuestsStmt.setInt(1, eventId);

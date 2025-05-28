@@ -27,15 +27,18 @@ public class MyEventsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         List<Participation> participations = new ArrayList<>();
+        String userEmail = request.getParameter("email");
 
         try (Connection conn = DBConnection.getConnection()) {
             String sql = "SELECT u.name AS participant_name, u.email, u.digital_id, "
                     + "e.event_id, e.name AS event_name, e.date, e.location, e.description "
                     + "FROM users u "
                     + "JOIN events e ON u.booked_event_id = e.event_id "
+                    + "WHERE u.email = ? "
                     + "ORDER BY e.date DESC";
 
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setString(1, userEmail);
                 ResultSet rs = stmt.executeQuery();
 
                 while (rs.next()) {
