@@ -17,13 +17,16 @@
             --light-color: #ffffff;
             --gradient-start: #3b82f6;
             --gradient-end: #8b5cf6;
-            --card-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.3);
+            --card-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
             --hover-transform: translateY(-5px);
             --background-color: #0f172a;
-            --card-background: rgba(30, 41, 59, 0.95);
-            --text-primary: #f8fafc;
+            --card-background: rgba(15, 23, 42, 0.95);
+            --text-primary: #ffffff;
             --text-secondary: #e2e8f0;
-            --border-color: rgba(255, 255, 255, 0.2);
+            --border-color: rgba(255, 255, 255, 0.3);
+            --input-background: rgba(30, 41, 59, 0.8);
+            --hover-background: rgba(255, 255, 255, 0.1);
+            --container-background: rgba(15, 23, 42, 0.8);
         }
 
         body {
@@ -39,11 +42,16 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
+            background: var(--container-background);
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
         }
 
         .header-section {
             background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-            color: white;
+            color: var(--text-primary);
             padding: 2rem;
             border-radius: 15px;
             margin-bottom: 2rem;
@@ -70,25 +78,26 @@
             margin: 0;
             font-size: 2.5em;
             text-align: center;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
             position: relative;
+            color: var(--text-primary);
         }
 
         .home-btn {
             position: absolute;
             right: 20px;
             top: 20px;
-            color: white;
+            color: var(--text-primary);
             text-decoration: none;
             padding: 10px 20px;
             border-radius: 25px;
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.2);
             transition: all 0.3s ease;
-            border: 1px solid rgba(255,255,255,0.3);
+            border: 1px solid rgba(255,255,255,0.4);
         }
 
         .home-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.3);
             transform: var(--hover-transform);
             box-shadow: var(--card-shadow);
         }
@@ -100,6 +109,7 @@
             box-shadow: var(--card-shadow);
             margin-bottom: 2rem;
             border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
         }
 
         .nav-links {
@@ -143,6 +153,7 @@
             position: relative;
             overflow: hidden;
             border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
         }
 
         .event-card:hover {
@@ -157,6 +168,7 @@
             position: relative;
             padding-bottom: 1rem;
             border-bottom: 1px solid var(--border-color);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
         }
 
         .event-card p {
@@ -213,20 +225,20 @@
             border-radius: 10px;
             font-size: 0.875rem;
             transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--input-background);
             color: var(--text-primary);
         }
 
         .form-group input:focus {
             border-color: var(--primary-color);
             outline: none;
-            background: rgba(255, 255, 255, 0.1);
+            background: var(--input-background);
             box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
         }
 
         .btn-primary {
             background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-            color: white;
+            color: var(--text-primary);
             border: none;
             padding: 0.75rem 1.5rem;
             border-radius: 25px;
@@ -237,11 +249,13 @@
             transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 1px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
         }
 
         .btn-primary:hover {
             transform: var(--hover-transform);
             box-shadow: var(--card-shadow);
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
         }
 
         .fully-booked {
@@ -268,6 +282,7 @@
             gap: 0.75rem;
             animation: slideIn 0.3s ease;
             border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
         }
 
         .alert.success {
@@ -292,6 +307,7 @@
             box-shadow: var(--card-shadow);
             animation: fadeIn 0.5s ease;
             border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
         }
 
         @keyframes fadeIn {
@@ -313,6 +329,11 @@
         }
 
         @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+                margin: 1rem;
+            }
+            
             .events-list {
                 grid-template-columns: 1fr;
             }
