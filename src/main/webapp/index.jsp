@@ -262,25 +262,39 @@
 
         /* Footer */
         footer {
-            background: linear-gradient(135deg, #1a365d 0%, #0f2942 100%);
-            padding: 4rem 0 2rem;
-            margin-top: 4rem;
-            border-top: 1px solid var(--border-color);
+            background: linear-gradient(165deg, #1a365d 0%, #0f2942 100%);
+            padding: 6rem 0 2rem;
+            margin-top: 6rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
         }
 
         .footer-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 3rem;
-            margin-bottom: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 4rem;
+            margin-bottom: 4rem;
+            position: relative;
         }
 
         .footer-section h4 {
             color: var(--text-primary);
-            font-size: 1.25rem;
-            margin-bottom: 1.5rem;
+            font-size: 1.4rem;
+            margin-bottom: 2rem;
             position: relative;
-            padding-bottom: 0.75rem;
+            padding-bottom: 1rem;
+            font-weight: 600;
         }
 
         .footer-section h4::after {
@@ -288,134 +302,152 @@
             position: absolute;
             bottom: 0;
             left: 0;
-            width: 50px;
+            width: 60px;
             height: 3px;
-            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-            border-radius: 2px;
-        }
-
-        .footer-section ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 3px;
         }
 
         .footer-section ul li {
-            margin-bottom: 1rem;
+            margin-bottom: 1.2rem;
         }
 
         .footer-section ul li a {
             color: var(--text-secondary);
             text-decoration: none;
-            transition: all 0.3s ease;
-            display: inline-flex;
+            display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.8rem;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
         }
 
         .footer-section ul li a:hover {
             color: var(--primary-color);
-            transform: translateX(5px);
+            transform: translateX(8px);
+            background: rgba(255, 255, 255, 0.08);
         }
 
         .footer-section ul li a i {
-            font-size: 0.875rem;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(96, 165, 250, 0.15);
+            border-radius: 6px;
             color: var(--primary-color);
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding-top: 2rem;
-            border-top: 1px solid var(--border-color);
-            color: var(--text-secondary);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
         }
 
         .social-links {
             display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
+            gap: 1.2rem;
+            margin-top: 2rem;
         }
 
         .social-link {
             color: var(--text-secondary);
             font-size: 1.5rem;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
             transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .social-link:hover {
             color: var(--primary-color);
-            transform: translateY(-3px);
-        }
-
-        /* Buttons */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-            padding: 1rem 2.5rem;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-            border: none;
-            font-size: 1.1rem;
-            min-width: 140px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .primary-btn {
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-            color: var(--text-primary);
-            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
-        }
-
-        .primary-btn:hover {
-            transform: var(--hover-transform);
-            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
-        }
-
-        .secondary-btn {
+            transform: translateY(-5px);
             background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary-color);
+        }
+
+        .newsletter-signup {
+            margin-top: 2.5rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .newsletter-signup h5 {
             color: var(--text-primary);
-            border: 1px solid var(--border-color);
-            backdrop-filter: blur(10px);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
         }
 
-        .secondary-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: var(--border-color);
-            transform: var(--hover-transform);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        .newsletter-form .form-group {
+            display: flex;
+            gap: 0.8rem;
         }
 
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .newsletter-form input {
+            flex: 1;
+            padding: 0.8rem 1.2rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
         }
 
-        @keyframes float {
-            0% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-            100% {
-                transform: translateY(0px);
-            }
+        .newsletter-form input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: rgba(255, 255, 255, 0.08);
         }
 
-        /* Responsive Design */
+        .newsletter-form button {
+            padding: 0.8rem 1.2rem;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2.5rem;
+            margin-top: 2.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-bottom p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .footer-meta {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .footer-meta a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .footer-meta a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-meta .separator {
+            color: rgba(255, 255, 255, 0.2);
+        }
+
         @media (max-width: 768px) {
             .nav-container {
                 flex-direction: column;
@@ -456,6 +488,20 @@
 
             .container {
                 padding: 1rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .newsletter-form .form-group {
+                flex-direction: column;
+            }
+
+            .newsletter-form button {
+                width: 100%;
             }
         }
     </style>
@@ -562,33 +608,58 @@
         </div>
     </section>
 
-    <!-- About Section -->
+    <!-- About Section with improved contrast -->
     <section class="about-section">
         <div class="container">
-            <h2 class="section-title">About Us</h2>
-            <p class="section-subtitle">Empowering event success through innovation</p>
+            <h2 class="section-title">About The Project</h2>
+            <p class="section-subtitle" style="color: #ffffff; font-size: 1.2rem; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                A Solo Developer Initiative for Advanced Event Management
+            </p>
             
-            <div class="about-content">
+            <div class="about-content" style="background: rgba(15, 23, 42, 0.95); padding: 2rem; border-radius: 15px; border: 1px solid var(--border-color);">
                 <div class="mission-vision">
-                    <h3>Our Mission</h3>
-                    <p>To simplify event management and create memorable experiences through technology</p>
+                    <div class="about-card" style="margin-bottom: 2rem;">
+                        <h3 style="color: var(--primary-color); font-size: 1.5rem; margin-bottom: 1rem;">
+                            <i class="fas fa-bullseye"></i> Project Mission
+                        </h3>
+                        <p style="color: #ffffff; line-height: 1.8; font-size: 1.1rem;">
+                            To revolutionize event management through innovative technology, making it accessible and efficient for everyone.
+                        </p>
+                    </div>
                     
-                    <h3>Our Vision</h3>
-                    <p>To become the world's most trusted event management platform</p>
+                    <div class="about-card">
+                        <h3 style="color: var(--primary-color); font-size: 1.5rem; margin-bottom: 1rem;">
+                            <i class="fas fa-eye"></i> Development Vision
+                        </h3>
+                        <p style="color: #ffffff; line-height: 1.8; font-size: 1.1rem;">
+                            Creating a robust, scalable, and user-friendly platform that sets new standards in event management solutions.
+                        </p>
+                    </div>
                 </div>
                 
-                <div class="team-section">
-                    <h3>Leadership Team</h3>
-                    <div class="team-grid">
-                        <div class="team-member">
-                            <img src="${pageContext.request.contextPath}/images/eventbg1.jpg" alt="Team Member">
-                            <h4>Sarah Johnson</h4>
-                            <p>CEO & Founder</p>
+                <div class="developer-section" style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+                    <h3 style="color: var(--primary-color); font-size: 1.5rem; margin-bottom: 1.5rem;">
+                        <i class="fas fa-code"></i> About the Developer
+                    </h3>
+                    <div class="developer-info" style="display: flex; align-items: center; gap: 2rem;">
+                        <div class="developer-image" style="flex-shrink: 0;">
+                            <img src="${pageContext.request.contextPath}/images/developer.jpg" 
+                                 alt="Developer Profile" 
+                                 style="width: 120px; height: 120px; border-radius: 60px; object-fit: cover; 
+                                        border: 3px solid var(--primary-color); 
+                                        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);">
                         </div>
-                        <div class="team-member">
-                            <img src="${pageContext.request.contextPath}/images/eventbg2.jpg" alt="Team Member">
-                            <h4>Michael Chen</h4>
-                            <p>Technical Director</p>
+                        <div class="developer-details">
+                            <h4 style="color: #ffffff; font-size: 1.3rem; margin-bottom: 0.5rem;">Full Stack Developer</h4>
+                            <p style="color: #e2e8f0; line-height: 1.6;">
+                                Specialized in Java, Spring Framework, and modern web technologies. Passionate about creating efficient and scalable solutions.
+                            </p>
+                            <div class="developer-skills" style="margin-top: 1rem;">
+                                <span style="background: rgba(59, 130, 246, 0.2); color: #ffffff; padding: 0.3rem 0.8rem; border-radius: 15px; margin-right: 0.5rem; font-size: 0.9rem;">Java</span>
+                                <span style="background: rgba(59, 130, 246, 0.2); color: #ffffff; padding: 0.3rem 0.8rem; border-radius: 15px; margin-right: 0.5rem; font-size: 0.9rem;">Spring</span>
+                                <span style="background: rgba(59, 130, 246, 0.2); color: #ffffff; padding: 0.3rem 0.8rem; border-radius: 15px; margin-right: 0.5rem; font-size: 0.9rem;">MySQL</span>
+                                <span style="background: rgba(59, 130, 246, 0.2); color: #ffffff; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.9rem;">Web Dev</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -634,85 +705,149 @@
         <div class="container">
             <h2 class="section-title">Join Our Team</h2>
             <p class="section-subtitle">Explore exciting internship opportunities</p>
-            <a href="${pageContext.request.contextPath}/careers" class="btn primary-btn">
+            <a href="https://credora.space" target="_blank" class="btn primary-btn">
                 <i class="fas fa-graduation-cap"></i> View Opportunities
             </a>
         </div>
     </section>
 
     <!-- Contact Section -->
-    <section class="contact-section">
+    <section class="contact-section" style="background: rgba(15, 23, 42, 0.95); padding: 4rem 0; margin-top: 4rem;">
         <div class="container">
-            <h2 class="section-title">Get In Touch</h2>
-            <div class="contact-grid">
+            <h2 class="section-title">Contact</h2>
+            <p class="section-subtitle" style="color: #ffffff; margin-bottom: 3rem;">Get in touch for support or collaboration</p>
+            
+            <div class="contact-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
                 <div class="contact-info">
-                    <div class="contact-item">
-                        <i class="fas fa-envelope"></i>
-                        <p>contact@eventmanagement.com</p>
+                    <div class="contact-card" style="background: rgba(30, 41, 59, 0.5); padding: 2rem; border-radius: 15px; border: 1px solid var(--border-color);">
+                        <h3 style="color: var(--primary-color); margin-bottom: 1.5rem; font-size: 1.3rem;">
+                            <i class="fas fa-envelope"></i> Email
+                        </h3>
+                        <a href="mailto:developer@eventmanagement.com" style="color: #ffffff; text-decoration: none; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            developer@eventmanagement.com
+                        </a>
                     </div>
-                    <div class="contact-item">
-                        <i class="fas fa-phone"></i>
-                        <p>+1 (555) 123-4567</p>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <p>123 Event Street, City, Country</p>
+                    
+                    <div class="contact-card" style="background: rgba(30, 41, 59, 0.5); padding: 2rem; border-radius: 15px; border: 1px solid var(--border-color); margin-top: 1rem;">
+                        <h3 style="color: var(--primary-color); margin-bottom: 1.5rem; font-size: 1.3rem;">
+                            <i class="fas fa-code-branch"></i> GitHub
+                        </h3>
+                        <a href="https://github.com/yourusername" target="_blank" style="color: #ffffff; text-decoration: none; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fab fa-github"></i> View Project Repository
+                        </a>
                     </div>
                 </div>
-                <div class="social-links">
-                    <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
-                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
-                    <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                
+                <div class="contact-form" style="background: rgba(30, 41, 59, 0.5); padding: 2rem; border-radius: 15px; border: 1px solid var(--border-color);">
+                    <h3 style="color: var(--primary-color); margin-bottom: 1.5rem; font-size: 1.3rem;">Send Message</h3>
+                    <form action="${pageContext.request.contextPath}/contact" method="POST" style="display: grid; gap: 1rem;">
+                        <input type="text" name="name" placeholder="Your Name" required 
+                               style="background: rgba(15, 23, 42, 0.95); border: 1px solid var(--border-color); color: #ffffff; padding: 0.8rem; border-radius: 8px;">
+                        <input type="email" name="email" placeholder="Your Email" required 
+                               style="background: rgba(15, 23, 42, 0.95); border: 1px solid var(--border-color); color: #ffffff; padding: 0.8rem; border-radius: 8px;">
+                        <textarea name="message" placeholder="Your Message" required rows="4" 
+                                  style="background: rgba(15, 23, 42, 0.95); border: 1px solid var(--border-color); color: #ffffff; padding: 0.8rem; border-radius: 8px; resize: vertical;"></textarea>
+                        <button type="submit" class="btn primary-btn" style="width: 100%;">
+                            <i class="fas fa-paper-plane"></i> Send Message
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
     </section>
 
     <footer>
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-section">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="#features"><i class="fas fa-chevron-right"></i> Features</a></li>
-                        <li><a href="#about"><i class="fas fa-chevron-right"></i> About Us</a></li>
-                        <li><a href="#contact"><i class="fas fa-chevron-right"></i> Contact</a></li>
-                        <li><a href="${pageContext.request.contextPath}/privacy"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Resources</h4>
-                    <ul>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Documentation</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> API Reference</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Support</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Blog</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Legal</h4>
-                    <ul>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Terms of Service</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Cookie Policy</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> GDPR</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Connect With Us</h4>
-                    <div class="social-links">
-                        <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-section">
+                <h4>Documentation</h4>
+                <ul>
+                    <li><a href="${pageContext.request.contextPath}/documentation.jsp#overview">
+                        <i class="fas fa-book"></i> Project Overview
+                    </a></li>
+                    <li><a href="${pageContext.request.contextPath}/documentation.jsp#user-features">
+                        <i class="fas fa-user"></i> User Features
+                    </a></li>
+                    <li><a href="${pageContext.request.contextPath}/documentation.jsp#event-management">
+                        <i class="fas fa-calendar-alt"></i> Event Management
+                    </a></li>
+                    <li><a href="${pageContext.request.contextPath}/documentation.jsp#registration">
+                        <i class="fas fa-ticket-alt"></i> Registration System
+                    </a></li>
+                </ul>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 Event Management System. All rights reserved.</p>
+            <div class="footer-section">
+                <h4>Technical Resources</h4>
+                <ul>
+                    <li><a href="${pageContext.request.contextPath}/documentation.jsp#technical">
+                        <i class="fas fa-cogs"></i> System Details
+                    </a></li>
+                    <li><a href="${pageContext.request.contextPath}/documentation.jsp#security">
+                        <i class="fas fa-shield-alt"></i> Security Features
+                    </a></li>
+                    <li><a href="${pageContext.request.contextPath}/documentation.jsp#admin-features">
+                        <i class="fas fa-user-shield"></i> Admin Guide
+                    </a></li>
+                    <li><a href="${pageContext.request.contextPath}/changelog">
+                        <i class="fas fa-history"></i> Changelog
+                    </a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="${pageContext.request.contextPath}/help">
+                        <i class="fas fa-question-circle"></i> Help Center
+                    </a></li>
+                    <li><a href="${pageContext.request.contextPath}/contact">
+                        <i class="fas fa-envelope"></i> Contact Support
+                    </a></li>
+                    <li><a href="${pageContext.request.contextPath}/terms">
+                        <i class="fas fa-gavel"></i> Terms of Service
+                    </a></li>
+                    <li><a href="${pageContext.request.contextPath}/privacy">
+                        <i class="fas fa-user-shield"></i> Privacy Policy
+                    </a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Stay Connected</h4>
+                <div class="social-links">
+                    <a href="#" class="social-link" title="Facebook">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="#" class="social-link" title="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-link" title="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="#" class="social-link" title="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+                <div class="newsletter-signup">
+                    <h5>Subscribe to Updates</h5>
+                    <form class="newsletter-form" action="${pageContext.request.contextPath}/subscribe" method="POST">
+                        <div class="form-group">
+                            <input type="email" name="email" placeholder="Enter your email" required>
+                            <button type="submit" class="btn primary-btn">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </footer>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Event Management System. All rights reserved.</p>
+            <div class="footer-meta">
+                <a href="${pageContext.request.contextPath}/sitemap">Sitemap</a>
+                <span class="separator">|</span>
+                <a href="${pageContext.request.contextPath}/accessibility">Accessibility</a>
+            </div>
+        </div>
+    </div>
+</footer>
 </body>
 </html>
