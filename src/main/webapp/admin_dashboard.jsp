@@ -17,8 +17,11 @@
         <a href="${pageContext.request.contextPath}/index.jsp" class="btn btn-secondary home-btn">Home</a>
     </div>
 
-    <c:if test="${not empty error}">
-        <div class="alert alert-danger">${error}</div>
+    <c:if test="${not empty successMessage}">
+        <div class="alert alert-success">${successMessage}</div>
+    </c:if>
+    <c:if test="${not empty errorMessage}">
+        <div class="alert alert-danger">${errorMessage}</div>
     </c:if>
 
     <div class="event-form">
@@ -70,24 +73,23 @@
             </tr>
         </thead>
         <tbody>
-            <c:forEach var="event" items="${events}">
-                <tr>
-                    <form method="post" action="admin">
-                        <input type="hidden" name="event_id" value="${event.id}">
-                        <td>${event.id}</td>
-                        <td><input type="text" name="name" value="${event.name}" class="form-control" required></td>
-                        <td><input type="date" name="date" value="${event.date}" class="form-control" required></td>
-                        <td><input type="text" name="location" value="${event.location}" class="form-control" required></td>
-                        <td><textarea name="description" class="form-control">${event.description}</textarea></td>
-                        <td><input type="number" name="guest_limit" value="${event.guestLimit}" class="form-control" min="1" required></td>
-                        <td>${event.currentGuests}</td>
-                        <td>
-                            <button type="submit" name="action" value="edit" class="btn btn-primary">Update</button>
-                            <button type="submit" name="action" value="delete" class="btn btn-danger" 
-                                    onclick="return confirm('Are you sure you want to delete this event?');">Delete</button>
-                        </td>
-                    </form>
-                </tr>
+            <c:forEach var="event" items="${events}">                <tr>
+    <form method="post" action="${pageContext.request.contextPath}/admin" class="event-form">
+        <input type="hidden" name="event_id" value="${event.id}">
+        <td>${event.id}</td>
+        <td><input type="text" name="name" value="${event.name}" class="form-control" required></td>
+        <td><input type="date" name="date" value="${event.date}" class="form-control" required></td>
+        <td><input type="text" name="location" value="${event.location}" class="form-control" required></td>
+        <td><textarea name="description" class="form-control">${event.description}</textarea></td>
+        <td><input type="number" name="guest_limit" value="${event.guestLimit}" class="form-control" min="1" required></td>
+        <td>${event.currentGuests}</td>
+        <td>
+            <button type="submit" name="action" value="update" class="btn btn-primary">Update</button>
+            <button type="submit" name="action" value="delete" class="btn btn-danger" 
+                    onclick="return confirm('Are you sure you want to delete this event?')">Delete</button>
+        </td>
+    </form>
+</tr>
             </c:forEach>
             <c:if test="${empty events}">
                 <tr><td colspan="8" class="text-center">No events found.</td></tr>

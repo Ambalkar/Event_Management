@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -125,11 +126,17 @@
         }
 
         .form-group label {
-            display: block;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
             margin-bottom: 0.75rem;
             color: var(--text-primary);
             font-weight: 500;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .form-group label i {
+            color: var(--primary-color);
         }
 
         .form-group input,
@@ -150,6 +157,71 @@
             outline: none;
             background: var(--input-background);
             box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.3);
+        }
+
+        .form-group input[type="date"] {
+            position: relative;
+            padding-right: 2.5rem;
+            cursor: pointer;
+            background: var(--input-background) url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%2360a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>') no-repeat right 0.75rem center;
+            background-size: 1.25rem;
+        }
+
+        .form-group input[type="date"]::-webkit-calendar-picker-indicator {
+            opacity: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .form-group input[type="date"]:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.3);
+        }
+
+        .form-group input[type="file"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            background: var(--input-background);
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+
+        .form-group input[type="file"]::-webkit-file-upload-button {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 1rem;
+        }
+
+        .form-group input[type="file"]::-webkit-file-upload-button:hover {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+        }
+
+        .image-preview {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+        }
+
+        .event-table .image-column {
+            width: 120px;
+            min-width: 120px;
+        }
+
+        .event-table .image-preview-cell {
+            padding: 0.5rem;
+            text-align: center;
         }
 
         .btn {
@@ -189,6 +261,25 @@
             background: linear-gradient(135deg, #dc2626, #b91c1c);
         }
 
+        .btn-secondary {
+            background: linear-gradient(135deg, #64748b, #475569);
+            color: var(--text-primary);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .btn-secondary:hover {
+            transform: var(--hover-transform);
+            box-shadow: var(--card-shadow);
+            background: linear-gradient(135deg, #475569, #334155);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
         .event-table {
             width: 100%;
             border-collapse: separate;
@@ -208,12 +299,14 @@
             color: var(--text-primary);
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
             border-bottom: 2px solid var(--border-color);
-            padding: 1rem;
-            font-size: 0.9em;
+            padding: 0.75rem;
+            font-size: 0.85em;
             white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .event-table td {
@@ -409,9 +502,10 @@
         </c:if>
 
         <div class="event-form">
-            <h2>Add New Event</h2>
-            <form method="post" action="admin">
-                <input type="hidden" name="action" value="add">
+            <h2 id="formTitle">Add New Event</h2>
+            <form method="post" action="${pageContext.request.contextPath}/admin" id="eventForm">
+                <input type="hidden" name="action" value="add" id="formAction">
+                <input type="hidden" name="event_id" id="eventId">
                 
                 <div class="form-group">
                     <label for="name">Event Name:</label>
@@ -419,7 +513,10 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="date">Date:</label>
+                    <label for="date">
+                        <i class="fas fa-calendar-alt"></i>
+                        Date:
+                    </label>
                     <input type="date" id="date" name="date" required>
                 </div>
 
@@ -438,9 +535,14 @@
                     <input type="number" id="guest_limit" name="guest_limit" min="1" required>
                 </div>
 
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-plus-circle"></i> Add Event
-                </button>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        <i class="fas fa-plus-circle"></i> Add Event
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="cancelBtn" style="display: none;" onclick="resetForm()">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
             </form>
         </div>
 
@@ -461,27 +563,33 @@
             <tbody>
                 <c:forEach var="event" items="${events}">
                     <tr>
-                        <form method="post" action="admin">
-                            <input type="hidden" name="event_id" value="${event.id}">
-                            <td class="id-column">${event.id}</td>
-                            <td class="name-column"><input type="text" name="name" value="${event.name}" required></td>
-                            <td class="date-column"><input type="date" name="date" value="${event.date}" required></td>
-                            <td class="location-column"><input type="text" name="location" value="${event.location}" required></td>
-                            <td class="description-column"><textarea name="description">${event.description}</textarea></td>
-                            <td class="guest-limit-column"><input type="number" name="guest_limit" value="${event.guestLimit}" min="1" required></td>
-                            <td class="guest-count">${event.currentGuests}</td>
-                            <td class="actions-column">
-                                <div class="actions">
-                                    <button type="submit" name="action" value="edit" class="btn btn-primary">
-                                        <i class="fas fa-edit"></i> Update
-                                    </button>
+                        <td class="id-column">${event.id}</td>
+                        <td class="name-column">${event.name}</td>
+                        <td class="date-column">${event.date}</td>
+                        <td class="location-column">${event.location}</td>
+                        <td class="description-column">${event.description}</td>
+                        <td class="guest-limit-column">${event.guestLimit}</td>
+                        <td class="guest-count">${event.currentGuests}</td>
+                        <td class="actions-column">
+                            <div class="actions">
+                                <button type="button" class="btn btn-primary update-btn" 
+                                    data-id="${event.id}"
+                                    data-name="${event.name}"
+                                    data-date="${event.date}"
+                                    data-location="${event.location}"
+                                    data-description="${event.description}"
+                                    data-guest-limit="${event.guestLimit}">
+                                    <i class="fas fa-edit"></i> Update
+                                </button>
+                                <form method="post" action="${pageContext.request.contextPath}/admin" style="display: inline;">
+                                    <input type="hidden" name="event_id" value="${event.id}">
                                     <button type="submit" name="action" value="delete" class="btn btn-danger" 
                                             onclick="return confirm('Are you sure you want to delete this event?');">
                                         <i class="fas fa-trash"></i> Delete
                                     </button>
-                                </div>
-                            </td>
-                        </form>
+                                </form>
+                            </div>
+                        </td>
                     </tr>
                 </c:forEach>
                 <c:if test="${empty events}">
@@ -495,5 +603,60 @@
             </tbody>
         </table>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add click event listeners to all update buttons
+            document.querySelectorAll('.update-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const eventData = {
+                        id: this.dataset.id,
+                        name: this.dataset.name,
+                        date: this.dataset.date,
+                        location: this.dataset.location,
+                        description: this.dataset.description,
+                        guestLimit: this.dataset.guestLimit
+                    };
+                    
+                    // Update form title and action
+                    document.getElementById('formTitle').textContent = 'Update Event';
+                    document.getElementById('formAction').value = 'edit';
+                    document.getElementById('eventId').value = eventData.id;
+                    
+                    // Fill form fields
+                    document.getElementById('name').value = eventData.name;
+                    document.getElementById('date').value = eventData.date;
+                    document.getElementById('location').value = eventData.location;
+                    document.getElementById('description').value = eventData.description;
+                    document.getElementById('guest_limit').value = eventData.guestLimit;
+                    
+                    // Update button text
+                    document.getElementById('submitBtn').innerHTML = '<i class="fas fa-save"></i> Update Event';
+                    
+                    // Show cancel button
+                    document.getElementById('cancelBtn').style.display = 'inline-block';
+                    
+                    // Scroll to form
+                    document.querySelector('.event-form').scrollIntoView({ behavior: 'smooth' });
+                });
+            });
+        });
+        
+        function resetForm() {
+            // Reset form title and action
+            document.getElementById('formTitle').textContent = 'Add New Event';
+            document.getElementById('formAction').value = 'add';
+            document.getElementById('eventId').value = '';
+            
+            // Clear form fields
+            document.getElementById('eventForm').reset();
+            
+            // Update button text
+            document.getElementById('submitBtn').innerHTML = '<i class="fas fa-plus-circle"></i> Add Event';
+            
+            // Hide cancel button
+            document.getElementById('cancelBtn').style.display = 'none';
+        }
+    </script>
 </body>
 </html>
