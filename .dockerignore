@@ -1,4 +1,2 @@
-target/
-.git
-.gitignore
-*.md
+*
+!target/EventManagementSystem.war

@@ -1,10 +1,11 @@
+
 FROM tomcat:9.0-jdk11
 
 # Remove default ROOT application
 RUN rm -rf /usr/local/tomcat/webapps/ROOT
 
-# Copy WAR file
-COPY EventManagementSystem.war /usr/local/tomcat/webapps/ROOT.war
+# Copy WAR file from target directory
+COPY target/EventManagementSystem.war /usr/local/tomcat/webapps/ROOT.war
 
 # Set environment variables
 ENV PORT=8080
