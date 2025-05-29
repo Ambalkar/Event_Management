@@ -328,46 +328,125 @@
             opacity: 0.5;
         }
 
+        /* Navigation Styles */
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-toggle {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            border: none;
+        }
+
+        /* Adjust container padding for navbar */
+        .container {
+            padding-top: 5rem;
+        }
+
+        /* Mobile Navigation */
         @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-                margin: 1rem;
+            .nav-toggle {
+                display: block;
             }
-            
-            .events-list {
-                grid-template-columns: 1fr;
-            }
-            
+
             .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
                 flex-direction: column;
-                align-items: center;
+                background: rgba(15, 23, 42, 0.98);
+                padding: 1rem;
+                gap: 0.5rem;
             }
-            
-            .header-section h1 {
-                font-size: 2em;
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-link {
+                width: 100%;
+                text-align: center;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header-section">
-            <a href="${pageContext.request.contextPath}/index.jsp" class="home-btn">
-                <i class="fas fa-home"></i> Home
+    <!-- Navigation Bar -->
+    <nav class="nav-bar">
+        <div class="nav-container">
+            <a href="${pageContext.request.contextPath}/" class="nav-logo">
+                <i class="fas fa-calendar-alt"></i> EventMS
             </a>
-            <h1>Events</h1>
-        </div>
-        
-        <nav class="navigation-bar">
-            <div class="nav-links">
-                <a href="user" class="nav-link">
+            <div class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="${pageContext.request.contextPath}/" class="nav-link">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="${pageContext.request.contextPath}/documentation.jsp" class="nav-link">
+                    <i class="fas fa-info-circle"></i> About
+                </a>
+                <a href="user" class="nav-link active">
                     <i class="fas fa-calendar-alt"></i> Available Events
                 </a>
                 <a href="myEvents" class="nav-link">
                     <i class="fas fa-ticket-alt"></i> My Events
                 </a>
             </div>
-        </nav>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header-section">
+            <h1>Events</h1>
+        </div>
         
         <c:if test="${not empty successMessage}">
             <div class="alert success">
@@ -429,5 +508,22 @@
             </c:if>
         </div>
     </div>
+
+    <script>
+        // Mobile navigation toggle
+        const navToggle = document.getElementById('navToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        navToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!navToggle.contains(e.target) && !navLinks.contains(e.target)) {
+                navLinks.classList.remove('active');
+            }
+        });
+    </script>
 </body>
 </html>

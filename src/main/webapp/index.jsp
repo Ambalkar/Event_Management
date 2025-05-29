@@ -514,6 +514,12 @@
                 <i class="fas fa-calendar-alt"></i> EventMS
             </a>
             <div class="nav-links">
+                <a href="${pageContext.request.contextPath}/" class="nav-link">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="${pageContext.request.contextPath}/documentation.jsp" class="nav-link">
+                    <i class="fas fa-info-circle"></i> About
+                </a>
                 <a href="${pageContext.request.contextPath}/user" class="nav-link">
                     <i class="fas fa-user"></i> User Portal
                 </a>
