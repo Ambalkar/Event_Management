@@ -3,7 +3,6 @@ services:
     name: event-management-system
     env: docker
     dockerfilePath: ./Dockerfile
-    buildCommand: mvn clean package -DskipTests
     envVars:
       - key: DATABASE_URL
         sync: false

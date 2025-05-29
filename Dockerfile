@@ -1,18 +1,12 @@
 
+FROM maven:3.8.4-openjdk-11 as build
+WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
+
 FROM tomcat:9.0-jdk11
-
-# Remove default ROOT application
 RUN rm -rf /usr/local/tomcat/webapps/ROOT
-
-# Copy WAR file from target directory
-COPY target/EventManagementSystem.war /usr/local/tomcat/webapps/ROOT.war
-
-# Set environment variables
+COPY --from=build /app/target/EventManagementSystem.war /usr/local/tomcat/webapps/ROOT.war
 ENV PORT=8080
-ENV CATALINA_OPTS="-Xms512m -Xmx1024m"
-
-# Expose port
 EXPOSE 8080
-
-# Start Tomcat
 CMD ["catalina.sh", "run"]
