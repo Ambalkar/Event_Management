@@ -1,7 +1,7 @@
-
 FROM maven:3.8.4-openjdk-11 as build
 WORKDIR /app
-COPY . .
+COPY pom.xml .
+COPY src ./src
 RUN mvn clean package -DskipTests
 
 FROM tomcat:9.0-jdk11
