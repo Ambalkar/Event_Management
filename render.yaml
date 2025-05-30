@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: event-management-system
+    name: event-management-system  # This is the name you'll use as your Blueprint Name
     env: docker
     plan: free
     buildCommand: "./mvnw clean package -DskipTests"
@@ -9,12 +9,38 @@ services:
       - key: PORT
         value: 8080
       - key: MYSQL_HOST
-        sync: false
+        fromService:
+          type: mysql
+          name: event-ms-db
+          property: host
       - key: MYSQL_PORT
-        value: 3306
+        fromService:
+          type: mysql
+          name: event-ms-db
+          property: port
       - key: MYSQL_DATABASE
-        sync: false
+        fromService:
+          type: mysql
+          name: event-ms-db
+          property: database
       - key: MYSQL_USER
-        sync: false
+        fromService:
+          type: mysql
+          name: event-ms-db
+          property: username
       - key: MYSQL_PASSWORD
-        sync: false
+        fromService:
+          type: mysql
+          name: event-ms-db
+          property: password
+    dependsOn:
+      - event-ms-db
+
+  - type: mysql
+    name: event-ms-db
+    plan: free
+    ipAllowList: []  # Allow all IPs
+    disk:
+      name: data
+      mountPath: /var/lib/mysql
+      sizeGB: 1
