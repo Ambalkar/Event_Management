@@ -1,14 +1,13 @@
 services:
   - type: web
     name: event-management-system
-    env: docker
-    dockerfilePath: ./Dockerfile
+    env: java
+    buildCommand: ./mvnw clean package
+    startCommand: java -jar target/*.jar
     envVars:
-      - key: DATABASE_URL
-        sync: false
-      - key: DATABASE_USERNAME
-        sync: false
-      - key: DATABASE_PASSWORD
-        sync: false
       - key: PORT
         value: 8080
+      - key: JAVA_OPTS
+        value: -Dserver.port=8080
+    healthCheckPath: /
+    autoDeploy: true
