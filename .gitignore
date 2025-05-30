@@ -1,11 +1,29 @@
+# Maven build directory
 target/
+
+# Compiled class files
 *.class
-*.war
-*.jar
-.settings/
-.classpath
-.project
+
+# IDE files
 .idea/
 *.iml
 .vscode/
+.settings/
+.classpath
+.project
+
+# Logs
 *.log
+
+# Package files
+*.jar
+*.war
+*.ear
+
+# Virtual machine crash logs
+hs_err_pid*
+
+# Maven
+.mvn/
+mvnw
+mvnw.cmd

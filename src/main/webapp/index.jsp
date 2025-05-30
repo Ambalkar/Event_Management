@@ -260,6 +260,101 @@
             color: var(--text-secondary);
         }
 
+        /* Services Section */
+        .services-section {
+            padding: 5rem 0;
+            background: linear-gradient(135deg, #1a365d 0%, #0f2942 100%);
+            margin: 2rem 0;
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+        }
+
+        .swiper {
+            width: 100%;
+            padding-top: 50px;
+            padding-bottom: 50px;
+        }
+
+        .swiper-slide {
+            background-position: center;
+            background-size: cover;
+            width: 300px;
+            height: 400px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            position: relative;
+        }
+
+        .swiper-slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 100%);
+            z-index: 1;
+        }
+
+        .swiper-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .slide-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem;
+            color: var(--text-primary);
+            z-index: 2;
+        }
+
+        .slide-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .slide-description {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .slide-button {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .slide-button:hover {
+            transform: var(--hover-transform);
+            box-shadow: var(--card-shadow);
+        }
+
+        .swiper-button-next,
+        .swiper-button-prev {
+            color: var(--primary-color) !important;
+        }
+
+        .swiper-pagination-bullet {
+            background: var(--primary-color) !important;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
         /* Footer */
         footer {
             background: linear-gradient(165deg, #1a365d 0%, #0f2942 100%);
@@ -505,6 +600,8 @@
             }
         }
     </style>
+    <!-- Add Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
 </head>
 <body>
     <!-- Navigation Bar -->
@@ -545,6 +642,62 @@
             </div>
         </div>
     </div>
+
+    <!-- Services Section -->
+    <section class="services-section">
+        <div class="container">
+            <h2 class="section-title">Our Services</h2>
+            <p class="section-subtitle">Explore our range of event management services</p>
+            
+            <!-- Swiper -->
+            <div class="swiper">
+                <div class="swiper-wrapper">
+                    <!-- Event 1 -->
+                    <div class="swiper-slide">
+                        <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Corporate Events">
+                        <div class="slide-content">
+                            <h3 class="slide-title">Corporate Events</h3>
+                            <p class="slide-description">Professional event management for your business needs</p>
+                            <a href="#" class="slide-button">Learn More</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Event 2 -->
+                    <div class="swiper-slide">
+                        <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Wedding Planning">
+                        <div class="slide-content">
+                            <h3 class="slide-title">Wedding Planning</h3>
+                            <p class="slide-description">Make your special day unforgettable</p>
+                            <a href="#" class="slide-button">Learn More</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Event 3 -->
+                    <div class="swiper-slide">
+                        <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Conferences">
+                        <div class="slide-content">
+                            <h3 class="slide-title">Conferences</h3>
+                            <p class="slide-description">Professional conference management services</p>
+                            <a href="#" class="slide-button">Learn More</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Event 4 -->
+                    <div class="swiper-slide">
+                        <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Social Gatherings">
+                        <div class="slide-content">
+                            <h3 class="slide-title">Social Gatherings</h3>
+                            <p class="slide-description">Perfect planning for your social events</p>
+                            <a href="#" class="slide-button">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+        </div>
+    </section>
 
     <!-- Features Section -->
     <section id="features" class="features-section">
@@ -855,5 +1008,35 @@
         </div>
     </div>
 </footer>
+
+<!-- Add Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+<script>
+    const swiper = new Swiper('.swiper', {
+        effect: 'coverflow',
+        grabCursor: true,
+        centeredSlides: true,
+        slidesPerView: 'auto',
+        coverflowEffect: {
+            rotate: 50,
+            stretch: 0,
+            depth: 100,
+            modifier: 1,
+            slideShadows: true,
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+        },
+    });
+</script>
 </body>
 </html>
