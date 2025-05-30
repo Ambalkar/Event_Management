@@ -8,13 +8,25 @@ services:
     envVars:
       - key: PORT
         value: 8080
-      - key: MYSQL_HOST
-        sync: false  # Will be set in Render dashboard
-      - key: MYSQL_PORT
-        value: 3306
-      - key: MYSQL_DATABASE
-        sync: false  # Will be set in Render dashboard
-      - key: MYSQL_USER
-        sync: false  # Will be set in Render dashboard
-      - key: MYSQL_PASSWORD
-        sync: false  # Will be set in Render dashboard
+      - key: SPRING_DATASOURCE_URL
+        fromService:
+          type: postgres
+          name: event-ms-db
+          property: connectionString
+      - key: SPRING_DATASOURCE_USERNAME
+        fromService:
+          type: postgres
+          name: event-ms-db
+          property: user
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromService:
+          type: postgres
+          name: event-ms-db
+          property: password
+    dependsOn:
+      - event-ms-db
+
+  - type: postgres
+    name: event-ms-db
+    plan: free
+    ipAllowList: []  # Allow all IPs

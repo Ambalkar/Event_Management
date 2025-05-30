@@ -18,8 +18,8 @@ COPY src ./src
 # Build the application
 RUN ./mvnw clean package -DskipTests
 
-# Expose port 
+# Expose port
 EXPOSE 8080
 
 # Run the application
-CMD java -jar target/EventManagementSystem.war
+CMD ["java", "-jar", "/app/target/EventManagementSystem.war"]

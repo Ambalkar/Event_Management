@@ -1,16 +1,13 @@
--- Create database
-CREATE DATABASE IF NOT EXISTS event_management;
-
--- Create dedicated user
-CREATE USER IF NOT EXISTS 'eventapp'@'localhost' IDENTIFIED BY 'eventpass123';
-GRANT ALL PRIVILEGES ON event_management.* TO 'eventapp'@'localhost';
-FLUSH PRIVILEGES;
-
-USE event_management;
+-- Create sequence for events
+CREATE SEQUENCE IF NOT EXISTS events_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE;
 
 -- Create events table
 CREATE TABLE IF NOT EXISTS events (
-    event_id INT PRIMARY KEY AUTO_INCREMENT,
+    event_id INT PRIMARY KEY DEFAULT nextval('events_seq'),
     name VARCHAR(100) NOT NULL,
     date DATE NOT NULL,
     location VARCHAR(200) NOT NULL,
@@ -19,9 +16,16 @@ CREATE TABLE IF NOT EXISTS events (
     current_guests INT DEFAULT 0
 );
 
+-- Create sequence for bookings
+CREATE SEQUENCE IF NOT EXISTS bookings_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE;
+
 -- Create bookings table
 CREATE TABLE IF NOT EXISTS bookings (
-    booking_id INT PRIMARY KEY AUTO_INCREMENT,
+    booking_id INT PRIMARY KEY DEFAULT nextval('bookings_seq'),
     event_id INT,
     user_name VARCHAR(100) NOT NULL,
     user_email VARCHAR(100) NOT NULL,
