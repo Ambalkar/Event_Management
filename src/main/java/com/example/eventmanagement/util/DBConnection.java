@@ -9,9 +9,9 @@ import java.util.logging.Logger;
 public class DBConnection {
 
     private static final Logger LOGGER = Logger.getLogger(DBConnection.class.getName());
-    private static final String URL = "jdbc:mysql://localhost:3306/event_management?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
-    private static final String USER = "eventapp";
-    private static final String PASSWORD = "eventpass123";
+    private static final String URL = System.getenv("SPRING_DATASOURCE_URL");
+    private static final String USER = System.getenv("SPRING_DATASOURCE_USERNAME");
+    private static final String PASSWORD = System.getenv("SPRING_DATASOURCE_PASSWORD");
 
     static {
         try {

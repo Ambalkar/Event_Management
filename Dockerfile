@@ -18,8 +18,12 @@ COPY src ./src
 # Build the application
 RUN ./mvnw clean package -DskipTests
 
-# Expose port
+# Expose port 
 EXPOSE 8080
 
-# Run the application
-CMD ["java", "-jar", "target/EventManagementSystem.war"]
+# Run the application with environment variables
+CMD ["java", \
+     "-DSPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}", \
+     "-DSPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}", \
+     "-DSPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}", \
+     "-jar", "target/EventManagementSystem.war"]

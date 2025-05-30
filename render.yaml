@@ -2,21 +2,18 @@ services:
   - type: web
     name: event-management-system
     env: docker
-    dockerfilePath: ./Dockerfile
+    buildCommand: "./mvnw clean package -DskipTests"
+    startCommand: "java -jar target/EventManagementSystem.war"
     envVars:
+      - key: SPRING_DATASOURCE_URL
+        value: "jdbc:mysql://your-database-host:3306/your-database-name"
+      - key: SPRING_DATASOURCE_USERNAME
+        value: "your-username" 
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: "your-password"
+      - key: SPRING_JPA_HIBERNATE_DDL_AUTO
+        value: "update"
       - key: PORT
         value: 8080
-      - key: JAVA_OPTS
-        value: -Dserver.port=8080
-      - key: SPRING_DATASOURCE_URL
-        sync: false
-      - key: SPRING_DATASOURCE_USERNAME
-        sync: false
-      - key: SPRING_DATASOURCE_PASSWORD
-        sync: false
-      - key: SPRING_SECURITY_USERNAME
-        value: admin
-      - key: SPRING_SECURITY_PASSWORD
-        sync: false
     healthCheckPath: /health
     autoDeploy: true
