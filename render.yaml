@@ -8,5 +8,15 @@ services:
         value: 8080
       - key: JAVA_OPTS
         value: -Dserver.port=8080
+      - key: SPRING_DATASOURCE_URL
+        sync: false
+      - key: SPRING_DATASOURCE_USERNAME
+        sync: false
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false
+      - key: SPRING_SECURITY_USERNAME
+        value: admin
+      - key: SPRING_SECURITY_PASSWORD
+        sync: false
     healthCheckPath: /health
     autoDeploy: true
