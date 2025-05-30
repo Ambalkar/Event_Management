@@ -13,12 +13,23 @@ RUN mvn clean package -DskipTests
 
 # Second stage: Run the application
 FROM tomcat:9.0-jdk11
+
+# Remove default ROOT application
 RUN rm -rf /usr/local/tomcat/webapps/ROOT
+
+# Copy the built WAR file
 COPY --from=build /app/target/EventManagementSystem.war /usr/local/tomcat/webapps/ROOT.war
+
+# Configure Tomcat
+RUN echo "export JAVA_OPTS=\"-Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true -Xms512m -Xmx1024m -XX:+UseConcMarkSweepGC\"" > /usr/local/tomcat/bin/setenv.sh \
+    && chmod +x /usr/local/tomcat/bin/setenv.sh
+
+# Create custom server.xml
+COPY server.xml /usr/local/tomcat/conf/server.xml
 
 # Set environment variables
 ENV PORT=8080
-ENV JAVA_OPTS="-Djava.security.egd=file:/dev/./urandom"
+ENV CATALINA_OPTS="-Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true -Xms512m -Xmx1024m -XX:+UseConcMarkSweepGC"
 
 # Expose the port
 EXPOSE 8080

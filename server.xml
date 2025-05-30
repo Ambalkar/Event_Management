@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Server port="8005" shutdown="SHUTDOWN">
+    <Service name="Catalina">
+        <Connector port="8080" protocol="HTTP/1.1"
+                   connectionTimeout="20000"
+                   redirectPort="8443"
+                   maxThreads="150"
+                   minSpareThreads="25"
+                   maxSpareThreads="75"
+                   enableLookups="false"
+                   acceptCount="100"
+                   disableUploadTimeout="true"
+                   URIEncoding="UTF-8"
+                   server="Server"
+                   relaxedPathChars="[]|"
+                   relaxedQueryChars="[]|{}^&#x5c;&#x60;&quot;&lt;&gt;"
+                   maxHttpHeaderSize="65536"
+                   maxPostSize="2097152"
+                   maxSavePostSize="2097152"
+                   maxConnections="10000"
+                   tcpNoDelay="true"
+                   compression="on"
+                   compressionMinSize="2048"
+                   compressableMimeType="text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json"
+                   />
+
+        <Engine name="Catalina" defaultHost="localhost">
+            <Host name="localhost" appBase="webapps"
+                  unpackWARs="true" autoDeploy="false"
+                  deployOnStartup="false">
+                <Valve className="org.apache.catalina.valves.AccessLogValve"
+                       directory="logs"
+                       prefix="localhost_access_log"
+                       suffix=".txt"
+                       pattern="%h %l %u %t &quot;%r&quot; %s %b" />
+            </Host>
+        </Engine>
+    </Service>
+</Server> 
