@@ -124,6 +124,7 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                    <mainClass>com.eventms.EventManagementSystemApplication</mainClass>
                 </configuration>
             </plugin>
             <plugin>
