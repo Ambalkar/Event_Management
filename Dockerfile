@@ -1,38 +1,24 @@
-FROM maven:3.8.4-openjdk-11 as build
+# Use Java 17 as the base image
+FROM eclipse-temurin:17-jdk-alpine
+
+# Set working directory
 WORKDIR /app
 
-# Copy the pom.xml first to cache dependencies
-COPY pom.xml .
-RUN mvn dependency:go-offline
+# Copy Maven wrapper and pom.xml
+COPY .mvn/ .mvn/
+COPY mvnw pom.xml ./
 
-# Copy the source code
-COPY . .
+# Download dependencies
+RUN ./mvnw dependency:go-offline
+
+# Copy source code
+COPY src ./src
 
 # Build the application
-RUN mvn clean package -DskipTests
+RUN ./mvnw clean package -DskipTests
 
-# Second stage: Run the application
-FROM tomcat:9.0-jdk11
-
-# Remove default ROOT application
-RUN rm -rf /usr/local/tomcat/webapps/ROOT
-
-# Copy the built WAR file
-COPY --from=build /app/target/EventManagementSystem.war /usr/local/tomcat/webapps/ROOT.war
-
-# Configure Tomcat
-RUN echo "export JAVA_OPTS=\"-Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true -Xms512m -Xmx1024m -XX:+UseConcMarkSweepGC\"" > /usr/local/tomcat/bin/setenv.sh \
-    && chmod +x /usr/local/tomcat/bin/setenv.sh
-
-# Create custom server.xml
-COPY server.xml /usr/local/tomcat/conf/server.xml
-
-# Set environment variables
-ENV PORT=8080
-ENV CATALINA_OPTS="-Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true -Xms512m -Xmx1024m -XX:+UseConcMarkSweepGC"
-
-# Expose the port
+# Expose port
 EXPOSE 8080
 
-# Start Tomcat
-CMD ["catalina.sh", "run"]
+# Run the application
+CMD ["java", "-jar", "target/EventManagementSystem.war"]

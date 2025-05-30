@@ -1,15 +1,12 @@
 services:
   - type: web
     name: event-management-system
-    env: java
-    buildCommand: ./mvnw clean package -DskipTests
-    startCommand: java -jar target/*.jar
+    env: docker
+    dockerfilePath: ./Dockerfile
     envVars:
       - key: PORT
         value: 8080
       - key: JAVA_OPTS
         value: -Dserver.port=8080
-      - key: JAVA_VERSION
-        value: 17
     healthCheckPath: /health
     autoDeploy: true
