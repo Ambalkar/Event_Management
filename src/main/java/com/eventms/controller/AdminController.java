@@ -13,7 +13,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
 @Controller
+
 public class AdminController {
 
     @Autowired
@@ -70,5 +77,54 @@ public class AdminController {
         }
         model.addAttribute("events", events);
         return "admin_dashboard"; // This will resolve to admin_dashboard.jsp
+    }
+
+    @PostMapping("/admin")
+    public String handleEventAction(
+            @RequestParam("action") String action,
+            @RequestParam(value = "event_id", required = false) Integer eventId,
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "date", required = false) String date,
+            @RequestParam(value = "location", required = false) String location,
+            @RequestParam(value = "description", required = false) String description,
+            @RequestParam(value = "guest_limit", required = false) Integer guestLimit,
+            RedirectAttributes redirectAttributes) {
+
+        try (Connection conn = dataSource.getConnection()) {
+            if ("add".equals(action)) {
+                String sql = "INSERT INTO events (name, date, location, description, guest_limit, current_guests) VALUES (?, ?, ?, ?, ?, 0)";
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ps.setString(1, name);
+                ps.setDate(2, java.sql.Date.valueOf(date));
+                ps.setString(3, location);
+                ps.setString(4, description);
+                ps.setInt(5, guestLimit);
+                ps.executeUpdate();
+                redirectAttributes.addFlashAttribute("successMessage", "Event added successfully.");
+            } else if ("update".equals(action)) {
+                String sql = "UPDATE events SET name = ?, date = ?, location = ?, description = ?, guest_limit = ? WHERE event_id = ?";
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ps.setString(1, name);
+                ps.setDate(2, java.sql.Date.valueOf(date));
+                ps.setString(3, location);
+                ps.setString(4, description);
+                ps.setInt(5, guestLimit);
+                ps.setInt(6, eventId);
+                ps.executeUpdate();
+                redirectAttributes.addFlashAttribute("successMessage", "Event updated successfully.");
+            } else if ("delete".equals(action)) {
+                String sql = "DELETE FROM events WHERE event_id = ?";
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ps.setInt(1, eventId);
+                ps.executeUpdate();
+                redirectAttributes.addFlashAttribute("successMessage", "Event deleted successfully.");
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage", "Invalid action.");
+            }
+        } catch (SQLException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Database error: " + e.getMessage());
+        }
+
+        return "redirect:/admin";
     }
 }
