@@ -658,7 +658,6 @@
                         <div class="slide-content">
                             <h3 class="slide-title">Corporate Events</h3>
                             <p class="slide-description">Professional event management for your business needs</p>
-                            <a href="#" class="slide-button">Learn More</a>
                         </div>
                     </div>
                     
@@ -668,7 +667,6 @@
                         <div class="slide-content">
                             <h3 class="slide-title">Wedding Planning</h3>
                             <p class="slide-description">Make your special day unforgettable</p>
-                            <a href="#" class="slide-button">Learn More</a>
                         </div>
                     </div>
                     
@@ -678,7 +676,6 @@
                         <div class="slide-content">
                             <h3 class="slide-title">Conferences</h3>
                             <p class="slide-description">Professional conference management services</p>
-                            <a href="#" class="slide-button">Learn More</a>
                         </div>
                     </div>
                     
@@ -688,7 +685,6 @@
                         <div class="slide-content">
                             <h3 class="slide-title">Social Gatherings</h3>
                             <p class="slide-description">Perfect planning for your social events</p>
-                            <a href="#" class="slide-button">Learn More</a>
                         </div>
                     </div>
                 </div>
