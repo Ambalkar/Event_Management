@@ -1,8 +1,8 @@
 # Event Management System (EMS)
+<img width="1440" height="852" alt="Screenshot 2026-02-24 083516" src="https://github.com/user-attachments/assets/592c4b3a-fd5a-49fa-bf98-a1d423447eef" />
 <img width="1440" height="852" alt="Screenshot 2026-02-24 083546" src="https://github.com/user-attachments/assets/5ba8f13d-8f2a-4ee9-9c74-68bf80846994" />
 <img width="1440" height="852" alt="Screenshot 2026-02-24 083603" src="https://github.com/user-attachments/assets/b4ea4422-73ac-4238-af77-94cb223565df" />
 <img width="1440" height="852" alt="Screenshot 2026-02-24 083634" src="https://github.com/user-attachments/assets/50df2b03-8362-41ae-93f9-36f7e856f08d" />
-<img width="1440" height="852" alt="Screenshot 2026-02-24 083516" src="https://github.com/user-attachments/assets/592c4b3a-fd5a-49fa-bf98-a1d423447eef" />
 
 ## 🌟 Overview
 A sophisticated web-based Event Management System built with Java, Spring Framework, and modern web technologies. The system offers comprehensive features for event creation, management, and participation with a focus on user experience and security.
