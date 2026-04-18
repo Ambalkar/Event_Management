@@ -21,12 +21,4 @@ CREATE TABLE IF NOT EXISTS bookings (
     UNIQUE(user_email, event_id)
 );
 
--- Sample data
-INSERT INTO events (name, date, location, guest_limit, current_guests) VALUES 
-('Tech Conference', '2024-12-25', 'Render Hall', 100, 10),
-('Spring Workshop', '2024-11-30', 'Conference Room', 50, 20)
-ON CONFLICT (event_id) DO NOTHING;
-
--- ; at end for Spring script parsing
-;
 
