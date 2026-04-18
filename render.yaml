@@ -2,4 +2,3 @@ services:
   - type: web
     name: event-management-system
     env: docker
-    startCommand: "java -jar target/EventManagementSystem.war"
