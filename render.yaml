@@ -4,7 +4,6 @@ services:
     env: docker
     plan: free
     startCommand: "java -jar target/EventManagementSystem.war"
-    healthCheckPath: "/health"
     envVars:
       - key: PORT
         value: 8080
@@ -31,4 +30,3 @@ services:
   - type: pserv
     name: event-ms-db
     plan: free
-    ipAllowList: []
