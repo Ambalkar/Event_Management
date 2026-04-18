@@ -4,29 +4,8 @@ services:
     env: docker
     plan: free
     startCommand: "java -jar target/EventManagementSystem.war"
-    envVars:
-      - key: PORT
-        value: 8080
-      - key: SPRING_DATASOURCE_URL
-        fromService:
-          type: pserv
-          name: event-ms-db
-          property: connectionString
-      - key: SPRING_DATASOURCE_USERNAME
-        fromService:
-          type: pserv
-          name: event-ms-db
-          property: user
-      - key: SPRING_DATASOURCE_PASSWORD
-        fromService:
-          type: pserv
-          name: event-ms-db
-          property: password
-      - key: SPRING_PROFILES_ACTIVE
-        value: production
-    dependsOn:
-      - event-ms-db
 
   - type: pserv
     name: event-ms-db
     plan: free
+    database: event_ms_db
