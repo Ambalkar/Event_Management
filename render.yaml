@@ -10,17 +10,17 @@ services:
         value: 8080
       - key: SPRING_DATASOURCE_URL
         fromService:
-          type: postgres
+          type: pserv
           name: event-ms-db
           property: connectionString
       - key: SPRING_DATASOURCE_USERNAME
         fromService:
-          type: postgres
+          type: pserv
           name: event-ms-db
           property: user
       - key: SPRING_DATASOURCE_PASSWORD
         fromService:
-          type: postgres
+          type: pserv
           name: event-ms-db
           property: password
       - key: SPRING_PROFILES_ACTIVE
@@ -28,7 +28,7 @@ services:
     dependsOn:
       - event-ms-db
 
-  - type: postgres
+  - type: pserv
     name: event-ms-db
     plan: free
-    ipAllowList: []  # Allow all IPs
+    ipAllowList: []
