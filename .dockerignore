@@ -8,6 +8,8 @@ target/
 README.md
 Dockerfile
 .dockerignore
+.mvn/
+mvnw
+mvnw.cmd
+*.md
 .env
-node_modules/
-!target/EventManagementSystem.war

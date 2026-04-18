@@ -15,11 +15,11 @@ public class DBConnection {
 
     static {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            LOGGER.info("MySQL JDBC Driver registered successfully");
+            Class.forName("org.postgresql.Driver");
+            LOGGER.info("PostgreSQL JDBC Driver registered successfully");
         } catch (ClassNotFoundException e) {
-            LOGGER.log(Level.SEVERE, "MySQL JDBC Driver not found", e);
-            throw new RuntimeException("MySQL JDBC Driver not found", e);
+            LOGGER.log(Level.SEVERE, "PostgreSQL JDBC Driver not found", e);
+            throw new RuntimeException("PostgreSQL JDBC Driver not found", e);
         }
     }
 

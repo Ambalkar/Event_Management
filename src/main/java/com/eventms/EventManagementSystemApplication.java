@@ -9,8 +9,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@ComponentScan(basePackages = "com.eventms")
-@EntityScan("com.eventms.model")
+@ComponentScan(basePackages = {"com.eventms", "com.example.eventmanagement"})
+@EntityScan("com.example.eventmanagement.model")
 @EnableJpaRepositories("com.eventms.repository")
 public class EventManagementSystemApplication extends SpringBootServletInitializer {
 

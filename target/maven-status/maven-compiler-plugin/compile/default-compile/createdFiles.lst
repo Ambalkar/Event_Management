@@ -1,12 +1,17 @@
+com\eventms\config\SecurityConfig.class
 com\example\eventmanagement\util\DBConnection.class
+com\eventms\controller\UserController.class
 com\example\eventmanagement\model\User.class
 com\example\eventmanagement\servlet\TestDBServlet.class
 com\example\eventmanagement\servlet\MyEventsServlet.class
 com\example\eventmanagement\model\Event.class
+com\eventms\controller\AdminController$Event.class
 com\example\eventmanagement\servlet\UserServlet.class
+com\eventms\controller\AdminController.class
 com\eventms\EventManagementSystemApplication.class
 com\eventms\model\BaseEntity.class
 com\example\eventmanagement\model\Participation.class
 com\eventms\controller\HealthCheckController.class
 com\eventms\repository\BaseRepository.class
+com\eventms\controller\AdminController$Booking.class
 com\example\eventmanagement\servlet\AdminServlet.class

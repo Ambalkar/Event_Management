@@ -3,5 +3,6 @@ builder = "DOCKERFILE"
 dockerfilePath = "Dockerfile"
 
 [deploy]
-startCommand = "catalina.sh run"
+startCommand = "java -jar target/EventManagementSystem.war"
 restartPolicyType = "ON_FAILURE"
+healthcheckPath = "/health"

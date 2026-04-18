@@ -1,13 +1,37 @@
 package com.example.eventmanagement.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Table;
+import javax.persistence.Column;
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "participations")
 public class Participation {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
+    
+    @Column(name = "participant_id", nullable = false)
     private String participantId;
+    
+    @Column(name = "name", nullable = false)
     private String name;
+    
+    @Column(name = "email", nullable = false)
     private String email;
+    
+    @Column(name = "registration_date")
     private LocalDateTime registrationDate;
+    
+    @ManyToOne
+    @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 
     // Getters and Setters

@@ -3,8 +3,8 @@ services:
     name: event-management-system
     env: docker
     plan: free
-    buildCommand: "./mvnw clean package -DskipTests"
     startCommand: "java -jar target/EventManagementSystem.war"
+    healthCheckPath: "/health"
     envVars:
       - key: PORT
         value: 8080
@@ -23,6 +23,8 @@ services:
           type: postgres
           name: event-ms-db
           property: password
+      - key: SPRING_PROFILES_ACTIVE
+        value: production
     dependsOn:
       - event-ms-db
 
