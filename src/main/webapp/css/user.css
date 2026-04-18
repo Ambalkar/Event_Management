@@ -2,13 +2,13 @@ body {
     font-family: Arial, sans-serif; 
     margin: 0;
     padding: 20px;
-    background-color: #f5f5f5;
+    background-color: #090a0d;
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    background-color: white;
+    background-color: #15171c;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -19,12 +19,12 @@ body {
     text-align: center;
     margin-bottom: 30px;
     padding: 15px 0;
-    border-bottom: 2px solid #e0e0e0;
+    border-bottom: 2px solid #343841;
 }
 
 .header-section h1 {
     margin: 0;
-    color: #333;
+    color: #f4f4f5;
 }
 
 .btn {
@@ -38,13 +38,13 @@ body {
 
 .btn-secondary {
     background-color: #6c757d;
-    color: white;
+    color: #f4f4f5;
     border: 2px solid transparent;
 }
 
 .btn-secondary:hover {
     background-color: #5a6268;
-    color: white;
+    color: #f4f4f5;
     transform: translateY(-2px);
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
@@ -57,7 +57,7 @@ body {
 }
 
 .event-card {
-    background: #fff;
+    background: #15171c;
     border-radius: 12px;
     padding: 25px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
@@ -71,25 +71,25 @@ body {
 
 .event-card h2 {
     margin: 0 0 15px 0;
-    color: #2c3e50;
+    color: #d7d7db;
     font-weight: 700;
 }
 
 .date, .location {
-    color: #666;
+    color: #c7c9ce;
     margin: 8px 0;
     font-size: 0.95rem;
 }
 
 .description {
     margin: 15px 0;
-    color: #444;
+    color: #d1d5db;
     line-height: 1.5;
 }
 
 .guests {
     font-weight: bold;
-    color: #27ae60;
+    color: #8dd5a5;
     margin-bottom: 15px;
 }
 
@@ -104,16 +104,18 @@ body {
 .form-group input {
     width: 100%;
     padding: 10px 12px;
-    border: 1px solid #ccc;
+    border: 1px solid #3b4048;
     border-radius: 8px;
     font-size: 1rem;
     transition: border-color 0.3s ease;
+    background: #111318;
+    color: #f4f4f5;
 }
 
 .form-group input:focus {
-    border-color: #3498db;
+    border-color: #8b9098;
     outline: none;
-    box-shadow: 0 0 6px rgba(52, 152, 219, 0.5);
+    box-shadow: 0 0 6px rgba(180, 185, 192, 0.28);
 }
 
 .btn {
@@ -124,15 +126,15 @@ body {
     cursor: pointer;
     font-weight: 600;
     font-size: 1rem;
-    background-color: #3498db;
-    color: white;
+    background-color: #8b9098;
+    color: #f4f4f5;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.4);
+    box-shadow: 0 2px 8px rgba(180, 185, 192, 0.22);
 }
 
 .btn:hover {
-    background-color: #2980b9;
-    box-shadow: 0 4px 14px rgba(41, 128, 185, 0.6);
+    background-color: #5e6470;
+    box-shadow: 0 4px 14px rgba(210, 215, 220, 0.26);
 }
 
 .text-center {
@@ -154,15 +156,15 @@ body {
 }
 
 .success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
+    background-color: rgba(70, 130, 90, 0.22);
+    color: #b8f0c8;
+    border: 1px solid rgba(120, 160, 130, 0.35);
 }
 
 .error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
+    background-color: rgba(150, 70, 70, 0.22);
+    color: #ffc9c9;
+    border: 1px solid rgba(190, 110, 110, 0.35);
 }
 
 .my-events-list {
@@ -173,7 +175,7 @@ body {
 }
 
 .participant-card {
-    background: #ffffff;
+    background: #15171c;
     border-radius: 12px;
     padding: 25px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
@@ -187,13 +189,13 @@ body {
 .participant-details, .event-details {
     margin: 15px 0;
     padding: 15px;
-    background: #f8f9fa;
+    background: #111318;
     border-radius: 8px;
 }
 
 .digital-id {
     font-family: 'Courier New', monospace;
-    background: #e9ecef;
+    background: #2a2d33;
     padding: 8px 12px;
     border-radius: 4px;
     font-size: 1.1em;
@@ -203,10 +205,10 @@ body {
 }
 
 .event-title {
-    color: #2c3e50;
+    color: #d7d7db;
     font-size: 1.5em;
     margin-bottom: 15px;
-    border-bottom: 2px solid #e9ecef;
+    border-bottom: 2px solid #2a2d33;
     padding-bottom: 10px;
 }
 
@@ -216,7 +218,7 @@ body {
     align-items: center;
     margin-bottom: 30px;
     padding: 15px;
-    background: #fff;
+    background: #15171c;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
@@ -228,26 +230,26 @@ body {
 
 .nav-link {
     text-decoration: none;
-    color: #2c3e50;
+    color: #d7d7db;
     padding: 8px 16px;
     border-radius: 4px;
     transition: background-color 0.2s;
 }
 
 .nav-link:hover {
-    background-color: #f0f2f5;
+    background-color: #252932;
 }
 
 .nav-link.active {
-    background-color: #007bff;
-    color: white;
+    background-color: #5f6670;
+    color: #f4f4f5;
 }
 
 .error-container {
     max-width: 600px;
     margin: 50px auto;
     padding: 20px;
-    background-color: #fff;
+    background-color: #15171c;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     text-align: center;
@@ -256,15 +258,15 @@ body {
 .error-message {
     margin: 20px 0;
     padding: 15px;
-    background-color: #fff3cd;
-    border: 1px solid #ffeeba;
+    background-color: rgba(160, 140, 70, 0.18);
+    border: 1px solid rgba(190, 170, 100, 0.28);
     border-radius: 4px;
-    color: #856404;
+    color: #f1d98a;
 }
 
 .user-email {
     padding: 8px 16px;
-    background-color: #f8f9fa;
+    background-color: #111318;
     border-radius: 4px;
     margin-left: auto;
 }
@@ -275,7 +277,7 @@ body {
     display: inline-block;
     padding: 5px 10px;
     background-color: #6c757d;
-    color: white;
+    color: #f4f4f5;
     text-decoration: none;
     border-radius: 3px;
     font-size: 14px;

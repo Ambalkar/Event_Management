@@ -9,31 +9,38 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #60a5fa;
-            --secondary-color: #a78bfa;
+            --primary-color: #d1d5db;
+            --secondary-color: #9ca3af;
+            --accent-teal: #2dd4bf;
+            --accent-green: #22c55e;
+            --accent-gold: #fbbf24;
+            --accent-coral: #fb7185;
             --success-color: #34d399;
             --danger-color: #f87171;
-            --dark-color: #0f172a;
-            --light-color: #ffffff;
-            --gradient-start: #3b82f6;
-            --gradient-end: #8b5cf6;
+            --dark-color: #07080a;
+            --light-color: #f4f4f5;
+            --gradient-start: #6b7280;
+            --gradient-end: #374151;
             --card-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
             --hover-transform: translateY(-5px);
-            --background-color: #0f172a;
-            --card-background: rgba(15, 23, 42, 0.95);
-            --text-primary: #ffffff;
-            --text-secondary: #e2e8f0;
+            --background-color: #07080a;
+            --card-background: rgba(8, 9, 11, 0.96);
+            --text-primary: #f4f4f5;
+            --text-secondary: #d4d4d8;
             --border-color: rgba(255, 255, 255, 0.3);
-            --input-background: rgba(30, 41, 59, 0.8);
+            --input-background: rgba(24, 26, 31, 0.82);
             --hover-background: rgba(255, 255, 255, 0.1);
-            --container-background: rgba(15, 23, 42, 0.8);
+            --container-background: rgba(8, 9, 11, 0.82);
         }
 
         body {
             font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, var(--background-color) 0%, #1e293b 100%);
+            background:
+                linear-gradient(115deg, rgba(45, 212, 191, 0.08), transparent 28%),
+                linear-gradient(245deg, rgba(251, 191, 36, 0.08), transparent 30%),
+                linear-gradient(135deg, var(--background-color) 0%, #15171c 100%);
             color: var(--text-primary);
             min-height: 100vh;
         }
@@ -43,17 +50,20 @@
             margin: 0 auto;
             padding: 2rem;
             background: var(--container-background);
-            border-radius: 20px;
+            border-radius: 8px;
             box-shadow: var(--card-shadow);
             border: 1px solid var(--border-color);
             backdrop-filter: blur(10px);
         }
 
         .header-section {
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            background:
+                linear-gradient(135deg, rgba(45, 212, 191, 0.20), transparent 36%),
+                linear-gradient(225deg, rgba(251, 191, 36, 0.18), transparent 40%),
+                linear-gradient(135deg, #181a1f 0%, #090a0d 100%);
             color: var(--text-primary);
             padding: 2rem;
-            border-radius: 15px;
+            border-radius: 8px;
             margin-bottom: 2rem;
             position: relative;
             box-shadow: var(--card-shadow);
@@ -105,7 +115,7 @@
         .navigation-bar {
             background: var(--card-background);
             padding: 1.5rem;
-            border-radius: 15px;
+            border-radius: 8px;
             box-shadow: var(--card-shadow);
             margin-bottom: 2rem;
             border: 1px solid var(--border-color);
@@ -122,19 +132,20 @@
             text-decoration: none;
             color: var(--text-primary);
             padding: 12px 24px;
-            border-radius: 25px;
+            border-radius: 8px;
             transition: all 0.3s ease;
             font-weight: 500;
             position: relative;
             overflow: hidden;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.14);
         }
 
         .nav-link:hover {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(45, 212, 191, 0.14);
+            border-color: rgba(45, 212, 191, 0.45);
             transform: var(--hover-transform);
-            box-shadow: var(--card-shadow);
+            box-shadow: 0 14px 30px rgba(45, 212, 191, 0.12);
         }
 
         .events-list {
@@ -145,20 +156,29 @@
         }
 
         .event-card {
-            background: var(--card-background);
-            border-radius: 15px;
+            background: linear-gradient(145deg, rgba(20, 23, 28, 0.98), rgba(7, 8, 10, 0.96));
+            border-radius: 8px;
             box-shadow: var(--card-shadow);
             padding: 1.5rem;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            border: 1px solid var(--border-color);
+            border: 1px solid rgba(255, 255, 255, 0.14);
             backdrop-filter: blur(10px);
         }
 
+        .event-card::before {
+            content: '';
+            position: absolute;
+            inset: 0 0 auto 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-teal), var(--accent-gold), var(--accent-green));
+        }
+
         .event-card:hover {
-            transform: var(--hover-transform);
-            box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.4);
+            transform: translateY(-8px);
+            border-color: rgba(255, 255, 255, 0.32);
+            box-shadow: 0 24px 54px -14px rgba(45, 212, 191, 0.28);
         }
 
         .event-card h2 {
@@ -180,18 +200,18 @@
         }
 
         .event-card .date, .event-card .location {
-            background: rgba(96, 165, 250, 0.15);
+            background: rgba(45, 212, 191, 0.10);
             padding: 0.75rem 1.25rem;
             border-radius: 20px;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
             margin: 0.5rem 0;
-            border: 1px solid rgba(96, 165, 250, 0.3);
+            border: 1px solid rgba(45, 212, 191, 0.28);
         }
 
         .event-card .date i, .event-card .location i {
-            color: var(--primary-color);
+            color: var(--accent-teal);
         }
 
         .event-card .guests {
@@ -230,18 +250,18 @@
         }
 
         .form-group input:focus {
-            border-color: var(--primary-color);
+            border-color: var(--accent-teal);
             outline: none;
             background: var(--input-background);
-            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+            box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.18);
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--accent-teal), var(--accent-green));
+            color: #04110e;
             border: none;
             padding: 0.75rem 1.5rem;
-            border-radius: 25px;
+            border-radius: 8px;
             cursor: pointer;
             width: 100%;
             font-size: 1rem;
@@ -254,8 +274,8 @@
 
         .btn-primary:hover {
             transform: var(--hover-transform);
-            box-shadow: var(--card-shadow);
-            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            box-shadow: 0 18px 44px rgba(34, 197, 94, 0.28);
+            background: linear-gradient(135deg, #5eead4, #86efac);
         }
 
         .fully-booked {
@@ -335,10 +355,10 @@
             left: 0;
             right: 0;
             z-index: 1000;
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border-color);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            background: rgba(6, 7, 8, 0.86);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+            box-shadow: 0 12px 34px rgba(0, 0, 0, 0.32);
         }
 
         .nav-container {
@@ -378,8 +398,9 @@
         }
 
         .nav-link.active {
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-            border: none;
+            background: linear-gradient(135deg, var(--accent-teal), var(--accent-green));
+            color: #04110e;
+            border-color: rgba(45, 212, 191, 0.45);
         }
 
         /* Adjust container padding for navbar */
@@ -400,7 +421,7 @@
                 left: 0;
                 right: 0;
                 flex-direction: column;
-                background: rgba(15, 23, 42, 0.98);
+                background: rgba(8, 9, 11, 0.98);
                 padding: 1rem;
                 gap: 0.5rem;
             }

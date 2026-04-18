@@ -8,20 +8,24 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         :root {
-            --primary-color: #60a5fa;
-            --secondary-color: #a78bfa;
+            --primary-color: #d1d5db;
+            --secondary-color: #9ca3af;
+            --accent-teal: #2dd4bf;
+            --accent-green: #22c55e;
+            --accent-gold: #fbbf24;
+            --accent-coral: #fb7185;
             --success-color: #34d399;
             --danger-color: #f87171;
-            --dark-color: #0f172a;
-            --light-color: #ffffff;
-            --gradient-start: #3b82f6;
-            --gradient-end: #8b5cf6;
+            --dark-color: #07080a;
+            --light-color: #f4f4f5;
+            --gradient-start: #6b7280;
+            --gradient-end: #374151;
             --card-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
             --hover-transform: translateY(-5px);
-            --background-color: #0f172a;
-            --card-background: rgba(15, 23, 42, 0.95);
-            --text-primary: #ffffff;
-            --text-secondary: #e2e8f0;
+            --background-color: #07080a;
+            --card-background: rgba(8, 9, 11, 0.96);
+            --text-primary: #f4f4f5;
+            --text-secondary: #d4d4d8;
             --border-color: rgba(255, 255, 255, 0.3);
         }
 
@@ -29,7 +33,10 @@
             font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, var(--background-color) 0%, #1e293b 100%);
+            background:
+                linear-gradient(115deg, rgba(45, 212, 191, 0.08), transparent 28%),
+                linear-gradient(245deg, rgba(251, 191, 36, 0.08), transparent 30%),
+                linear-gradient(135deg, var(--background-color) 0%, #15171c 100%);
             color: var(--text-primary);
             min-height: 100vh;
         }
@@ -41,14 +48,29 @@
         }
 
         .doc-header {
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            background:
+                linear-gradient(135deg, rgba(45, 212, 191, 0.20), transparent 36%),
+                linear-gradient(225deg, rgba(251, 191, 36, 0.18), transparent 40%),
+                linear-gradient(135deg, #181a1f 0%, #090a0d 100%);
             color: var(--text-primary);
             padding: 2rem;
-            border-radius: 15px;
+            border-radius: 8px;
             margin-bottom: 2rem;
             position: relative;
             box-shadow: var(--card-shadow);
             text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            overflow: hidden;
+        }
+
+        .doc-header::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-teal), var(--accent-gold), var(--accent-green));
         }
 
         .doc-header h1 {
@@ -60,11 +82,12 @@
         .doc-nav {
             position: sticky;
             top: 20px;
-            background: var(--card-background);
+            background: linear-gradient(145deg, rgba(20, 23, 28, 0.98), rgba(7, 8, 10, 0.96));
             padding: 1rem;
-            border-radius: 10px;
+            border-radius: 8px;
             margin-bottom: 2rem;
             box-shadow: var(--card-shadow);
+            border: 1px solid rgba(255, 255, 255, 0.14);
         }
 
         .doc-nav ul {
@@ -87,27 +110,29 @@
         }
 
         .doc-nav a:hover {
-            background: var(--hover-background);
+            background: rgba(45, 212, 191, 0.14);
+            color: var(--accent-teal);
             transform: translateX(5px);
         }
 
         .doc-section {
-            background: var(--card-background);
+            background: linear-gradient(145deg, rgba(20, 23, 28, 0.98), rgba(7, 8, 10, 0.96));
             padding: 2rem;
-            border-radius: 15px;
+            border-radius: 8px;
             margin-bottom: 2rem;
             box-shadow: var(--card-shadow);
+            border: 1px solid rgba(255, 255, 255, 0.14);
         }
 
         .doc-section h2 {
-            color: var(--primary-color);
+            color: var(--accent-teal);
             margin-top: 0;
-            border-bottom: 2px solid var(--border-color);
+            border-bottom: 2px solid rgba(45, 212, 191, 0.28);
             padding-bottom: 0.5rem;
         }
 
         .doc-section h3 {
-            color: var(--secondary-color);
+            color: var(--accent-gold);
             margin-top: 1.5rem;
         }
 
@@ -136,14 +161,25 @@
         }
 
         .feature-card {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.055);
             padding: 1.5rem;
-            border-radius: 10px;
-            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 16px 36px rgba(0,0,0,0.22);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            inset: 0 0 auto 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-teal), var(--accent-gold), var(--accent-green));
         }
 
         .feature-card h4 {
-            color: var(--primary-color);
+            color: var(--accent-teal);
             margin-top: 0;
         }
 
@@ -155,8 +191,8 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background: var(--primary-color);
-            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--accent-teal), var(--accent-green));
+            color: #04110e;
             width: 40px;
             height: 40px;
             border-radius: 50%;
@@ -170,7 +206,7 @@
 
         .back-to-top:hover {
             transform: translateY(-5px);
-            background: var(--gradient-end);
+            background: linear-gradient(135deg, #5eead4, #86efac);
         }
 
         @media (max-width: 768px) {
@@ -198,10 +234,10 @@
             left: 0;
             right: 0;
             z-index: 1000;
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border-color);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            background: rgba(6, 7, 8, 0.86);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+            box-shadow: 0 12px 34px rgba(0, 0, 0, 0.32);
         }
 
         .nav-container {
@@ -244,21 +280,23 @@
             color: var(--text-primary);
             text-decoration: none;
             padding: 0.75rem 1.5rem;
-            border-radius: 10px;
+            border-radius: 8px;
             transition: all 0.3s ease;
             font-weight: 500;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.14);
         }
 
         .nav-link:hover {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(45, 212, 191, 0.14);
+            border-color: rgba(45, 212, 191, 0.45);
             transform: var(--hover-transform);
-            box-shadow: var(--card-shadow);
+            box-shadow: 0 14px 30px rgba(45, 212, 191, 0.12);
         }
 
         .admin-link {
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.28), rgba(45, 212, 191, 0.18));
+            border-color: rgba(251, 191, 36, 0.35);
         }
 
         /* Adjust container padding for navbar */
@@ -279,7 +317,7 @@
                 left: 0;
                 right: 0;
                 flex-direction: column;
-                background: rgba(15, 23, 42, 0.98);
+                background: rgba(8, 9, 11, 0.98);
                 padding: 1rem;
                 gap: 0.5rem;
             }

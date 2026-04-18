@@ -83,19 +83,25 @@ public class AdminController {
     public String adminDashboard(Model model) {
         List<Event> events = new ArrayList<>();
         List<Booking> bookings = new ArrayList<>();
+        int totalCapacity = 0;
+        int totalGuests = 0;
         try (Connection conn = dataSource.getConnection()) {
             String sql = "SELECT event_id, name, date, location, description, guest_limit, current_guests FROM events";
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
+                int guestLimit = rs.getInt("guest_limit");
+                int currentGuests = rs.getInt("current_guests");
+                totalCapacity += guestLimit;
+                totalGuests += currentGuests;
                 events.add(new Event(
                     rs.getInt("event_id"),
                     rs.getString("name"),
                     rs.getString("date"),
                     rs.getString("location"),
                     rs.getString("description"),
-                    rs.getInt("guest_limit"),
-                    rs.getInt("current_guests")
+                    guestLimit,
+                    currentGuests
                 ));
             }
 
@@ -122,6 +128,10 @@ public class AdminController {
         }
         model.addAttribute("events", events);
         model.addAttribute("bookings", bookings);
+        model.addAttribute("totalEvents", events.size());
+        model.addAttribute("totalBookings", bookings.size());
+        model.addAttribute("totalCapacity", totalCapacity);
+        model.addAttribute("totalGuests", totalGuests);
         return "admin_dashboard"; // This will resolve to admin_dashboard.jsp
     }
 

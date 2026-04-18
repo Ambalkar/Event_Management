@@ -1,536 +1,606 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin Dashboard - Event Management System</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin.css">
+    <title>Admin Portal - Event Management System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #60a5fa;
-            --secondary-color: #a78bfa;
-            --success-color: #34d399;
-            --danger-color: #f87171;
-            --dark-color: #0f172a;
-            --light-color: #ffffff;
-            --gradient-start: #3b82f6;
-            --gradient-end: #8b5cf6;
-            --card-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
-            --hover-transform: translateY(-5px);
-            --background-color: #0f172a;
-            --card-background: rgba(15, 23, 42, 0.95);
-            --text-primary: #ffffff;
-            --text-secondary: #e2e8f0;
-            --border-color: rgba(255, 255, 255, 0.3);
-            --input-background: rgba(30, 41, 59, 0.8);
-            --hover-background: rgba(255, 255, 255, 0.1);
-            --container-background: rgba(15, 23, 42, 0.8);
+            --page-bg: #060708;
+            --panel-bg: rgba(14, 15, 18, 0.96);
+            --panel-soft: rgba(26, 28, 33, 0.9);
+            --panel-line: rgba(230, 230, 230, 0.16);
+            --panel-line-strong: rgba(230, 230, 230, 0.28);
+            --metal-1: #e5e7eb;
+            --metal-2: #a3a8b0;
+            --metal-3: #656b75;
+            --metal-4: #30343a;
+            --accent-teal: #2dd4bf;
+            --accent-green: #22c55e;
+            --accent-gold: #fbbf24;
+            --accent-coral: #fb7185;
+            --ink: #f4f4f5;
+            --muted: #b8bbc2;
+            --muted-dark: #7e838c;
+            --success: #8dd5a5;
+            --danger: #f87171;
+            --shadow: 0 24px 60px rgba(0, 0, 0, 0.42);
+            --radius: 8px;
+        }
+
+        * {
+            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
             margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, var(--background-color) 0%, #1e293b 100%);
-            color: var(--text-primary);
             min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at 18% 0%, rgba(45, 212, 191, 0.14), transparent 30%),
+                radial-gradient(circle at 82% 6%, rgba(251, 191, 36, 0.12), transparent 28%),
+                linear-gradient(135deg, #050607 0%, #111318 50%, #050607 100%);
         }
 
-        .container {
-            max-width: 1200px;
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+            background-size: 36px 36px;
+            mask-image: linear-gradient(to bottom, rgba(0,0,0,0.75), transparent 85%);
+        }
+
+        .admin-shell {
+            width: min(1440px, calc(100% - 32px));
             margin: 0 auto;
-            padding: 2rem;
-            background: var(--container-background);
-            border-radius: 20px;
-            box-shadow: var(--card-shadow);
-            border: 1px solid var(--border-color);
-            backdrop-filter: blur(10px);
-        }
-
-        .header-section {
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-            color: var(--text-primary);
-            padding: 2rem;
-            border-radius: 15px;
-            margin-bottom: 2rem;
+            padding: 24px 0 48px;
             position: relative;
-            box-shadow: var(--card-shadow);
-            overflow: hidden;
-            border: 1px solid var(--border-color);
+            z-index: 1;
         }
 
-        .header-section::before {
+        .topbar {
+            min-height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 16px 20px;
+            background: rgba(8, 9, 11, 0.88);
+            border: 1px solid var(--panel-line);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(14px);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 0;
+        }
+
+        .brand-mark {
+            width: 46px;
+            height: 46px;
+            display: grid;
+            place-items: center;
+            border-radius: var(--radius);
+            background: linear-gradient(145deg, var(--accent-teal), var(--accent-green));
+            color: #04110e;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), 0 12px 28px rgba(45, 212, 191, 0.28);
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: 1.35rem;
+            letter-spacing: 0;
+        }
+
+        .brand p {
+            margin: 0.15rem 0 0;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .nav-pill,
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 40px;
+            padding: 0.7rem 1rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--panel-line-strong);
+            color: var(--ink);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+            background: rgba(255,255,255,0.06);
+        }
+
+        .nav-pill:hover,
+        .btn:hover {
+            transform: translateY(-2px);
+            border-color: rgba(45, 212, 191,0.45);
+            background: rgba(45, 212, 191,0.14);
+        }
+
+        .hero-panel {
+            margin-top: 20px;
+            padding: 28px;
+            border-radius: var(--radius);
+            border: 1px solid var(--panel-line);
+            background:
+                linear-gradient(135deg, rgba(45, 212, 191, 0.16), transparent 35%),
+                linear-gradient(225deg, rgba(251, 191, 36, 0.14), transparent 40%),
+                linear-gradient(135deg, rgba(28, 30, 35, 0.96), rgba(7, 8, 10, 0.98));
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .hero-panel::after {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%),
-                        linear-gradient(-45deg, rgba(255,255,255,0.1) 25%, transparent 25%);
-            background-size: 60px 60px;
-            opacity: 0.1;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(115deg, transparent 0%, rgba(255,255,255,0.08) 45%, transparent 55%);
+            opacity: 0.7;
         }
 
-        .header-section h1 {
-            margin: 0;
-            font-size: 2.5em;
-            text-align: center;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        .hero-copy {
             position: relative;
-            color: var(--text-primary);
+            z-index: 1;
+            max-width: 760px;
         }
 
-        .home-btn {
+        .eyebrow {
+            margin: 0 0 8px;
+            color: var(--accent-teal);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.78rem;
+            letter-spacing: 0;
+        }
+
+        .hero-copy h2 {
+            margin: 0;
+            font-size: 3.75rem;
+            line-height: 1.02;
+            letter-spacing: 0;
+            background: linear-gradient(90deg, #ffffff 0%, var(--accent-teal) 42%, var(--accent-gold) 78%, #f5f5f5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-copy p:last-child {
+            max-width: 660px;
+            margin: 14px 0 0;
+            color: var(--muted);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 14px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            min-height: 132px;
+            padding: 18px;
+            border-radius: var(--radius);
+            border: 1px solid var(--panel-line);
+            background: linear-gradient(145deg, rgba(24, 26, 31, 0.96), rgba(10, 11, 13, 0.96));
+            box-shadow: 0 16px 38px rgba(0,0,0,0.25);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
             position: absolute;
-            right: 20px;
-            top: 20px;
-            color: var(--text-primary);
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 25px;
-            background: rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255,255,255,0.4);
+            inset: 0 0 auto 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-teal), var(--accent-gold), var(--accent-green));
         }
 
-        .home-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: var(--hover-transform);
-            box-shadow: var(--card-shadow);
+        .stat-card i {
+            color: var(--accent-gold);
+            font-size: 1.25rem;
+        }
+
+        .stat-card strong {
+            display: block;
+            margin-top: 18px;
+            font-size: 2rem;
+            line-height: 1;
+        }
+
+        .stat-card span {
+            display: block;
+            margin-top: 8px;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .console-grid {
+            display: grid;
+            grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+            align-items: start;
+        }
+
+        .panel {
+            border-radius: var(--radius);
+            border: 1px solid var(--panel-line);
+            background: var(--panel-bg);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--panel-line);
+            background:
+                linear-gradient(135deg, rgba(45, 212, 191, 0.08), transparent),
+                linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+        }
+
+        .panel-header h2 {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        .panel-header p {
+            margin: 4px 0 0;
+            color: var(--muted);
+            font-size: 0.86rem;
+        }
+
+        .panel-badge {
+            white-space: nowrap;
+            padding: 0.45rem 0.7rem;
+            border-radius: var(--radius);
+            background: rgba(255,255,255,0.08);
+            border: 1px solid var(--panel-line);
+            color: var(--accent-teal);
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        form {
+            margin: 0;
         }
 
         .event-form {
-            background: var(--card-background);
-            padding: 2rem;
-            border-radius: 15px;
-            margin-bottom: 2rem;
-            box-shadow: var(--card-shadow);
-            border: 1px solid var(--border-color);
-            backdrop-filter: blur(10px);
-        }
-
-        .event-form h2 {
-            color: var(--text-primary);
-            margin-bottom: 1.5rem;
-            font-size: 1.75em;
-            text-align: center;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            padding: 20px;
         }
 
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 16px;
         }
 
-        .form-group label {
+        label {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.75rem;
-            color: var(--text-primary);
-            font-weight: 500;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            gap: 8px;
+            color: var(--metal-1);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
         }
 
-        .form-group label i {
-            color: var(--primary-color);
-        }
-
-        .form-group input,
-        .form-group textarea {
+        input,
+        textarea {
             width: 100%;
-            padding: 0.75rem 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            background: var(--input-background);
-            color: var(--text-primary);
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            border-color: var(--primary-color);
+            border: 1px solid var(--panel-line);
+            border-radius: var(--radius);
+            background: #101217;
+            color: var(--ink);
+            padding: 0.85rem 0.9rem;
+            font-family: inherit;
+            font-size: 0.95rem;
             outline: none;
-            background: var(--input-background);
-            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.3);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
         }
 
-        .form-group input[type="date"] {
-            width: 100%;    /* Make it full width like other inputs */
-            padding: 0.75rem 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            background: var(--input-background);
-            color: var(--text-primary);
-            font-size: 1rem;
-            position: relative;
-            cursor: pointer;
+        textarea {
+            min-height: 106px;
+            resize: vertical;
         }
 
-        /* Table specific date column styling */
-        .event-table .date-column {
-            width: 15%;  /* Match other columns */
-        }
-
-        .event-table input[type="date"] {
-            width: 100%;
-            min-width: unset;
-            padding: 0.5rem;
-        }
-
-        /* Remove default date picker styling */
-        .form-group input[type="date"]::-webkit-inner-spin-button,
-        .form-group input[type="date"]::-webkit-calendar-picker-indicator {
-            opacity: 0;
-            position: absolute;
-            right: 0;
-            top: 0;
-            bottom: 0;
-            width: 100%;
-            cursor: pointer;
-        }
-
-        /* Add custom date format placeholder */
-        .form-group input[type="date"]::before {
-            content: attr(placeholder);
-            position: absolute;
-            color: var(--text-secondary);
-        }
-
-        .form-group input[type="date"]:focus::before {
-            display: none;
-        }
-
-        .form-group input[type="file"] {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            background: var(--input-background);
-            color: var(--text-primary);
-            cursor: pointer;
-        }
-
-        .form-group input[type="file"]::-webkit-file-upload-button {
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-            color: var(--text-primary);
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-right: 1rem;
-        }
-
-        .form-group input[type="file"]::-webkit-file-upload-button:hover {
-            background: linear-gradient(135deg, #2563eb, #7c3aed);
-        }
-
-        .image-preview {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 8px;
-            border: 2px solid var(--border-color);
-        }
-
-        .event-table .image-column {
-            width: 120px;
-            min-width: 120px;
-        }
-
-        .event-table .image-preview-cell {
-            padding: 0.5rem;
-            text-align: center;
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-primary);
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-            color: var(--text-primary);
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-        }
-
-        .btn-primary:hover {
-            transform: var(--hover-transform);
-            box-shadow: var(--card-shadow);
-            background: linear-gradient(135deg, #2563eb, #7c3aed);
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            color: var(--text-primary);
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-        }
-
-        .btn-danger:hover {
-            transform: var(--hover-transform);
-            box-shadow: var(--card-shadow);
-            background: linear-gradient(135deg, #dc2626, #b91c1c);
-        }
-
-        .btn-secondary {
-            background: linear-gradient(135deg, #64748b, #475569);
-            color: var(--text-primary);
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-        }
-
-        .btn-secondary:hover {
-            transform: var(--hover-transform);
-            box-shadow: var(--card-shadow);
-            background: linear-gradient(135deg, #475569, #334155);
+        input:focus,
+        textarea:focus {
+            border-color: rgba(229, 231, 235, 0.65);
+            box-shadow: 0 0 0 3px rgba(229, 231, 235, 0.12);
+            background: #14171d;
         }
 
         .form-actions {
             display: flex;
-            gap: 1rem;
-            justify-content: center;
-            margin-top: 2rem;
-        }
-
-        .event-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            margin-top: 2rem;
-            background: var(--card-background);
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: var(--card-shadow);
-            border: 1px solid var(--border-color);
-            backdrop-filter: blur(10px);
-            table-layout: fixed;
-        }
-
-        .event-table th {
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-            color: var(--text-primary);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-            border-bottom: 2px solid var(--border-color);
-            padding: 0.75rem;
-            font-size: 0.85em;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .event-table td {
-            background: var(--card-background);
-            color: var(--text-primary);
-            border-bottom: 1px solid var(--border-color);
-            padding: 1rem;
-            vertical-align: middle;
-            word-wrap: break-word;
-            overflow: hidden;
-        }
-
-        .event-table tbody tr {
-            background: var(--card-background);
-            transition: all 0.3s ease;
-        }
-
-        .event-table tbody tr:nth-child(even) {
-            background: rgba(30, 41, 59, 0.95);
-        }
-
-        .event-table tbody tr:hover {
-            background: var(--hover-background);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .event-table input,
-        .event-table textarea {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background: var(--input-background);
-            color: var(--text-primary);
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-            box-sizing: border-box;
-        }
-
-        .event-table input:focus,
-        .event-table textarea:focus {
-            border-color: var(--primary-color);
-            outline: none;
-            background: var(--input-background);
-            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.3);
-        }
-
-        .event-table textarea {
-            min-height: 60px;
-            resize: vertical;
-            max-height: 120px;
-        }
-
-        .event-table .actions {
-            display: flex;
-            gap: 0.5rem;
-            justify-content: flex-start;
+            gap: 10px;
+            margin-top: 18px;
             flex-wrap: wrap;
         }
 
-        .event-table .btn {
-            padding: 0.4rem 0.8rem;
-            font-size: 0.85rem;
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-teal), var(--accent-green));
+            color: #04110e;
+            border-color: rgba(45,212,191,0.45);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #4b515b, #242830);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #6f1d1d, #3d1010);
+            border-color: rgba(248, 113, 113, 0.35);
+        }
+
+        .btn-danger:hover {
+            border-color: rgba(248, 113, 113, 0.65);
+            background: linear-gradient(135deg, #842323, #4a1212);
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 920px;
+        }
+
+        th,
+        td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--panel-line);
+            vertical-align: top;
+        }
+
+        th {
+            position: sticky;
+            top: 0;
+            background: #181b21;
+            color: var(--metal-1);
+            font-size: 0.76rem;
+            text-transform: uppercase;
+            letter-spacing: 0;
+            z-index: 1;
+        }
+
+        td {
+            color: var(--muted);
+            font-size: 0.92rem;
+        }
+
+        tbody tr {
+            transition: background 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background: rgba(255,255,255,0.045);
+        }
+
+        .id-cell,
+        .count-cell {
+            color: var(--metal-1);
+            font-weight: 700;
+        }
+
+        .event-name,
+        .user-name {
+            color: var(--ink);
+            font-weight: 700;
+        }
+
+        .muted {
+            color: var(--muted-dark);
+        }
+
+        .status-chip,
+        .digital-chip {
             display: inline-flex;
             align-items: center;
-            gap: 0.4rem;
+            gap: 6px;
+            padding: 0.42rem 0.65rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--panel-line);
+            background: rgba(255,255,255,0.065);
+            color: var(--metal-1);
+            font-weight: 700;
+            font-size: 0.78rem;
             white-space: nowrap;
-            min-width: 80px;
         }
 
-        .event-table .btn i {
-            font-size: 0.9rem;
+        .status-chip.good {
+            color: var(--success);
+            border-color: rgba(141, 213, 165, 0.28);
+            background: rgba(141, 213, 165, 0.08);
         }
 
-        .event-table .id-column {
-            font-weight: 600;
-            color: var(--primary-color);
-            width: 60px;
+        .row-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
-        .event-table .guest-count {
-            font-weight: 500;
-            color: var(--success-color);
-            width: 100px;
+        .row-actions .btn {
+            min-height: 34px;
+            padding: 0.45rem 0.65rem;
+            font-size: 0.78rem;
         }
 
-        .event-table .name-column {
-            width: 15%;
-        }
-
-        .event-table .date-column {
-            width: 15%;  /* Match other columns */
-            white-space: normal;  /* Allow text to wrap */
-        }
-
-        .event-table .location-column {
-            width: 15%;
-        }
-
-        .event-table .description-column {
-            width: 25%;
-        }
-
-        .event-table .guest-limit-column {
-            width: 10%;
-        }
-
-        .event-table .actions-column {
-            width: 15%;
-        }
-
-        .event-table .email-column {
-            width: 20%;
-        }
-
-        .event-table .digital-id-column {
-            width: 20%;
-        }
-
-        .event-table .empty-message {
+        .empty-state {
             text-align: center;
-            padding: 2rem;
-            color: var(--text-secondary);
-            font-style: italic;
+            color: var(--muted);
+            padding: 34px 16px;
         }
 
-        .event-table .empty-message i {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            color: var(--primary-color);
-            opacity: 0.5;
+        .empty-state i {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--metal-2);
+            font-size: 1.6rem;
         }
 
         .alert {
-            padding: 1rem 1.5rem;
-            border-radius: 10px;
-            margin-bottom: 1.5rem;
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            animation: slideIn 0.3s ease;
-            border: 1px solid var(--border-color);
-            background: var(--card-background);
-            backdrop-filter: blur(10px);
+            gap: 10px;
+            margin-top: 20px;
+            padding: 14px 16px;
+            border-radius: var(--radius);
+            border: 1px solid var(--panel-line);
+            background: var(--panel-bg);
         }
 
         .alert-danger {
-            background: rgba(220, 38, 38, 0.2);
-            color: #fca5a5;
-            border-color: rgba(220, 38, 38, 0.4);
+            color: #ffc9c9;
+            border-color: rgba(248, 113, 113, 0.35);
+            background: rgba(120, 30, 30, 0.18);
         }
 
-        h2 {
-            color: var(--text-primary);
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        .alert-success {
+            color: #b8f0c8;
+            border-color: rgba(141, 213, 165, 0.3);
+            background: rgba(50, 110, 70, 0.16);
         }
 
-        @media (max-width: 1200px) {
-            .event-table {
-                display: block;
-                overflow-x: auto;
+        @media (max-width: 980px) {
+            .console-grid,
+            .stats-grid {
+                grid-template-columns: 1fr;
             }
-            
-            .event-table th,
-            .event-table td {
-                min-width: 120px;
-            }
-            
-            .event-table .id-column {
-                min-width: 60px;
-            }
-            
-            .event-table .guest-count {
-                min-width: 100px;
-            }
-            
-            .event-table .actions {
+
+            .topbar {
+                align-items: flex-start;
                 flex-direction: column;
-                gap: 0.5rem;
             }
-            
-            .event-table .btn {
+
+            .top-actions {
+                width: 100%;
+                justify-content: stretch;
+            }
+
+            .nav-pill {
+                flex: 1;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .admin-shell {
+                width: min(100% - 20px, 1440px);
+                padding-top: 10px;
+            }
+
+            .hero-panel,
+            .event-form,
+            .panel-header {
+                padding: 16px;
+            }
+
+            .form-actions .btn,
+            .nav-pill {
                 width: 100%;
             }
 
-            .event-table .date-column {
-                min-width: unset;
-                width: 15%;
+            .hero-copy h2 {
+                font-size: 2.4rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header-section">
-            <a href="${pageContext.request.contextPath}/" class="home-btn">
-                <i class="fas fa-home"></i> Home
-            </a>
-            <h1>Admin Dashboard</h1>
-        </div>
+    <main class="admin-shell">
+        <nav class="topbar">
+            <div class="brand">
+                <div class="brand-mark">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <div>
+                    <h1>EventMS Admin</h1>
+                    <p>Manage events, seats, and participant records.</p>
+                </div>
+            </div>
+            <div class="top-actions">
+                <a href="${pageContext.request.contextPath}/" class="nav-pill">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="${pageContext.request.contextPath}/user" class="nav-pill">
+                    <i class="fas fa-calendar-alt"></i> User Portal
+                </a>
+                <a href="#bookings" class="nav-pill">
+                    <i class="fas fa-users"></i> Bookings
+                </a>
+            </div>
+        </nav>
+
+        <section class="hero-panel">
+            <div class="hero-copy">
+                <p class="eyebrow">Control Room</p>
+                <h2>Admin Dashboard</h2>
+                <p>Track event capacity, manage live event records, and review participant booking details from one dark metallic console.</p>
+            </div>
+        </section>
+
+        <section class="stats-grid" aria-label="Admin dashboard summary">
+            <article class="stat-card">
+                <i class="fas fa-calendar-check"></i>
+                <strong>${totalEvents}</strong>
+                <span>Total events</span>
+            </article>
+            <article class="stat-card">
+                <i class="fas fa-ticket-alt"></i>
+                <strong>${totalBookings}</strong>
+                <span>Total bookings</span>
+            </article>
+            <article class="stat-card">
+                <i class="fas fa-chair"></i>
+                <strong>${totalCapacity}</strong>
+                <span>Total capacity</span>
+            </article>
+            <article class="stat-card">
+                <i class="fas fa-user-friends"></i>
+                <strong>${totalGuests}</strong>
+                <span>Registered guests</span>
+            </article>
+        </section>
+
+        <c:if test="${not empty successMessage}">
+            <div class="alert alert-success">
+                <i class="fas fa-check-circle"></i> ${successMessage}
+            </div>
+        </c:if>
 
         <c:if test="${not empty errorMessage}">
             <div class="alert alert-danger">
@@ -538,148 +608,185 @@
             </div>
         </c:if>
 
-        <div class="event-form">
-            <h2 id="formTitle">Add New Event</h2>
-            <form method="post" action="${pageContext.request.contextPath}/admin" id="eventForm">
-                <input type="hidden" name="action" value="add" id="formAction">
-                <input type="hidden" name="event_id" id="eventId">
-                
-                <div class="form-group">
-                    <label for="name">Event Name:</label>
-                    <input type="text" id="name" name="name" required>
+        <section class="console-grid">
+            <aside class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h2 id="formTitle">Create Event</h2>
+                        <p>Add a new event or edit a selected event.</p>
+                    </div>
+                    <span class="panel-badge">Event</span>
                 </div>
 
-                <div class="form-group">
-                    <label for="date">
-                        <i class="fas fa-calendar-alt"></i>
-                        Date:
-                    </label>
-                    <input type="date" id="date" name="date" required>
+                <form method="post" action="${pageContext.request.contextPath}/admin" id="eventForm" class="event-form">
+                    <input type="hidden" name="action" value="add" id="formAction">
+                    <input type="hidden" name="event_id" id="eventId">
+
+                    <div class="form-group">
+                        <label for="name"><i class="fas fa-signature"></i> Event Name</label>
+                        <input type="text" id="name" name="name" placeholder="Annual Tech Summit" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="date"><i class="fas fa-calendar-day"></i> Date</label>
+                        <input type="date" id="date" name="date" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location"><i class="fas fa-map-marker-alt"></i> Location</label>
+                        <input type="text" id="location" name="location" placeholder="Main Auditorium" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description"><i class="fas fa-align-left"></i> Description</label>
+                        <textarea id="description" name="description" placeholder="Add event details for participants."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="guest_limit"><i class="fas fa-users"></i> Guest Limit</label>
+                        <input type="number" id="guest_limit" name="guest_limit" min="1" placeholder="100" required>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary" id="submitBtn">
+                            <i class="fas fa-plus-circle"></i> Add Event
+                        </button>
+                        <button type="button" class="btn btn-secondary" id="cancelBtn" style="display: none;" onclick="resetForm()">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    </div>
+                </form>
+            </aside>
+
+            <section class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h2>Event Inventory</h2>
+                        <p>Update schedules, venue details, and booking limits.</p>
+                    </div>
+                    <span class="panel-badge">${totalEvents} Records</span>
                 </div>
 
-                <div class="form-group">
-                    <label for="location">Location:</label>
-                    <input type="text" id="location" name="location" required>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Event</th>
+                                <th>Date</th>
+                                <th>Location</th>
+                                <th>Capacity</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach var="event" items="${events}">
+                                <tr>
+                                    <td class="id-cell">#${event.id}</td>
+                                    <td>
+                                        <div class="event-name">${event.name}</div>
+                                        <div class="muted">${event.description}</div>
+                                    </td>
+                                    <td>${event.date}</td>
+                                    <td>${event.location}</td>
+                                    <td class="count-cell">${event.currentGuests} / ${event.guestLimit}</td>
+                                    <td>
+                                        <c:choose>
+                                            <c:when test="${event.currentGuests lt event.guestLimit}">
+                                                <span class="status-chip good"><i class="fas fa-circle"></i> Open</span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span class="status-chip"><i class="fas fa-lock"></i> Full</span>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </td>
+                                    <td>
+                                        <div class="row-actions">
+                                            <button type="button" class="btn btn-primary update-btn"
+                                                data-id="${event.id}"
+                                                data-name="${event.name}"
+                                                data-date="${event.date}"
+                                                data-location="${event.location}"
+                                                data-description="${event.description}"
+                                                data-guest-limit="${event.guestLimit}">
+                                                <i class="fas fa-edit"></i> Edit
+                                            </button>
+                                            <form method="post" action="${pageContext.request.contextPath}/admin">
+                                                <input type="hidden" name="event_id" value="${event.id}">
+                                                <button type="submit" name="action" value="delete" class="btn btn-danger"
+                                                        onclick="return confirm('Are you sure you want to delete this event?');">
+                                                    <i class="fas fa-trash"></i> Delete
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                            <c:if test="${empty events}">
+                                <tr>
+                                    <td colspan="7" class="empty-state">
+                                        <i class="fas fa-calendar-times"></i>
+                                        No events found.
+                                    </td>
+                                </tr>
+                            </c:if>
+                        </tbody>
+                    </table>
                 </div>
+            </section>
+        </section>
 
-                <div class="form-group">
-                    <label for="description">Description:</label>
-                    <textarea id="description" name="description" rows="3"></textarea>
+        <section class="panel" id="bookings" style="margin-top: 20px;">
+            <div class="panel-header">
+                <div>
+                    <h2>User Booking Details</h2>
+                    <p>Participant contact details, assigned events, and digital IDs.</p>
                 </div>
+                <span class="panel-badge">${totalBookings} Bookings</span>
+            </div>
 
-                <div class="form-group">
-                    <label for="guest_limit">Guest Limit:</label>
-                    <input type="number" id="guest_limit" name="guest_limit" min="1" required>
-                </div>
-
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary" id="submitBtn">
-                        <i class="fas fa-plus-circle"></i> Add Event
-                    </button>
-                    <button type="button" class="btn btn-secondary" id="cancelBtn" style="display: none;" onclick="resetForm()">
-                        <i class="fas fa-times"></i> Cancel
-                    </button>
-                </div>
-            </form>
-        </div>
-
-        <h2 style="color: var(--text-primary); text-align: center; margin: 2rem 0;">Existing Events</h2>
-        <table class="event-table">
-            <thead>
-                <tr>
-                    <th class="id-column">ID</th>
-                    <th class="name-column">Name</th>
-                    <th class="date-column">Date</th>
-                    <th class="location-column">Location</th>
-                    <th class="description-column">Description</th>
-                    <th class="guest-limit-column">Guest Limit</th>
-                    <th class="guest-count">Current Guests</th>
-                    <th class="actions-column">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <c:forEach var="event" items="${events}">
-                    <tr>
-                        <td class="id-column">${event.id}</td>
-                        <td class="name-column">${event.name}</td>
-                        <td class="date-column">${event.date}</td>
-                        <td class="location-column">${event.location}</td>
-                        <td class="description-column">${event.description}</td>
-                        <td class="guest-limit-column">${event.guestLimit}</td>
-                        <td class="guest-count">${event.currentGuests}</td>
-                        <td class="actions-column">
-                            <div class="actions">
-                                <button type="button" class="btn btn-primary update-btn" 
-                                    data-id="${event.id}"
-                                    data-name="${event.name}"
-                                    data-date="${event.date}"
-                                    data-location="${event.location}"
-                                    data-description="${event.description}"
-                                    data-guest-limit="${event.guestLimit}">
-                                    <i class="fas fa-edit"></i> Update
-                                </button>
-                                <form method="post" action="${pageContext.request.contextPath}/admin" style="display: inline;">
-                                    <input type="hidden" name="event_id" value="${event.id}">
-                                    <button type="submit" name="action" value="delete" class="btn btn-danger" 
-                                            onclick="return confirm('Are you sure you want to delete this event?');">
-                                        <i class="fas fa-trash"></i> Delete
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                </c:forEach>
-                <c:if test="${empty events}">
-                    <tr>
-                        <td colspan="8" class="empty-message">
-                            <i class="fas fa-calendar-times"></i>
-                            <div>No events found.</div>
-                        </td>
-                    </tr>
-                </c:if>
-            </tbody>
-        </table>
-
-        <h2 style="color: var(--text-primary); text-align: center; margin: 3rem 0 2rem;">User Booking Details</h2>
-        <table class="event-table">
-            <thead>
-                <tr>
-                    <th class="id-column">ID</th>
-                    <th class="name-column">User Name</th>
-                    <th class="email-column">Email</th>
-                    <th class="name-column">Event</th>
-                    <th class="date-column">Event Date</th>
-                    <th class="digital-id-column">Digital ID</th>
-                    <th class="date-column">Booked On</th>
-                </tr>
-            </thead>
-            <tbody>
-                <c:forEach var="booking" items="${bookings}">
-                    <tr>
-                        <td class="id-column">${booking.id}</td>
-                        <td class="name-column">${booking.userName}</td>
-                        <td class="email-column">${booking.userEmail}</td>
-                        <td class="name-column">${booking.eventName}</td>
-                        <td class="date-column">${booking.eventDate}</td>
-                        <td class="digital-id-column">${booking.digitalId}</td>
-                        <td class="date-column">${booking.bookingDate}</td>
-                    </tr>
-                </c:forEach>
-                <c:if test="${empty bookings}">
-                    <tr>
-                        <td colspan="7" class="empty-message">
-                            <i class="fas fa-user-clock"></i>
-                            <div>No user bookings found.</div>
-                        </td>
-                    </tr>
-                </c:if>
-            </tbody>
-        </table>
-    </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>User</th>
+                            <th>Email</th>
+                            <th>Event</th>
+                            <th>Event Date</th>
+                            <th>Digital ID</th>
+                            <th>Booked On</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="booking" items="${bookings}">
+                            <tr>
+                                <td class="id-cell">#${booking.id}</td>
+                                <td class="user-name">${booking.userName}</td>
+                                <td>${booking.userEmail}</td>
+                                <td>${booking.eventName}</td>
+                                <td>${booking.eventDate}</td>
+                                <td><span class="digital-chip">${booking.digitalId}</span></td>
+                                <td>${booking.bookingDate}</td>
+                            </tr>
+                        </c:forEach>
+                        <c:if test="${empty bookings}">
+                            <tr>
+                                <td colspan="7" class="empty-state">
+                                    <i class="fas fa-user-clock"></i>
+                                    No user bookings found.
+                                </td>
+                            </tr>
+                        </c:if>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Add click event listeners to all update buttons
             document.querySelectorAll('.update-btn').forEach(button => {
                 button.addEventListener('click', function() {
                     const eventData = {
@@ -690,44 +797,28 @@
                         description: this.dataset.description,
                         guestLimit: this.dataset.guestLimit
                     };
-                    
-                    // Update form title and action
+
                     document.getElementById('formTitle').textContent = 'Update Event';
                     document.getElementById('formAction').value = 'update';
                     document.getElementById('eventId').value = eventData.id;
-                    
-                    // Fill form fields
                     document.getElementById('name').value = eventData.name;
                     document.getElementById('date').value = eventData.date;
                     document.getElementById('location').value = eventData.location;
                     document.getElementById('description').value = eventData.description;
                     document.getElementById('guest_limit').value = eventData.guestLimit;
-                    
-                    // Update button text
                     document.getElementById('submitBtn').innerHTML = '<i class="fas fa-save"></i> Update Event';
-                    
-                    // Show cancel button
-                    document.getElementById('cancelBtn').style.display = 'inline-block';
-                    
-                    // Scroll to form
-                    document.querySelector('.event-form').scrollIntoView({ behavior: 'smooth' });
+                    document.getElementById('cancelBtn').style.display = 'inline-flex';
+                    document.getElementById('eventForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
                 });
             });
         });
-        
+
         function resetForm() {
-            // Reset form title and action
-            document.getElementById('formTitle').textContent = 'Add New Event';
+            document.getElementById('formTitle').textContent = 'Create Event';
             document.getElementById('formAction').value = 'add';
             document.getElementById('eventId').value = '';
-            
-            // Clear form fields
             document.getElementById('eventForm').reset();
-            
-            // Update button text
             document.getElementById('submitBtn').innerHTML = '<i class="fas fa-plus-circle"></i> Add Event';
-            
-            // Hide cancel button
             document.getElementById('cancelBtn').style.display = 'none';
         }
     </script>

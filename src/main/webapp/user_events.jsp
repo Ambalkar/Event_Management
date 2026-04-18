@@ -9,13 +9,13 @@
         body { font-family: Arial, sans-serif; margin: 20px; }
         table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
         th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
+        th { background-color: #202329; }
         form { margin-bottom: 20px; }
         input[type="text"], input[type="email"], input[type="number"] {
             width: 100%; padding: 6px; margin: 4px 0; box-sizing: border-box;
         }
         input[type="submit"] {
-            background-color: #4CAF50; color: white; border: none; padding: 10px 20px;
+            background-color: #6f767f; color: #f4f4f5; border: none; padding: 10px 20px;
             cursor: pointer;
         }
         input[type="submit"]:hover {
@@ -27,12 +27,12 @@
             border-radius: 4px;
         }
         .error {
-            background-color: #f8d7da;
-            color: #721c24;
+            background-color: rgba(150, 70, 70, 0.22);
+            color: #ffc9c9;
         }
         .success {
-            background-color: #d4edda;
-            color: #155724;
+            background-color: rgba(70, 130, 90, 0.22);
+            color: #b8f0c8;
         }
         .container {
             max-width: 1200px;
@@ -49,7 +49,7 @@
             text-decoration: none;
             padding: 5px 10px;
             background-color: #6c757d;
-            color: white;
+            color: #f4f4f5;
             border-radius: 3px;
             font-size: 14px;
             position: absolute;
