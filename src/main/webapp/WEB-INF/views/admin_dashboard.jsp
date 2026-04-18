@@ -442,6 +442,14 @@
             width: 15%;
         }
 
+        .event-table .email-column {
+            width: 20%;
+        }
+
+        .event-table .digital-id-column {
+            width: 20%;
+        }
+
         .event-table .empty-message {
             text-align: center;
             padding: 2rem;
@@ -518,15 +526,15 @@
 <body>
     <div class="container">
         <div class="header-section">
-            <a href="${pageContext.request.contextPath}/index.jsp" class="home-btn">
+            <a href="${pageContext.request.contextPath}/" class="home-btn">
                 <i class="fas fa-home"></i> Home
             </a>
             <h1>Admin Dashboard</h1>
         </div>
 
-        <c:if test="${not empty error}">
+        <c:if test="${not empty errorMessage}">
             <div class="alert alert-danger">
-                <i class="fas fa-exclamation-circle"></i> ${error}
+                <i class="fas fa-exclamation-circle"></i> ${errorMessage}
             </div>
         </c:if>
 
@@ -631,6 +639,42 @@
                 </c:if>
             </tbody>
         </table>
+
+        <h2 style="color: var(--text-primary); text-align: center; margin: 3rem 0 2rem;">User Booking Details</h2>
+        <table class="event-table">
+            <thead>
+                <tr>
+                    <th class="id-column">ID</th>
+                    <th class="name-column">User Name</th>
+                    <th class="email-column">Email</th>
+                    <th class="name-column">Event</th>
+                    <th class="date-column">Event Date</th>
+                    <th class="digital-id-column">Digital ID</th>
+                    <th class="date-column">Booked On</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach var="booking" items="${bookings}">
+                    <tr>
+                        <td class="id-column">${booking.id}</td>
+                        <td class="name-column">${booking.userName}</td>
+                        <td class="email-column">${booking.userEmail}</td>
+                        <td class="name-column">${booking.eventName}</td>
+                        <td class="date-column">${booking.eventDate}</td>
+                        <td class="digital-id-column">${booking.digitalId}</td>
+                        <td class="date-column">${booking.bookingDate}</td>
+                    </tr>
+                </c:forEach>
+                <c:if test="${empty bookings}">
+                    <tr>
+                        <td colspan="7" class="empty-message">
+                            <i class="fas fa-user-clock"></i>
+                            <div>No user bookings found.</div>
+                        </td>
+                    </tr>
+                </c:if>
+            </tbody>
+        </table>
     </div>
 
     <script>
@@ -649,7 +693,7 @@
                     
                     // Update form title and action
                     document.getElementById('formTitle').textContent = 'Update Event';
-                    document.getElementById('formAction').value = 'edit';
+                    document.getElementById('formAction').value = 'update';
                     document.getElementById('eventId').value = eventData.id;
                     
                     // Fill form fields

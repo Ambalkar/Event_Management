@@ -698,7 +698,7 @@
 
     <div class="container">
         <div class="header-section">
-            <a href="${pageContext.request.contextPath}/index.jsp" class="home-btn">
+            <a href="${pageContext.request.contextPath}/" class="home-btn">
                 <i class="fas fa-home"></i> Home
             </a>
             <h1>My Events</h1>
@@ -706,8 +706,8 @@
 
         <div class="email-form">
             <h2>View Your Bookings</h2>
-            <form method="get" action="myEvents">
-                <input type="email" name="email" placeholder="Enter your email address" required>
+            <form method="get" action="${pageContext.request.contextPath}/myEvents">
+                <input type="email" name="email" value="${email}" placeholder="Enter your email address" required>
                 <button type="submit">
                     <i class="fas fa-search"></i> View Bookings
                 </button>
@@ -760,7 +760,7 @@
         </div>
         
         <div class="navigation">
-            <a href="user" class="btn">
+            <a href="${pageContext.request.contextPath}/user" class="btn">
                 <i class="fas fa-arrow-left"></i> Back to Events
             </a>
         </div>

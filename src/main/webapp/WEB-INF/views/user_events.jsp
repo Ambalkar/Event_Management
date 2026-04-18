@@ -433,10 +433,10 @@
                 <a href="${pageContext.request.contextPath}/documentation.jsp" class="nav-link">
                     <i class="fas fa-info-circle"></i> About
                 </a>
-                <a href="user" class="nav-link active">
+                <a href="${pageContext.request.contextPath}/user" class="nav-link active">
                     <i class="fas fa-calendar-alt"></i> Available Events
                 </a>
-                <a href="myEvents" class="nav-link">
+                <a href="${pageContext.request.contextPath}/myEvents" class="nav-link">
                     <i class="fas fa-ticket-alt"></i> My Events
                 </a>
             </div>
@@ -479,7 +479,7 @@
                     </p>
                     
                     <c:if test="${event.guestLimit > event.currentGuests}">
-                        <form method="post" action="user" class="booking-form">
+                        <form method="post" action="${pageContext.request.contextPath}/user" class="booking-form">
                             <input type="hidden" name="event_id" value="${event.id}">
                             <div class="form-group">
                                 <input type="text" name="name" placeholder="Your Name" required>

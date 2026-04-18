@@ -16,9 +16,6 @@ import java.util.List;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
 @Controller
 
 public class AdminController {
@@ -54,9 +51,38 @@ public class AdminController {
         public int getCurrentGuests() { return currentGuests; }
     }
 
+    public static class Booking {
+        private int id;
+        private String userName;
+        private String userEmail;
+        private String digitalId;
+        private String eventName;
+        private String eventDate;
+        private String bookingDate;
+
+        public Booking(int id, String userName, String userEmail, String digitalId, String eventName, String eventDate, String bookingDate) {
+            this.id = id;
+            this.userName = userName;
+            this.userEmail = userEmail;
+            this.digitalId = digitalId;
+            this.eventName = eventName;
+            this.eventDate = eventDate;
+            this.bookingDate = bookingDate;
+        }
+
+        public int getId() { return id; }
+        public String getUserName() { return userName; }
+        public String getUserEmail() { return userEmail; }
+        public String getDigitalId() { return digitalId; }
+        public String getEventName() { return eventName; }
+        public String getEventDate() { return eventDate; }
+        public String getBookingDate() { return bookingDate; }
+    }
+
     @GetMapping("/admin")
     public String adminDashboard(Model model) {
         List<Event> events = new ArrayList<>();
+        List<Booking> bookings = new ArrayList<>();
         try (Connection conn = dataSource.getConnection()) {
             String sql = "SELECT event_id, name, date, location, description, guest_limit, current_guests FROM events";
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -72,10 +98,30 @@ public class AdminController {
                     rs.getInt("current_guests")
                 ));
             }
+
+            String bookingSql = "SELECT b.booking_id, b.user_name, b.user_email, b.digital_id, b.booking_date, "
+                    + "e.name AS event_name, e.date AS event_date "
+                    + "FROM bookings b "
+                    + "LEFT JOIN events e ON b.event_id = e.event_id "
+                    + "ORDER BY b.booking_date DESC";
+            PreparedStatement bookingPs = conn.prepareStatement(bookingSql);
+            ResultSet bookingRs = bookingPs.executeQuery();
+            while (bookingRs.next()) {
+                bookings.add(new Booking(
+                    bookingRs.getInt("booking_id"),
+                    bookingRs.getString("user_name"),
+                    bookingRs.getString("user_email"),
+                    bookingRs.getString("digital_id"),
+                    bookingRs.getString("event_name"),
+                    bookingRs.getString("event_date"),
+                    bookingRs.getString("booking_date")
+                ));
+            }
         } catch (SQLException e) {
             model.addAttribute("errorMessage", "Error loading events: " + e.getMessage());
         }
         model.addAttribute("events", events);
+        model.addAttribute("bookings", bookings);
         return "admin_dashboard"; // This will resolve to admin_dashboard.jsp
     }
 
