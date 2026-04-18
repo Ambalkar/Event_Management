@@ -2,10 +2,16 @@ services:
   - type: web
     name: event-management-system
     env: docker
-    plan: free
+    buildCommand: "mvn clean package -DskipTests"
     startCommand: "java -jar target/EventManagementSystem.war"
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        value: "postgresql://postgres@event-ms-db:5432/event_ms_db"
+      - key: SPRING_PROFILES_ACTIVE
+        value: "production"
+      - key: PORT
+        value: "8080"
 
   - type: pserv
     name: event-ms-db
-    plan: free
-    database: event_ms_db
+    ipAllowList: []
