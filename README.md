@@ -187,8 +187,8 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 👥 Contact & Support
 
-- Email: developer@eventmanagement.com
-- GitHub: [Project Repository](https://github.com/yourusername/EMS)
+- Email: devendraambalkar11@gmail.com
+- GitHub: [Project Repository](https://github.com/Ambalkar/Event_Management.git)
 - Documentation: [Project Docs](https://your-domain.com/documentation)
 
 ## 🎯 Future Enhancements
