@@ -120,33 +120,67 @@ EMS/
 - Event notifications
 - Personal dashboard
 
-## 💻 Installation & Setup
+## 💻 Local Setup & Render Deployment
 
-### Prerequisites
-- Java JDK 11 or higher
-- Maven 3.6+
-- MySQL 8.0+
-- Tomcat 9.0+
+### Local Development
+**Prerequisites:**
+- Java JDK 17+
+- Maven (or use ./mvnw)
+- PostgreSQL (docker-compose recommended)
 
-### Setup Steps
-1. Clone the repository:
+**Quick Start:**
 ```bash
-git clone https://github.com/yourusername/EMS.git
+# Build
+./mvnw.cmd clean package -DskipTests
+
+# Local dev (docker-compose.yml)
+docker-compose up -d
+
+# Access
+http://localhost:8080
 ```
 
-2. Configure database:
-```sql
-CREATE DATABASE ems;
-```
+### 🚀 Render Free Tier Deployment (Production Ready)
 
-3. Update application.properties with your database credentials
+1. **Push to GitHub** (connect Render to repo)
 
-4. Build the project:
-```bash
-mvn clean install
-```
+2. **Create Render PostgreSQL (Free Tier):**
+   - Dashboard > New > PostgreSQL
+   - Name: event-ms-db
+   - Copy Internal DB URL → set as `SPRING_DATASOURCE_URL`
+   - Copy USER/PASS
 
-5. Deploy to Tomcat server
+3. **Create Web Service:**
+   - Dashboard > New > Web Service
+   - Connect GitHub repo
+   - **Runtime: Docker**
+   - **Plan: Free**
+   - **render.yaml auto-detected**
+   - **Add Env Vars** (from .env.example):
+     ```
+     SPRING_DATASOURCE_URL=your_render_postgres_url
+     SPRING_DATASOURCE_USERNAME=your_db_user
+     SPRING_DATASOURCE_PASSWORD=your_db_pass
+     SPRING_PROFILES_ACTIVE=production
+     SPRING_SECURITY_USERNAME=admin
+     SPRING_SECURITY_PASSWORD=your_secure_pass
+     ```
+   - Deploy!
+
+4. **Initialize DB:**
+   ```
+   psql $SPRING_DATASOURCE_URL -f src/main/resources/postgres_schema.sql
+   ```
+
+**Endpoints:**
+- App: `https://your-app.onrender.com`
+- Admin: `/admin`
+- Health: `/health`
+
+**Free Tier Notes:**
+- Sleeps after 15min idle (cold start ~30s)
+- 512MB RAM limit (optimized)
+- Auto-scales to zero
 
 ## 🔧 Configuration
 

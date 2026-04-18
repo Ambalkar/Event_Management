@@ -2,3 +2,13 @@ services:
   - type: web
     name: event-management-system
     env: docker
+    buildCommand: ./mvnw clean package -DskipTests
+    startCommand: java -jar target/EventManagementSystem.war
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: production
+      - key: SPRING_JPA_HIBERNATE_DDL_AUTO
+        value: update
+      - key: LOGGING_LEVEL_COM_EVENTMS
+        value: INFO
+    autoDeploy: true
