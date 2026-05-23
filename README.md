@@ -1,242 +1,227 @@
 # Event Management System (EMS)
-<img width="1440" height="852" alt="Screenshot 2026-02-24 083516" src="https://github.com/user-attachments/assets/592c4b3a-fd5a-49fa-bf98-a1d423447eef" />
-<img width="1440" height="852" alt="Screenshot 2026-02-24 083546" src="https://github.com/user-attachments/assets/5ba8f13d-8f2a-4ee9-9c74-68bf80846994" />
-<img width="1440" height="852" alt="Screenshot 2026-02-24 083603" src="https://github.com/user-attachments/assets/b4ea4422-73ac-4238-af77-94cb223565df" />
-<img width="1440" height="852" alt="Screenshot 2026-02-24 083634" src="https://github.com/user-attachments/assets/50df2b03-8362-41ae-93f9-36f7e856f08d" />
 
-## 🌟 Overview
-A sophisticated web-based Event Management System built with Java, Spring Framework, and modern web technologies. The system offers comprehensive features for event creation, management, and participation with a focus on user experience and security.
+Event Management System is a Java 17 web application for creating events, publishing them to users, and tracking event bookings. It is built with Spring Boot, JSP views, PostgreSQL, and Maven, and can run locally with Docker Compose, Maven, or the included Windows development script.
 
-## ⚡ Key Features
+<img width="1440" height="852" alt="EMS landing page screenshot" src="https://github.com/user-attachments/assets/592c4b3a-fd5a-49fa-bf98-a1d423447eef" />
+<img width="1440" height="852" alt="EMS user events screenshot" src="https://github.com/user-attachments/assets/5ba8f13d-8f2a-4ee9-9c74-68bf80846994" />
+<img width="1440" height="852" alt="EMS admin dashboard screenshot" src="https://github.com/user-attachments/assets/b4ea4422-73ac-4238-af77-94cb223565df" />
+<img width="1440" height="852" alt="EMS bookings screenshot" src="https://github.com/user-attachments/assets/50df2b03-8362-41ae-93f9-36f7e856f08d" />
 
-### 🎯 Core Functionality
-- **Event Creation & Management**
-  - Intuitive event creation interface
-  - Real-time event tracking
-  - Automated registration system
-  - Comprehensive event analytics
+## Features
 
-### 👥 User Management
-- **Role-Based Access Control**
-  - Admin Portal
-  - User Portal
-  - Event Organizer capabilities
-  - Participant management
+- Public landing page with project and developer information.
+- User event catalog at `/user`.
+- Event booking with participant name, email, generated digital ID, and booking date.
+- "My Events" lookup at `/myEvents` by participant email.
+- Admin dashboard at `/admin` for managing event records and viewing bookings.
+- Simple events, major events, and sub-events.
+- Capacity tracking with "housefull" handling.
+- PostgreSQL schema for events and bookings.
+- Health check endpoint at `/health`.
+- Docker, Render, and Railway deployment files.
 
-### 🔒 Security Features
-- Secure authentication system
-- Role-based authorization
-- Data encryption
-- Session management
-- XSS protection
+## Tech Stack
 
-### 📱 Interface
-- Responsive design for all devices
-- Modern, intuitive UI
-- Dark theme with gradient accents
-- Interactive components
-- Real-time updates
+- Java 17
+- Spring Boot 2.7.0
+- Spring MVC
+- Spring Data JPA dependency with direct JDBC usage in controllers
+- Spring Security configured to permit all requests
+- JSP and JSTL
+- PostgreSQL
+- Maven
+- Docker and Docker Compose
 
-## 🛠️ Technical Stack
+## Project Structure
 
-### Backend
-- Java 
-- Spring Framework
-- MySQL Database
-- Hibernate ORM
-- JSP (JavaServer Pages)
-- JSTL (JSP Standard Tag Library)
-
-### Frontend
-- HTML5
-- CSS3
-- JavaScript
-- Font Awesome Icons
-- Google Fonts (Poppins)
-- CSS Custom Properties
-- Flexbox & Grid layouts
-
-### Security
-- Spring Security
-- JWT Authentication
-- HTTPS Protocol
-- Form validation
-- SQL injection prevention
-
-## 📂 Project Structure
-
-```
+```text
 EMS/
-├── src/
-│   ├── main/
-│   │   ├── java/
-│   │   │   └── [Java source files]
-│   │   ├── resources/
-│   │   │   └── [Configuration files]
-│   │   └── webapp/
-│   │       ├── WEB-INF/
-│   │       │   ├── views/
-│   │       │   │   ├── my_events.jsp
-│   │       │   │   └── user_events.jsp
-│   │       ├── css/
-│   │       │   └── style.css
-│   │       ├── images/
-│   │       ├── documentation.jsp
-│   │       └── index.jsp
-│   └── test/
-└── pom.xml
+|-- src/main/java/
+|   |-- com/eventms/
+|   |   |-- EventManagementSystemApplication.java
+|   |   |-- config/SecurityConfig.java
+|   |   |-- controller/
+|   |   `-- repository/
+|   `-- com/example/eventmanagement/
+|       |-- model/
+|       |-- servlet/
+|       `-- util/
+|-- src/main/resources/
+|   |-- application.properties
+|   |-- postgres_schema.sql
+|   |-- database_schema.sql
+|   |-- database_setup.sql
+|   `-- import.sql
+|-- src/main/webapp/
+|   |-- WEB-INF/views/
+|   |   |-- admin_dashboard.jsp
+|   |   |-- user_events.jsp
+|   |   |-- my_events.jsp
+|   |   `-- error.jsp
+|   |-- css/
+|   |-- images/
+|   |-- index.jsp
+|   `-- documentation.jsp
+|-- docker-compose.yml
+|-- Dockerfile
+|-- render.yaml
+|-- railway.toml
+|-- run-dev.bat
+`-- pom.xml
 ```
 
-## 🚀 Features in Detail
+## Application Routes
 
-### 1. User Interface
-- **Navigation**
-  - Fixed responsive navbar
-  - Dynamic mobile menu
-  - Smooth animations
-  - Consistent styling
+| Route | Description |
+| --- | --- |
+| `/` | Landing page, forwarded to `index.jsp`. |
+| `/user` | Browse and book available events. |
+| `/myEvents` | Search bookings by participant email. |
+| `/admin` | Create, update, delete, and review events and bookings. |
+| `/documentation.jsp` | In-app documentation page. |
+| `/health` | Plain `OK` health check for deployment platforms. |
 
-- **Landing Page**
-  - Hero section with background image
-  - Features showcase
-  - How it works section
-  - Benefits overview
-  - Contact form
-  - Newsletter subscription
+## Database
 
-### 2. Event Management
-- Event creation
-- Event modification
-- Event deletion
-- Event status tracking
-- Participant management
-- Real-time analytics
+The default database is PostgreSQL. Runtime settings are read from environment variables with local defaults:
 
-### 3. User Features
-- Event registration
-- Event browsing
-- Profile management
-- Booking history
-- Event notifications
-- Personal dashboard
+```properties
+SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/event_ms_db
+SPRING_DATASOURCE_USERNAME=postgres
+SPRING_DATASOURCE_PASSWORD=postgres
+SPRING_PROFILES_ACTIVE=default
+```
 
-## 💻 Local Setup & Render Deployment
+The core schema is in `src/main/resources/postgres_schema.sql` and creates:
 
-### Local Development
-**Prerequisites:**
+- `events`: event metadata, capacity counts, event type, and optional parent event.
+- `bookings`: participant bookings linked to events, with a generated digital ID.
+
+## Local Development
+
+### Prerequisites
+
 - Java JDK 17+
-- Maven (or use ./mvnw)
-- PostgreSQL (docker-compose recommended)
+- Maven, or the included Maven wrapper
+- PostgreSQL, Docker Compose, or the Windows H2 helper script
 
-**Quick Start:**
+### Option 1: Docker Compose
+
+This starts both the application and PostgreSQL.
+
 ```bash
-# Build
-./mvnw.cmd clean package -DskipTests
+docker-compose up --build
+```
 
-# Local dev (docker-compose.yml)
-docker-compose up -d
+Open:
 
-# Access
+```text
 http://localhost:8080
 ```
 
-### 🚀 Render Free Tier Deployment (Production Ready)
+### Option 2: Maven with Local PostgreSQL
 
-1. **Push to GitHub** (connect Render to repo)
+Create a PostgreSQL database named `event_ms_db`, then initialize the schema:
 
-2. **Create Render PostgreSQL (Free Tier):**
-   - Dashboard > New > PostgreSQL
-   - Name: event-ms-db
-   - Copy Internal DB URL → set as `SPRING_DATASOURCE_URL`
-   - Copy USER/PASS
-
-3. **Create Web Service:**
-   - Dashboard > New > Web Service
-   - Connect GitHub repo
-   - **Runtime: Docker**
-   - **Plan: Free**
-   - **render.yaml auto-detected**
-   - **Add Env Vars** (from .env.example):
-     ```
-     SPRING_DATASOURCE_URL=your_render_postgres_url
-     SPRING_DATASOURCE_USERNAME=your_db_user
-     SPRING_DATASOURCE_PASSWORD=your_db_pass
-     SPRING_PROFILES_ACTIVE=production
-     SPRING_SECURITY_USERNAME=admin
-     SPRING_SECURITY_PASSWORD=your_secure_pass
-     ```
-   - Deploy!
-
-4. **Initialize DB:**
-   ```
-   psql $SPRING_DATASOURCE_URL -f src/main/resources/postgres_schema.sql
-   ```
-
-**Endpoints:**
-- App: `https://your-app.onrender.com`
-- Admin: `/admin`
-- Health: `/health`
-
-**Free Tier Notes:**
-- Sleeps after 15min idle (cold start ~30s)
-- 512MB RAM limit (optimized)
-- Auto-scales to zero
-
-## 🔧 Configuration
-
-### Database Configuration
-```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/ems
-spring.datasource.username=your_username
-spring.datasource.password=your_password
+```bash
+psql -U postgres -d event_ms_db -f src/main/resources/postgres_schema.sql
 ```
 
-### Application Properties
-```properties
-server.port=8080
-spring.jpa.hibernate.ddl-auto=update
+Build and run:
+
+```bash
+./mvnw.cmd clean package -DskipTests
+java -jar target/EventManagementSystem.war
 ```
 
-## 📚 Documentation
+Open:
 
-Comprehensive documentation available at `/documentation.jsp` including:
-- Project Overview
-- User Guide
-- Technical Documentation
-- API Reference
-- Security Guidelines
-- Troubleshooting Guide
+```text
+http://localhost:8080
+```
 
-## 🤝 Contributing
+### Option 3: Windows Dev Script
 
-1. Fork the repository
-2. Create feature branch
-3. Commit changes
-4. Push to branch
-5. Open pull request
+`run-dev.bat` builds the WAR, downloads H2 for local development, and starts the app on port `8081`.
 
-## 📄 License
+```bat
+run-dev.bat
+```
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+Open:
 
-## 👥 Contact & Support
+```text
+http://localhost:8081
+```
 
-- Email: devendraambalkar11@gmail.com
-- GitHub: [Project Repository](https://github.com/Ambalkar/Event_Management.git)
-- Documentation: [Project Docs](https://your-domain.com/documentation)
+## Configuration
 
-## 🎯 Future Enhancements
+Important environment variables:
 
-- Mobile application
-- Payment gateway integration
-- Advanced analytics dashboard
-- Multi-language support
-- API integration capabilities
-- Enhanced reporting features
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `PORT` | `8080` | Server port. |
+| `SPRING_PROFILES_ACTIVE` | `default` | Active Spring profile. |
+| `SPRING_DATASOURCE_URL` | `jdbc:postgresql://localhost:5432/event_ms_db` | JDBC database URL. |
+| `SPRING_DATASOURCE_USERNAME` | `postgres` | Database user. |
+| `SPRING_DATASOURCE_PASSWORD` | `postgres` | Database password. |
+| `SPRING_SECURITY_USERNAME` | `admin` | Default Spring security user, currently unused because all routes are permitted. |
+| `SPRING_SECURITY_PASSWORD` | `admin` | Default Spring security password, currently unused because all routes are permitted. |
 
-## 🙏 Acknowledgments
+See `.env.example` for deployment-oriented values.
 
-- Font Awesome for icons
-- Google Fonts for typography
-- Community contributors
-- Open source community
+## Build
+
+```bash
+./mvnw.cmd clean package -DskipTests
+```
+
+The packaged application is created at:
+
+```text
+target/EventManagementSystem.war
+```
+
+## Deployment
+
+### Docker
+
+```bash
+docker build -t event-management-system .
+docker run -p 8080:8080 \
+  -e SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/event_ms_db \
+  -e SPRING_DATASOURCE_USERNAME=postgres \
+  -e SPRING_DATASOURCE_PASSWORD=postgres \
+  event-management-system
+```
+
+### Render
+
+This repository includes `render.yaml` and a Dockerfile. For Render:
+
+1. Create or connect a PostgreSQL database.
+2. Create a web service from this repository.
+3. Use Docker runtime.
+4. Set the datasource environment variables from `.env.example`.
+5. Run `src/main/resources/postgres_schema.sql` against the production database if the tables do not already exist.
+
+Health check:
+
+```text
+/health
+```
+
+## Notes
+
+- The app currently permits all requests in `SecurityConfig`, including `/admin`.
+- Controllers mostly use `DataSource`, `Connection`, and prepared SQL directly.
+- `spring.jpa.hibernate.ddl-auto=update` is enabled, but the checked-in SQL schema is still the clearest source for the database tables expected by the controllers.
+- `target/` contains generated build output and should not be edited manually.
+
+## Future Improvements
+
+- Add admin authentication and CSRF protection before public production use.
+- Add automated tests for booking capacity and major/sub-event behavior.
+- Move direct SQL operations into service/repository layers.
+- Add duplicate-booking feedback for the existing `(user_email, event_id)` uniqueness constraint.
+- Add migrations with Flyway or Liquibase.
