@@ -1,3 +1,4 @@
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
@@ -816,15 +817,19 @@
                                         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);">
                         </div>
                         <div class="developer-details">
-                            <h4 style="color: #f4f4f5; font-size: 1.3rem; margin-bottom: 0.5rem;">Full Stack Developer</h4>
-                            <p style="color: #d4d4d8; line-height: 1.6;">
-                                Specialized in Java, Spring Framework, and modern web technologies. Passionate about creating efficient and scalable solutions.
+<h4 style="color: #f4f4f5; font-size: 1.3rem; margin-bottom: 0.5rem;">Devendra Ambalkar</h4>
+<p style="color: #d4d4d8; line-height: 1.6;">
+                                is a software developer specializing in Java, Spring Framework, and full-stack web development. He builds secure, scalable applications with a strong focus on user experience and system performance.
                             </p>
-                            <div class="developer-skills" style="margin-top: 1rem;">
+                            <p style="color: #d4d4d8; line-height: 1.6; margin-top: 0.5rem;">
+                                With hands-on experience in Spring Security, JWT, Hibernate, and relational databases, he has developed production-ready systems like the Event Management System.
+                            </p>
+<div class="developer-skills" style="margin-top: 1rem;">
                                 <span style="background: rgba(170, 175, 184, 0.18); color: #f4f4f5; padding: 0.3rem 0.8rem; border-radius: 15px; margin-right: 0.5rem; font-size: 0.9rem;">Java</span>
-                                <span style="background: rgba(170, 175, 184, 0.18); color: #f4f4f5; padding: 0.3rem 0.8rem; border-radius: 15px; margin-right: 0.5rem; font-size: 0.9rem;">Spring</span>
-                                <span style="background: rgba(170, 175, 184, 0.18); color: #f4f4f5; padding: 0.3rem 0.8rem; border-radius: 15px; margin-right: 0.5rem; font-size: 0.9rem;">MySQL</span>
-                                <span style="background: rgba(170, 175, 184, 0.18); color: #f4f4f5; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.9rem;">Web Dev</span>
+                                <span style="background: rgba(170, 175, 184, 0.18); color: #f4f4f5; padding: 0.3rem 0.8rem; border-radius: 15px; margin-right: 0.5rem; font-size: 0.9rem;">Spring Security</span>
+                                <span style="background: rgba(170, 175, 184, 0.18); color: #f4f4f5; padding: 0.3rem 0.8rem; border-radius: 15px; margin-right: 0.5rem; font-size: 0.9rem;">JWT</span>
+                                <span style="background: rgba(170, 175, 184, 0.18); color: #f4f4f5; padding: 0.3rem 0.8rem; border-radius: 15px; margin-right: 0.5rem; font-size: 0.9rem;">Hibernate</span>
+                                <span style="background: rgba(170, 175, 184, 0.18); color: #f4f4f5; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.9rem;">MySQL</span>
                             </div>
                         </div>
                     </div>
@@ -889,8 +894,8 @@
                         <h3 style="color: var(--primary-color); margin-bottom: 1.5rem; font-size: 1.3rem;">
                             <i class="fas fa-envelope"></i> Email
                         </h3>
-                        <a href="mailto:developer@eventmanagement.com" style="color: #f4f4f5; text-decoration: none; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
-                            developer@eventmanagement.com
+                        <a href="mailto:devendraambalkar11@gmail.com" style="color: #f4f4f5; text-decoration: none; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            devendraambalkar11@gmail.com
                         </a>
                     </div>
                     
@@ -898,8 +903,8 @@
                         <h3 style="color: var(--primary-color); margin-bottom: 1.5rem; font-size: 1.3rem;">
                             <i class="fas fa-code-branch"></i> GitHub
                         </h3>
-                        <a href="https://github.com/yourusername" target="_blank" style="color: #f4f4f5; text-decoration: none; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fab fa-github"></i> View Project Repository
+                        <a href="https://github.com/Ambalkar/Event_Management.git" target="_blank" style="color: #f4f4f5; text-decoration: none; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fab fa-github"></i> Event Management Repository
                         </a>
                     </div>
                 </div>

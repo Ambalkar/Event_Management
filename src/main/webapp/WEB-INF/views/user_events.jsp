@@ -293,6 +293,47 @@
             border: 1px solid rgba(248, 113, 113, 0.3);
         }
 
+        .event-kind {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            padding: 0.45rem 0.7rem;
+            border-radius: 8px;
+            border: 1px solid rgba(251, 191, 36, 0.28);
+            color: var(--accent-gold);
+            background: rgba(251, 191, 36, 0.08);
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .sub-events {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .sub-events h3 {
+            margin: 0 0 1rem;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .sub-event-card {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.055);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+        }
+
+        .sub-event-card h4 {
+            margin: 0 0 0.75rem;
+            color: var(--text-primary);
+            font-size: 1.05rem;
+        }
+
         .alert {
             padding: 1rem 1.25rem;
             border-radius: 10px;
@@ -484,6 +525,16 @@
         <div class="events-list">
             <c:forEach var="event" items="${events}">
                 <div class="event-card">
+                    <div class="event-kind">
+                        <c:choose>
+                            <c:when test="${event.majorEvent}">
+                                <i class="fas fa-layer-group"></i> Major Event
+                            </c:when>
+                            <c:otherwise>
+                                <i class="fas fa-calendar-day"></i> Simple Event
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
                     <h2>${event.name}</h2>
                     <p class="date">
                         <i class="far fa-calendar-alt"></i>
@@ -496,10 +547,10 @@
                     <p class="description">${event.description}</p>
                     <p class="guests">
                         <i class="fas fa-users"></i>
-                        Available Spots: ${event.guestLimit - event.currentGuests}
+                        Available Spots: ${event.wholeEventAvailableSpots}
                     </p>
                     
-                    <c:if test="${event.guestLimit > event.currentGuests}">
+                    <c:if test="${event.wholeEventOpen}">
                         <form method="post" action="${pageContext.request.contextPath}/user" class="booking-form">
                             <input type="hidden" name="event_id" value="${event.id}">
                             <div class="form-group">
@@ -513,10 +564,54 @@
                             </button>
                         </form>
                     </c:if>
-                    <c:if test="${event.guestLimit <= event.currentGuests}">
+                    <c:if test="${not event.wholeEventOpen}">
                         <p class="fully-booked">
-                            <i class="fas fa-exclamation-circle"></i> Event Fully Booked
+                            <i class="fas fa-exclamation-circle"></i> The event is Housefull you can explore other events
                         </p>
+                    </c:if>
+
+                    <c:if test="${event.majorEvent}">
+                        <div class="sub-events">
+                            <h3><i class="fas fa-stream"></i> Sub Events</h3>
+                            <c:forEach var="subEvent" items="${event.subEvents}">
+                                <div class="sub-event-card">
+                                    <h4>${subEvent.name}</h4>
+                                    <p class="date">
+                                        <i class="far fa-calendar-alt"></i>
+                                        Date: ${subEvent.date}
+                                    </p>
+                                    <p class="location">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        Location: ${subEvent.location}
+                                    </p>
+                                    <p class="description">${subEvent.description}</p>
+                                    <p class="guests">
+                                        <i class="fas fa-users"></i>
+                                        Available Spots: ${subEvent.guestLimit - subEvent.currentGuests}
+                                    </p>
+
+                                    <c:if test="${subEvent.guestLimit > subEvent.currentGuests}">
+                                        <form method="post" action="${pageContext.request.contextPath}/user" class="booking-form">
+                                            <input type="hidden" name="event_id" value="${subEvent.id}">
+                                            <div class="form-group">
+                                                <input type="text" name="name" placeholder="Your Name" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="email" name="email" placeholder="Your Email" required>
+                                            </div>
+                                            <button type="submit" class="btn-primary">
+                                                <i class="fas fa-ticket-alt"></i> Book Sub Event
+                                            </button>
+                                        </form>
+                                    </c:if>
+                                    <c:if test="${subEvent.guestLimit <= subEvent.currentGuests}">
+                                        <p class="fully-booked">
+                                            <i class="fas fa-exclamation-circle"></i> The event is Housefull you can explore other events
+                                        </p>
+                                    </c:if>
+                                </div>
+                            </c:forEach>
+                        </div>
                     </c:if>
                 </div>
             </c:forEach>

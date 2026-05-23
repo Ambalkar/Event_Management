@@ -13,7 +13,9 @@ CREATE TABLE IF NOT EXISTS events (
     location VARCHAR(200) NOT NULL,
     description TEXT,
     guest_limit INT NOT NULL DEFAULT 0,
-    current_guests INT DEFAULT 0
+    current_guests INT DEFAULT 0,
+    event_type VARCHAR(20) NOT NULL DEFAULT 'SIMPLE',
+    parent_event_id INT REFERENCES events(event_id) ON DELETE CASCADE
 );
 
 -- Create sequence for users

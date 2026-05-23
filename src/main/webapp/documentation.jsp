@@ -382,7 +382,7 @@
             <div class="about-content">
                 <div class="developer-info">
                     <h3>Developer</h3>
-                    <p class="highlight-text">This Event Management System is developed by a single developer, showcasing a comprehensive full-stack implementation of a modern web application.</p>
+<p class="highlight-text">This Event Management System is developed by Devendra Ambalkar, showcasing expertise in Java, Spring Framework, and full-stack web development.</p>
                 </div>
                 
                 <div class="project-overview">

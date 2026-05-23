@@ -243,6 +243,17 @@
             text-shadow: 0 0 10px rgba(180, 185, 192, 0.26);
         }
 
+        .event-context {
+            margin: 0 0 1rem;
+            padding: 0.8rem 1rem;
+            border-radius: 10px;
+            border: 1px solid rgba(251, 191, 36, 0.22);
+            background: rgba(251, 191, 36, 0.08);
+            color: var(--accent-gold);
+            font-weight: 700;
+            text-align: center;
+        }
+
         .digital-id {
             background: linear-gradient(135deg, #181a1f, #090a0d);
             padding: 2rem;
@@ -743,6 +754,18 @@
                 <div class="event-card">
                     <div class="participant-card">
                         <h2 class="event-title">${participation.event.name}</h2>
+                        <c:if test="${participation.event.subEvent}">
+                            <div class="event-context">
+                                <i class="fas fa-layer-group"></i>
+                                Part of ${participation.event.parentEventName}
+                            </div>
+                        </c:if>
+                        <c:if test="${participation.event.majorEvent}">
+                            <div class="event-context">
+                                <i class="fas fa-layer-group"></i>
+                                Entire Major Event
+                            </div>
+                        </c:if>
                         <div class="participant-details">
                             <p>
                                 <strong><i class="fas fa-user"></i> Name:</strong>

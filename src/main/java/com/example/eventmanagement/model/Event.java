@@ -6,6 +6,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Table;
 import javax.persistence.Column;
+import javax.persistence.Transient;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "events")
@@ -33,6 +36,18 @@ public class Event {
     @Column(name = "current_guests")
     private int currentGuests;
 
+    @Column(name = "event_type")
+    private String eventType = "SIMPLE";
+
+    @Column(name = "parent_event_id")
+    private Integer parentEventId;
+
+    @Transient
+    private String parentEventName;
+
+    @Transient
+    private List<Event> subEvents = new ArrayList<>();
+
     // Getters and Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
@@ -54,6 +69,46 @@ public class Event {
     
     public int getCurrentGuests() { return currentGuests; }
     public void setCurrentGuests(int currentGuests) { this.currentGuests = currentGuests; }
+
+    public String getEventType() { return eventType; }
+    public void setEventType(String eventType) { this.eventType = eventType; }
+
+    public Integer getParentEventId() { return parentEventId; }
+    public void setParentEventId(Integer parentEventId) { this.parentEventId = parentEventId; }
+
+    public String getParentEventName() { return parentEventName; }
+    public void setParentEventName(String parentEventName) { this.parentEventName = parentEventName; }
+
+    public List<Event> getSubEvents() { return subEvents; }
+    public void setSubEvents(List<Event> subEvents) { this.subEvents = subEvents; }
+
+    public boolean isMajorEvent() {
+        return "MAJOR".equalsIgnoreCase(eventType);
+    }
+
+    public boolean isSubEvent() {
+        return parentEventId != null;
+    }
+
+    public int getAvailableSpots() {
+        return Math.max(guestLimit - currentGuests, 0);
+    }
+
+    public int getWholeEventAvailableSpots() {
+        int availableSpots = getAvailableSpots();
+        if (!isMajorEvent() || subEvents == null || subEvents.isEmpty()) {
+            return availableSpots;
+        }
+
+        for (Event subEvent : subEvents) {
+            availableSpots = Math.min(availableSpots, subEvent.getAvailableSpots());
+        }
+        return availableSpots;
+    }
+
+    public boolean isWholeEventOpen() {
+        return getWholeEventAvailableSpots() > 0;
+    }
 
     // Validation method
     public boolean isValid() {

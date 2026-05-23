@@ -317,7 +317,8 @@
         }
 
         input,
-        textarea {
+        textarea,
+        select {
             width: 100%;
             border: 1px solid var(--panel-line);
             border-radius: var(--radius);
@@ -336,7 +337,8 @@
         }
 
         input:focus,
-        textarea:focus {
+        textarea:focus,
+        select:focus {
             border-color: rgba(229, 231, 235, 0.65);
             box-shadow: 0 0 0 3px rgba(229, 231, 235, 0.12);
             background: #14171d;
@@ -347,6 +349,83 @@
             gap: 10px;
             margin-top: 18px;
             flex-wrap: wrap;
+        }
+
+        .sub-event-builder {
+            display: none;
+            margin-top: 8px;
+            padding: 14px;
+            border-radius: var(--radius);
+            border: 1px solid var(--panel-line);
+            background: rgba(255,255,255,0.045);
+        }
+
+        .sub-event-row {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--panel-line);
+        }
+
+        .sub-event-row:last-child {
+            border-bottom: 0;
+        }
+
+        .sub-event-row textarea {
+            min-height: 82px;
+        }
+
+        .sub-event-row .wide {
+            grid-column: 1 / -1;
+        }
+
+        .sub-event-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .event-type-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 8px;
+            color: var(--accent-gold);
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .sub-event-list {
+            margin-top: 12px;
+            padding-left: 14px;
+            border-left: 2px solid rgba(45, 212, 191, 0.35);
+        }
+
+        .sub-event-item {
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: var(--radius);
+            background: rgba(255,255,255,0.045);
+            border: 1px solid var(--panel-line);
+        }
+
+        .sub-event-form {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--panel-line);
+        }
+
+        .sub-event-form textarea,
+        .sub-event-form .wide {
+            grid-column: 1 / -1;
         }
 
         .btn-primary {
@@ -623,6 +702,14 @@
                     <input type="hidden" name="event_id" id="eventId">
 
                     <div class="form-group">
+                        <label for="event_type"><i class="fas fa-layer-group"></i> Event Type</label>
+                        <select id="event_type" name="event_type">
+                            <option value="SIMPLE">Simple Event</option>
+                            <option value="MAJOR">Major Event</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
                         <label for="name"><i class="fas fa-signature"></i> Event Name</label>
                         <input type="text" id="name" name="name" placeholder="Annual Tech Summit" required>
                     </div>
@@ -645,6 +732,17 @@
                     <div class="form-group">
                         <label for="guest_limit"><i class="fas fa-users"></i> Guest Limit</label>
                         <input type="number" id="guest_limit" name="guest_limit" min="1" placeholder="100" required>
+                    </div>
+
+                    <div class="form-group sub-event-builder" id="subEventBuilder">
+                        <label><i class="fas fa-stream"></i> Sub Events</label>
+                        <div id="subEventRows"></div>
+                        <div class="sub-event-actions">
+                            <button type="button" class="btn btn-secondary" onclick="addSubEventRow()">
+                                <i class="fas fa-plus"></i> Add Sub Event
+                            </button>
+                            <span class="muted">Leave rows empty to skip them.</span>
+                        </div>
                     </div>
 
                     <div class="form-actions">
@@ -686,7 +784,41 @@
                                     <td class="id-cell">#${event.id}</td>
                                     <td>
                                         <div class="event-name">${event.name}</div>
+                                        <div class="event-type-chip">
+                                            <c:choose>
+                                                <c:when test="${event.majorEvent}">
+                                                    <i class="fas fa-layer-group"></i> Major Event
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <i class="fas fa-calendar-day"></i> Simple Event
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </div>
                                         <div class="muted">${event.description}</div>
+                                        <c:if test="${event.majorEvent}">
+                                            <div class="sub-event-list">
+                                                <c:forEach var="subEvent" items="${event.subEvents}">
+                                                    <div class="sub-event-item">
+                                                        <div class="event-name">${subEvent.name}</div>
+                                                        <div class="muted">${subEvent.date} | ${subEvent.location}</div>
+                                                        <div class="muted">${subEvent.description}</div>
+                                                        <div class="count-cell">${subEvent.currentGuests} / ${subEvent.guestLimit}</div>
+                                                    </div>
+                                                </c:forEach>
+                                                <form method="post" action="${pageContext.request.contextPath}/admin" class="sub-event-form">
+                                                    <input type="hidden" name="action" value="addSubEvent">
+                                                    <input type="hidden" name="parent_event_id" value="${event.id}">
+                                                    <input type="text" name="name" placeholder="Sub-event name" required>
+                                                    <input type="date" name="date" required>
+                                                    <input type="number" name="guest_limit" min="1" placeholder="Guest limit" required>
+                                                    <input type="text" name="location" placeholder="Location" class="wide" required>
+                                                    <textarea name="description" placeholder="Description" class="wide"></textarea>
+                                                    <button type="submit" class="btn btn-primary wide">
+                                                        <i class="fas fa-plus-circle"></i> Add Sub Event
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </c:if>
                                     </td>
                                     <td>${event.date}</td>
                                     <td>${event.location}</td>
@@ -709,7 +841,8 @@
                                                 data-date="${event.date}"
                                                 data-location="${event.location}"
                                                 data-description="${event.description}"
-                                                data-guest-limit="${event.guestLimit}">
+                                                data-guest-limit="${event.guestLimit}"
+                                                data-event-type="${event.eventType}">
                                                 <i class="fas fa-edit"></i> Edit
                                             </button>
                                             <form method="post" action="${pageContext.request.contextPath}/admin">
@@ -795,7 +928,8 @@
                         date: this.dataset.date,
                         location: this.dataset.location,
                         description: this.dataset.description,
-                        guestLimit: this.dataset.guestLimit
+                        guestLimit: this.dataset.guestLimit,
+                        eventType: this.dataset.eventType
                     };
 
                     document.getElementById('formTitle').textContent = 'Update Event';
@@ -806,11 +940,16 @@
                     document.getElementById('location').value = eventData.location;
                     document.getElementById('description').value = eventData.description;
                     document.getElementById('guest_limit').value = eventData.guestLimit;
+                    document.getElementById('event_type').value = eventData.eventType || 'SIMPLE';
+                    toggleSubEventBuilder();
                     document.getElementById('submitBtn').innerHTML = '<i class="fas fa-save"></i> Update Event';
                     document.getElementById('cancelBtn').style.display = 'inline-flex';
                     document.getElementById('eventForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
                 });
             });
+
+            document.getElementById('event_type').addEventListener('change', toggleSubEventBuilder);
+            toggleSubEventBuilder();
         });
 
         function resetForm() {
@@ -818,8 +957,32 @@
             document.getElementById('formAction').value = 'add';
             document.getElementById('eventId').value = '';
             document.getElementById('eventForm').reset();
+            document.getElementById('subEventRows').innerHTML = '';
+            toggleSubEventBuilder();
             document.getElementById('submitBtn').innerHTML = '<i class="fas fa-plus-circle"></i> Add Event';
             document.getElementById('cancelBtn').style.display = 'none';
+        }
+
+        function toggleSubEventBuilder() {
+            const isMajor = document.getElementById('event_type').value === 'MAJOR';
+            const isCreateMode = document.getElementById('formAction').value === 'add';
+            document.getElementById('subEventBuilder').style.display = isMajor && isCreateMode ? 'block' : 'none';
+        }
+
+        function addSubEventRow() {
+            const row = document.createElement('div');
+            row.className = 'sub-event-row';
+            row.innerHTML = `
+                <input type="text" name="sub_name" placeholder="Sub-event name">
+                <input type="date" name="sub_date">
+                <input type="text" name="sub_location" placeholder="Location" class="wide">
+                <textarea name="sub_description" placeholder="Description" class="wide"></textarea>
+                <input type="number" name="sub_guest_limit" min="1" placeholder="Guest limit">
+                <button type="button" class="btn btn-danger" onclick="this.closest('.sub-event-row').remove()">
+                    <i class="fas fa-trash"></i> Remove
+                </button>
+            `;
+            document.getElementById('subEventRows').appendChild(row);
         }
     </script>
 </body>
