@@ -350,12 +350,24 @@
                 <a href="${pageContext.request.contextPath}/documentation.jsp" class="nav-link">
                     <i class="fas fa-info-circle"></i> About
                 </a>
-                <a href="${pageContext.request.contextPath}/user" class="nav-link">
+                <a href="${pageContext.request.contextPath}/" class="nav-link">
                     <i class="fas fa-user"></i> User Portal
                 </a>
                 <a href="${pageContext.request.contextPath}/admin" class="nav-link admin-link">
                     <i class="fas fa-user-shield"></i> Admin Portal
                 </a>
+                <c:choose>
+                    <c:when test="${not empty sessionScope.authEmail}">
+                        <a href="${pageContext.request.contextPath}/logout" class="nav-link">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </c:when>
+                    <c:otherwise>
+                        <a href="${pageContext.request.contextPath}/login" class="nav-link">
+                            <i class="fas fa-sign-in-alt"></i> Sign In
+                        </a>
+                    </c:otherwise>
+                </c:choose>
             </div>
         </div>
     </nav>
@@ -388,6 +400,36 @@
                 <div class="project-overview">
                     <h3>Project Overview</h3>
                     <p>The Event Management System is a comprehensive web application designed to streamline the process of managing events, registrations, and attendee tracking. Built from the ground up, this project demonstrates expertise in both frontend and backend development.</p>
+                </div>
+
+                <div class="about-grid">
+                    <div class="about-card">
+                        <h3><i class="fas fa-bullseye"></i> Project Mission</h3>
+                        <p>To make event management more accessible and efficient through a clear, reliable platform for organizers and participants.</p>
+                    </div>
+                    <div class="about-card">
+                        <h3><i class="fas fa-eye"></i> Development Vision</h3>
+                        <p>To provide a scalable, user-friendly system that brings event creation, booking, tracking, and reporting into one workflow.</p>
+                    </div>
+                </div>
+
+                <div class="developer-profile">
+                    <img src="${pageContext.request.contextPath}/images/developer.jpg" alt="Developer Profile">
+                    <div>
+                        <h3>Devendra Ambalkar</h3>
+                        <p>Software developer specializing in Java, Spring Framework, and full-stack web development, with hands-on experience in Spring Security, JWT, Hibernate, and relational databases.</p>
+                        <div class="contact-links">
+                            <a href="mailto:devendraambalkar11@gmail.com">
+                                <i class="fas fa-envelope"></i> Email
+                            </a>
+                            <a href="https://github.com/Ambalkar/Event_Management.git" target="_blank">
+                                <i class="fab fa-github"></i> GitHub
+                            </a>
+                            <a href="https://credora.space" target="_blank">
+                                <i class="fas fa-graduation-cap"></i> Opportunities
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -433,6 +475,62 @@
                     line-height: 1.7;
                 }
 
+                .about-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+                    gap: 1rem;
+                    margin-bottom: 2rem;
+                }
+
+                .about-card {
+                    background: rgba(255, 255, 255, 0.06);
+                    border: 1px solid var(--border-color);
+                    border-radius: 8px;
+                    padding: 1.5rem;
+                }
+
+                .about-card h3 {
+                    margin-top: 0;
+                }
+
+                .developer-profile {
+                    display: grid;
+                    grid-template-columns: auto 1fr;
+                    gap: 1.25rem;
+                    align-items: center;
+                    margin-top: 2rem;
+                    padding-top: 2rem;
+                    border-top: 1px solid var(--border-color);
+                }
+
+                .developer-profile img {
+                    width: 110px;
+                    height: 110px;
+                    border-radius: 50%;
+                    object-fit: cover;
+                    border: 3px solid var(--primary-color);
+                }
+
+                .developer-profile h3 {
+                    margin: 0 0 0.5rem;
+                }
+
+                .contact-links {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 0.75rem;
+                    margin-top: 1rem;
+                }
+
+                .contact-links a {
+                    color: var(--text-primary);
+                    text-decoration: none;
+                    background: rgba(255, 255, 255, 0.08);
+                    border: 1px solid var(--border-color);
+                    border-radius: 8px;
+                    padding: 0.65rem 0.9rem;
+                }
+
                 .feature-card {
                     background: rgba(255, 255, 255, 0.08);
                     border: 1px solid var(--border-color);
@@ -474,6 +572,10 @@
 
                     .project-overview p {
                         font-size: 1em;
+                    }
+
+                    .developer-profile {
+                        grid-template-columns: 1fr;
                     }
                 }
             </style>

@@ -42,11 +42,26 @@ public class Event {
     @Column(name = "parent_event_id")
     private Integer parentEventId;
 
+    @Column(name = "image_path")
+    private String imagePath;
+
     @Transient
     private String parentEventName;
 
     @Transient
     private List<Event> subEvents = new ArrayList<>();
+
+    @Transient
+    private boolean bookedByCurrentUser;
+
+    @Transient
+    private boolean includedInMajorPass;
+
+    @Transient
+    private boolean canBook = true;
+
+    @Transient
+    private String bookingStatus;
 
     // Getters and Setters
     public int getId() { return id; }
@@ -76,11 +91,26 @@ public class Event {
     public Integer getParentEventId() { return parentEventId; }
     public void setParentEventId(Integer parentEventId) { this.parentEventId = parentEventId; }
 
+    public String getImagePath() { return imagePath; }
+    public void setImagePath(String imagePath) { this.imagePath = imagePath; }
+
     public String getParentEventName() { return parentEventName; }
     public void setParentEventName(String parentEventName) { this.parentEventName = parentEventName; }
 
     public List<Event> getSubEvents() { return subEvents; }
     public void setSubEvents(List<Event> subEvents) { this.subEvents = subEvents; }
+
+    public boolean isBookedByCurrentUser() { return bookedByCurrentUser; }
+    public void setBookedByCurrentUser(boolean bookedByCurrentUser) { this.bookedByCurrentUser = bookedByCurrentUser; }
+
+    public boolean isIncludedInMajorPass() { return includedInMajorPass; }
+    public void setIncludedInMajorPass(boolean includedInMajorPass) { this.includedInMajorPass = includedInMajorPass; }
+
+    public boolean isCanBook() { return canBook; }
+    public void setCanBook(boolean canBook) { this.canBook = canBook; }
+
+    public String getBookingStatus() { return bookingStatus; }
+    public void setBookingStatus(String bookingStatus) { this.bookingStatus = bookingStatus; }
 
     public boolean isMajorEvent() {
         return "MAJOR".equalsIgnoreCase(eventType);

@@ -721,12 +721,21 @@
                 <a href="${pageContext.request.contextPath}/documentation.jsp" class="nav-link">
                     <i class="fas fa-info-circle"></i> About
                 </a>
-                <a href="${pageContext.request.contextPath}/user" class="nav-link">
+                <a href="${pageContext.request.contextPath}/" class="nav-link">
                     <i class="fas fa-user"></i> User Portal
                 </a>
-                <a href="${pageContext.request.contextPath}/admin" class="nav-link admin-link">
-                    <i class="fas fa-user-shield"></i> Admin Portal
-                </a>
+                <c:choose>
+                    <c:when test="${not empty sessionScope.authEmail}">
+                        <a href="${pageContext.request.contextPath}/logout" class="nav-link">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </c:when>
+                    <c:otherwise>
+                        <a href="${pageContext.request.contextPath}/login" class="nav-link">
+                            <i class="fas fa-sign-in-alt"></i> Sign In
+                        </a>
+                    </c:otherwise>
+                </c:choose>
             </div>
         </div>
     </nav>
@@ -807,7 +816,7 @@
         </div>
         
         <div class="navigation">
-            <a href="${pageContext.request.contextPath}/user" class="btn">
+            <a href="${pageContext.request.contextPath}/" class="btn">
                 <i class="fas fa-arrow-left"></i> Back to Events
             </a>
         </div>

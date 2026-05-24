@@ -428,6 +428,22 @@
             grid-column: 1 / -1;
         }
 
+        .event-thumb {
+            width: 100%;
+            max-width: 220px;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid var(--panel-line);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .event-thumb.small {
+            max-width: 150px;
+            margin-bottom: 8px;
+        }
+
         .btn-primary {
             background: linear-gradient(135deg, var(--accent-teal), var(--accent-green));
             color: #04110e;
@@ -635,11 +651,14 @@
                 <a href="${pageContext.request.contextPath}/" class="nav-pill">
                     <i class="fas fa-home"></i> Home
                 </a>
-                <a href="${pageContext.request.contextPath}/user" class="nav-pill">
+                <a href="${pageContext.request.contextPath}/" class="nav-pill">
                     <i class="fas fa-calendar-alt"></i> User Portal
                 </a>
                 <a href="#bookings" class="nav-pill">
                     <i class="fas fa-users"></i> Bookings
+                </a>
+                <a href="${pageContext.request.contextPath}/logout" class="nav-pill">
+                    <i class="fas fa-sign-out-alt"></i> Logout
                 </a>
             </div>
         </nav>
@@ -655,8 +674,13 @@
         <section class="stats-grid" aria-label="Admin dashboard summary">
             <article class="stat-card">
                 <i class="fas fa-calendar-check"></i>
-                <strong>${totalEvents}</strong>
-                <span>Total events</span>
+                <strong>${majorEventCount}</strong>
+                <span>Total major events</span>
+            </article>
+            <article class="stat-card">
+                <i class="fas fa-stream"></i>
+                <strong>${subEventCount}</strong>
+                <span>Total sub events</span>
             </article>
             <article class="stat-card">
                 <i class="fas fa-ticket-alt"></i>
@@ -666,12 +690,7 @@
             <article class="stat-card">
                 <i class="fas fa-chair"></i>
                 <strong>${totalCapacity}</strong>
-                <span>Total capacity</span>
-            </article>
-            <article class="stat-card">
-                <i class="fas fa-user-friends"></i>
-                <strong>${totalGuests}</strong>
-                <span>Registered guests</span>
+                <span>Seats available</span>
             </article>
         </section>
 
@@ -697,7 +716,7 @@
                     <span class="panel-badge">Event</span>
                 </div>
 
-                <form method="post" action="${pageContext.request.contextPath}/admin" id="eventForm" class="event-form">
+                <form method="post" action="${pageContext.request.contextPath}/admin" id="eventForm" class="event-form" enctype="multipart/form-data">
                     <input type="hidden" name="action" value="add" id="formAction">
                     <input type="hidden" name="event_id" id="eventId">
 
@@ -706,6 +725,7 @@
                         <select id="event_type" name="event_type">
                             <option value="SIMPLE">Simple Event</option>
                             <option value="MAJOR">Major Event</option>
+                            <option value="SUB">Sub Event</option>
                         </select>
                     </div>
 
@@ -734,6 +754,11 @@
                         <input type="number" id="guest_limit" name="guest_limit" min="1" placeholder="100" required>
                     </div>
 
+                    <div class="form-group">
+                        <label for="image"><i class="fas fa-image"></i> Event Image</label>
+                        <input type="file" id="image" name="image" accept="image/*">
+                    </div>
+
                     <div class="form-group sub-event-builder" id="subEventBuilder">
                         <label><i class="fas fa-stream"></i> Sub Events</label>
                         <div id="subEventRows"></div>
@@ -741,7 +766,7 @@
                             <button type="button" class="btn btn-secondary" onclick="addSubEventRow()">
                                 <i class="fas fa-plus"></i> Add Sub Event
                             </button>
-                            <span class="muted">Leave rows empty to skip them.</span>
+                            <span class="muted" id="subCapacityHint">Sub-event limits must fit inside the major event limit.</span>
                         </div>
                     </div>
 
@@ -762,7 +787,7 @@
                         <h2>Event Inventory</h2>
                         <p>Update schedules, venue details, and booking limits.</p>
                     </div>
-                    <span class="panel-badge">${totalEvents} Records</span>
+                    <span class="panel-badge">${majorEventCount} Major / ${subEventCount} Sub</span>
                 </div>
 
                 <div class="table-wrap">
@@ -783,6 +808,9 @@
                                 <tr>
                                     <td class="id-cell">#${event.id}</td>
                                     <td>
+                                        <c:if test="${not empty event.imagePath}">
+                                            <img src="${pageContext.request.contextPath}${event.imagePath}" alt="${event.name}" class="event-thumb">
+                                        </c:if>
                                         <div class="event-name">${event.name}</div>
                                         <div class="event-type-chip">
                                             <c:choose>
@@ -799,20 +827,35 @@
                                             <div class="sub-event-list">
                                                 <c:forEach var="subEvent" items="${event.subEvents}">
                                                     <div class="sub-event-item">
+                                                        <c:if test="${not empty subEvent.imagePath}">
+                                                            <img src="${pageContext.request.contextPath}${subEvent.imagePath}" alt="${subEvent.name}" class="event-thumb small">
+                                                        </c:if>
                                                         <div class="event-name">${subEvent.name}</div>
                                                         <div class="muted">${subEvent.date} | ${subEvent.location}</div>
                                                         <div class="muted">${subEvent.description}</div>
-                                                        <div class="count-cell">${subEvent.currentGuests} / ${subEvent.guestLimit}</div>
+                                                        <div class="count-cell">${subEvent.currentGuests} / ${subEvent.guestLimit} (${subEvent.availableSpots} open)</div>
+                                                        <button type="button" class="btn btn-secondary update-btn sub-event-edit"
+                                                            data-id="${subEvent.id}"
+                                                            data-name="${subEvent.name}"
+                                                            data-date="${subEvent.date}"
+                                                            data-location="${subEvent.location}"
+                                                            data-description="${subEvent.description}"
+                                                            data-guest-limit="${subEvent.guestLimit}"
+                                                            data-event-type="${subEvent.eventType}">
+                                                            <i class="fas fa-edit"></i> Edit Sub Event
+                                                        </button>
                                                     </div>
                                                 </c:forEach>
-                                                <form method="post" action="${pageContext.request.contextPath}/admin" class="sub-event-form">
+                                                <form method="post" action="${pageContext.request.contextPath}/admin" class="sub-event-form" enctype="multipart/form-data">
                                                     <input type="hidden" name="action" value="addSubEvent">
                                                     <input type="hidden" name="parent_event_id" value="${event.id}">
                                                     <input type="text" name="name" placeholder="Sub-event name" required>
                                                     <input type="date" name="date" required>
-                                                    <input type="number" name="guest_limit" min="1" placeholder="Guest limit" required>
+                                                    <input type="number" name="guest_limit" min="1" max="${event.subCapacityRemaining}" placeholder="Guest limit, max ${event.subCapacityRemaining}" required>
                                                     <input type="text" name="location" placeholder="Location" class="wide" required>
                                                     <textarea name="description" placeholder="Description" class="wide"></textarea>
+                                                    <input type="file" name="image" accept="image/*" class="wide" required>
+                                                    <span class="muted wide">Remaining sub-event capacity: ${event.subCapacityRemaining}</span>
                                                     <button type="submit" class="btn btn-primary wide">
                                                         <i class="fas fa-plus-circle"></i> Add Sub Event
                                                     </button>
@@ -822,7 +865,12 @@
                                     </td>
                                     <td>${event.date}</td>
                                     <td>${event.location}</td>
-                                    <td class="count-cell">${event.currentGuests} / ${event.guestLimit}</td>
+                                    <td class="count-cell">
+                                        ${event.currentGuests} / ${event.guestLimit}
+                                        <c:if test="${event.majorEvent}">
+                                            <div class="muted">Sub limits: ${event.subGuestLimitTotal} / ${event.guestLimit}</div>
+                                        </c:if>
+                                    </td>
                                     <td>
                                         <c:choose>
                                             <c:when test="${event.currentGuests lt event.guestLimit}">
@@ -889,6 +937,7 @@
                             <th>Event</th>
                             <th>Event Date</th>
                             <th>Digital ID</th>
+                            <th>Type</th>
                             <th>Booked On</th>
                         </tr>
                     </thead>
@@ -901,12 +950,13 @@
                                 <td>${booking.eventName}</td>
                                 <td>${booking.eventDate}</td>
                                 <td><span class="digital-chip">${booking.digitalId}</span></td>
+                                <td>${booking.bookingType}</td>
                                 <td>${booking.bookingDate}</td>
                             </tr>
                         </c:forEach>
                         <c:if test="${empty bookings}">
                             <tr>
-                                <td colspan="7" class="empty-state">
+                                    <td colspan="8" class="empty-state">
                                     <i class="fas fa-user-clock"></i>
                                     No user bookings found.
                                 </td>
@@ -949,7 +999,22 @@
             });
 
             document.getElementById('event_type').addEventListener('change', toggleSubEventBuilder);
+            document.getElementById('guest_limit').addEventListener('input', updateSubCapacityHint);
+            document.getElementById('eventForm').addEventListener('submit', function(event) {
+                const selectedType = document.getElementById('event_type').value;
+                if (selectedType === 'MAJOR' && !isSubCapacityValid()) {
+                    event.preventDefault();
+                    alert('Combined sub-event guest limits cannot exceed the major event guest limit.');
+                    return;
+                }
+                if (selectedType === 'MAJOR' && document.getElementById('formAction').value === 'add'
+                        && !document.getElementById('image').value) {
+                    event.preventDefault();
+                    alert('Major events require an image.');
+                }
+            });
             toggleSubEventBuilder();
+            updateSubCapacityHint();
         });
 
         function resetForm() {
@@ -959,6 +1024,7 @@
             document.getElementById('eventForm').reset();
             document.getElementById('subEventRows').innerHTML = '';
             toggleSubEventBuilder();
+            updateSubCapacityHint();
             document.getElementById('submitBtn').innerHTML = '<i class="fas fa-plus-circle"></i> Add Event';
             document.getElementById('cancelBtn').style.display = 'none';
         }
@@ -967,6 +1033,7 @@
             const isMajor = document.getElementById('event_type').value === 'MAJOR';
             const isCreateMode = document.getElementById('formAction').value === 'add';
             document.getElementById('subEventBuilder').style.display = isMajor && isCreateMode ? 'block' : 'none';
+            updateSubCapacityHint();
         }
 
         function addSubEventRow() {
@@ -977,12 +1044,36 @@
                 <input type="date" name="sub_date">
                 <input type="text" name="sub_location" placeholder="Location" class="wide">
                 <textarea name="sub_description" placeholder="Description" class="wide"></textarea>
-                <input type="number" name="sub_guest_limit" min="1" placeholder="Guest limit">
-                <button type="button" class="btn btn-danger" onclick="this.closest('.sub-event-row').remove()">
+                <input type="number" name="sub_guest_limit" min="1" placeholder="Guest limit" class="sub-guest-limit" oninput="updateSubCapacityHint()">
+                <input type="file" name="sub_image" accept="image/*" class="wide" required>
+                <button type="button" class="btn btn-danger" onclick="this.closest('.sub-event-row').remove(); updateSubCapacityHint();">
                     <i class="fas fa-trash"></i> Remove
                 </button>
             `;
             document.getElementById('subEventRows').appendChild(row);
+            updateSubCapacityHint();
+        }
+
+        function getSubLimitTotal() {
+            return Array.from(document.querySelectorAll('.sub-guest-limit'))
+                .reduce((total, input) => total + (Number(input.value) || 0), 0);
+        }
+
+        function isSubCapacityValid() {
+            const parentLimit = Number(document.getElementById('guest_limit').value) || 0;
+            return getSubLimitTotal() <= parentLimit;
+        }
+
+        function updateSubCapacityHint() {
+            const hint = document.getElementById('subCapacityHint');
+            if (!hint) {
+                return;
+            }
+            const parentLimit = Number(document.getElementById('guest_limit').value) || 0;
+            const subTotal = getSubLimitTotal();
+            const remaining = Math.max(parentLimit - subTotal, 0);
+            hint.textContent = 'Sub-event limits: ' + subTotal + ' / ' + parentLimit + ' used. Remaining: ' + remaining + '.';
+            hint.style.color = subTotal > parentLimit ? 'var(--danger)' : 'var(--muted)';
         }
     </script>
 </body>

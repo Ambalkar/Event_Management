@@ -19,6 +19,12 @@ import java.util.Map;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.multipart.MultipartFile;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 @Controller
 
 public class AdminController {
@@ -37,10 +43,11 @@ public class AdminController {
         private String eventType;
         private Integer parentEventId;
         private String parentEventName;
+        private String imagePath;
         private List<Event> subEvents = new ArrayList<>();
 
         public Event(int id, String name, String date, String location, String description, int guestLimit,
-                int currentGuests, String eventType, Integer parentEventId, String parentEventName) {
+                int currentGuests, String eventType, Integer parentEventId, String parentEventName, String imagePath) {
             this.id = id;
             this.name = name;
             this.date = date;
@@ -51,6 +58,7 @@ public class AdminController {
             this.eventType = eventType;
             this.parentEventId = parentEventId;
             this.parentEventName = parentEventName;
+            this.imagePath = imagePath;
         }
 
         public int getId() { return id; }
@@ -63,9 +71,30 @@ public class AdminController {
         public String getEventType() { return eventType; }
         public Integer getParentEventId() { return parentEventId; }
         public String getParentEventName() { return parentEventName; }
+        public String getImagePath() { return imagePath; }
         public List<Event> getSubEvents() { return subEvents; }
         public boolean isMajorEvent() { return "MAJOR".equalsIgnoreCase(eventType); }
         public boolean isSubEvent() { return parentEventId != null; }
+        public int getAvailableSpots() { return Math.max(guestLimit - currentGuests, 0); }
+        public int getWholeEventAvailableSpots() {
+            int availableSpots = getAvailableSpots();
+            if (!isMajorEvent() || subEvents.isEmpty()) {
+                return availableSpots;
+            }
+
+            for (Event subEvent : subEvents) {
+                availableSpots = Math.min(availableSpots, subEvent.getAvailableSpots());
+            }
+            return availableSpots;
+        }
+        public int getSubGuestLimitTotal() {
+            int total = 0;
+            for (Event subEvent : subEvents) {
+                total += subEvent.getGuestLimit();
+            }
+            return total;
+        }
+        public int getSubCapacityRemaining() { return Math.max(guestLimit - getSubGuestLimitTotal(), 0); }
     }
 
     public static class Booking {
@@ -76,8 +105,9 @@ public class AdminController {
         private String eventName;
         private String eventDate;
         private String bookingDate;
+        private String bookingType;
 
-        public Booking(int id, String userName, String userEmail, String digitalId, String eventName, String eventDate, String bookingDate) {
+        public Booking(int id, String userName, String userEmail, String digitalId, String eventName, String eventDate, String bookingDate, String bookingType) {
             this.id = id;
             this.userName = userName;
             this.userEmail = userEmail;
@@ -85,6 +115,7 @@ public class AdminController {
             this.eventName = eventName;
             this.eventDate = eventDate;
             this.bookingDate = bookingDate;
+            this.bookingType = bookingType;
         }
 
         public int getId() { return id; }
@@ -94,20 +125,26 @@ public class AdminController {
         public String getEventName() { return eventName; }
         public String getEventDate() { return eventDate; }
         public String getBookingDate() { return bookingDate; }
+        public String getBookingType() { return bookingType; }
     }
 
     @GetMapping("/admin")
-    public String adminDashboard(Model model) {
+    public String adminDashboard(Model model, HttpSession session) {
+        if (!isAdmin(session)) {
+            return "redirect:/login?target=/admin";
+        }
+
         List<Event> events = new ArrayList<>();
-        List<Event> allEvents = new ArrayList<>();
         List<Booking> bookings = new ArrayList<>();
         int totalCapacity = 0;
         int totalGuests = 0;
+        int majorEventCount = 0;
+        int subEventCount = 0;
         try (Connection conn = dataSource.getConnection()) {
             ensureEventHierarchyColumns(conn);
 
             String sql = "SELECT e.event_id, e.name, e.date, e.location, e.description, e.guest_limit, "
-                    + "e.current_guests, e.event_type, e.parent_event_id, p.name AS parent_event_name "
+                    + "e.current_guests, e.event_type, e.parent_event_id, e.image_path, p.name AS parent_event_name "
                     + "FROM events e "
                     + "LEFT JOIN events p ON e.parent_event_id = p.event_id "
                     + "ORDER BY COALESCE(e.parent_event_id, e.event_id), e.parent_event_id NULLS FIRST, e.date";
@@ -117,8 +154,6 @@ public class AdminController {
             while (rs.next()) {
                 int guestLimit = rs.getInt("guest_limit");
                 int currentGuests = rs.getInt("current_guests");
-                totalCapacity += guestLimit;
-                totalGuests += currentGuests;
                 Integer parentEventId = rs.getObject("parent_event_id") == null ? null : rs.getInt("parent_event_id");
                 Event event = new Event(
                     rs.getInt("event_id"),
@@ -130,19 +165,30 @@ public class AdminController {
                     currentGuests,
                     rs.getString("event_type"),
                     parentEventId,
-                    rs.getString("parent_event_name")
+                    rs.getString("parent_event_name"),
+                    rs.getString("image_path")
                 );
-                allEvents.add(event);
                 eventMap.put(event.getId(), event);
                 if (parentEventId == null) {
+                    if ("MAJOR".equalsIgnoreCase(event.getEventType())) {
+                        majorEventCount++;
+                    }
                     events.add(event);
                 } else if (eventMap.containsKey(parentEventId)) {
+                    subEventCount++;
                     eventMap.get(parentEventId).getSubEvents().add(event);
                 }
             }
 
+            for (Event event : events) {
+                // Sub-event seats are carved out of the parent major event capacity.
+                // Counting both parent and children here inflates dashboard availability.
+                totalGuests += event.getCurrentGuests();
+                totalCapacity += event.getAvailableSpots();
+            }
+
             String bookingSql = "SELECT b.booking_id, b.user_name, b.user_email, b.digital_id, b.booking_date, "
-                    + "COALESCE(p.name || ' - ' || e.name, e.name) AS event_name, e.date AS event_date "
+                    + "COALESCE(p.name || ' - ' || e.name, e.name) AS event_name, e.date AS event_date, b.booking_type "
                     + "FROM bookings b "
                     + "LEFT JOIN events e ON b.event_id = e.event_id "
                     + "LEFT JOIN events p ON e.parent_event_id = p.event_id "
@@ -157,7 +203,8 @@ public class AdminController {
                     bookingRs.getString("digital_id"),
                     bookingRs.getString("event_name"),
                     bookingRs.getString("event_date"),
-                    bookingRs.getString("booking_date")
+                    bookingRs.getString("booking_date"),
+                    bookingRs.getString("booking_type")
                 ));
             }
         } catch (SQLException e) {
@@ -165,7 +212,9 @@ public class AdminController {
         }
         model.addAttribute("events", events);
         model.addAttribute("bookings", bookings);
-        model.addAttribute("totalEvents", allEvents.size());
+        model.addAttribute("totalEvents", majorEventCount + " / " + subEventCount);
+        model.addAttribute("majorEventCount", majorEventCount);
+        model.addAttribute("subEventCount", subEventCount);
         model.addAttribute("totalBookings", bookings.size());
         model.addAttribute("totalCapacity", totalCapacity);
         model.addAttribute("totalGuests", totalGuests);
@@ -188,15 +237,32 @@ public class AdminController {
             @RequestParam(value = "sub_location", required = false) List<String> subLocations,
             @RequestParam(value = "sub_description", required = false) List<String> subDescriptions,
             @RequestParam(value = "sub_guest_limit", required = false) List<String> subGuestLimits,
-            RedirectAttributes redirectAttributes) {
+            @RequestParam(value = "image", required = false) MultipartFile image,
+            @RequestParam(value = "sub_image", required = false) List<MultipartFile> subImages,
+            RedirectAttributes redirectAttributes,
+            HttpSession session) {
+
+        if (!isAdmin(session)) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Please log in as admin to manage events.");
+            return "redirect:/login?target=/admin";
+        }
 
         try (Connection conn = dataSource.getConnection()) {
             ensureEventHierarchyColumns(conn);
+            conn.setAutoCommit(false);
 
             if ("add".equals(action)) {
                 String normalizedType = "MAJOR".equalsIgnoreCase(eventType) ? "MAJOR" : "SIMPLE";
-                String sql = "INSERT INTO events (name, date, location, description, guest_limit, current_guests, event_type, parent_event_id) "
-                        + "VALUES (?, ?, ?, ?, ?, 0, ?, NULL)";
+                validateEventInput(name, date, location, guestLimit);
+                if ("MAJOR".equals(normalizedType)) {
+                    if (image == null || image.isEmpty()) {
+                        throw new SQLException("Major events require an image.");
+                    }
+                    validateNewSubEventTotal(subNames, subGuestLimits, guestLimit);
+                }
+                String imagePath = saveEventImage(image);
+                String sql = "INSERT INTO events (name, date, location, description, guest_limit, current_guests, event_type, parent_event_id, image_path) "
+                        + "VALUES (?, ?, ?, ?, ?, 0, ?, NULL, ?)";
                 PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, name);
                 ps.setDate(2, java.sql.Date.valueOf(date));
@@ -204,6 +270,7 @@ public class AdminController {
                 ps.setString(4, description);
                 ps.setInt(5, guestLimit);
                 ps.setString(6, normalizedType);
+                ps.setString(7, imagePath);
                 ps.executeUpdate();
 
                 ResultSet created = ps.getGeneratedKeys();
@@ -213,15 +280,29 @@ public class AdminController {
                 int createdEventId = created.getInt(1);
 
                 if ("MAJOR".equals(normalizedType)) {
-                    insertSubEvents(conn, createdEventId, subNames, subDates, subLocations, subDescriptions, subGuestLimits);
+                    insertSubEvents(conn, createdEventId, subNames, subDates, subLocations, subDescriptions, subGuestLimits, subImages);
                 }
+                conn.commit();
                 redirectAttributes.addFlashAttribute("successMessage", "Event added successfully.");
             } else if ("addSubEvent".equals(action)) {
-                insertSubEvent(conn, parentEventId, name, date, location, description, guestLimit);
+                insertSubEvent(conn, parentEventId, name, date, location, description, guestLimit, saveEventImage(image));
+                conn.commit();
                 redirectAttributes.addFlashAttribute("successMessage", "Sub-event added successfully.");
             } else if ("update".equals(action)) {
-                String normalizedType = "MAJOR".equalsIgnoreCase(eventType) ? "MAJOR" : "SIMPLE";
-                String sql = "UPDATE events SET name = ?, date = ?, location = ?, description = ?, guest_limit = ?, event_type = ? WHERE event_id = ?";
+                String normalizedType;
+                if ("MAJOR".equalsIgnoreCase(eventType)) {
+                    normalizedType = "MAJOR";
+                } else if ("SUB".equalsIgnoreCase(eventType)) {
+                    normalizedType = "SUB";
+                } else {
+                    normalizedType = "SIMPLE";
+                }
+                validateEventInput(name, date, location, guestLimit);
+                validateGuestLimitUpdate(conn, eventId, normalizedType, guestLimit);
+                String imagePath = saveEventImage(image);
+                String sql = imagePath == null
+                        ? "UPDATE events SET name = ?, date = ?, location = ?, description = ?, guest_limit = ?, event_type = ? WHERE event_id = ?"
+                        : "UPDATE events SET name = ?, date = ?, location = ?, description = ?, guest_limit = ?, event_type = ?, image_path = ? WHERE event_id = ?";
                 PreparedStatement ps = conn.prepareStatement(sql);
                 ps.setString(1, name);
                 ps.setDate(2, java.sql.Date.valueOf(date));
@@ -229,23 +310,35 @@ public class AdminController {
                 ps.setString(4, description);
                 ps.setInt(5, guestLimit);
                 ps.setString(6, normalizedType);
-                ps.setInt(7, eventId);
+                if (imagePath == null) {
+                    ps.setInt(7, eventId);
+                } else {
+                    ps.setString(7, imagePath);
+                    ps.setInt(8, eventId);
+                }
                 ps.executeUpdate();
+                conn.commit();
                 redirectAttributes.addFlashAttribute("successMessage", "Event updated successfully.");
             } else if ("delete".equals(action)) {
                 String sql = "DELETE FROM events WHERE event_id = ?";
                 PreparedStatement ps = conn.prepareStatement(sql);
                 ps.setInt(1, eventId);
                 ps.executeUpdate();
+                conn.commit();
                 redirectAttributes.addFlashAttribute("successMessage", "Event deleted successfully.");
             } else {
+                conn.rollback();
                 redirectAttributes.addFlashAttribute("errorMessage", "Invalid action.");
             }
-        } catch (SQLException e) {
+        } catch (SQLException | IOException e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Database error: " + e.getMessage());
         }
 
         return "redirect:/admin";
+    }
+
+    private boolean isAdmin(HttpSession session) {
+        return session != null && "ADMIN".equals(session.getAttribute("authRole"));
     }
 
     private void ensureEventHierarchyColumns(Connection conn) throws SQLException {
@@ -257,10 +350,54 @@ public class AdminController {
                 "ALTER TABLE events ADD COLUMN IF NOT EXISTS parent_event_id INTEGER REFERENCES events(event_id) ON DELETE CASCADE")) {
             ps.executeUpdate();
         }
+        try (PreparedStatement ps = conn.prepareStatement(
+                "ALTER TABLE events ADD COLUMN IF NOT EXISTS image_path VARCHAR(500)")) {
+            ps.executeUpdate();
+        }
+        try (PreparedStatement ps = conn.prepareStatement(
+                "ALTER TABLE bookings ADD COLUMN IF NOT EXISTS booking_type VARCHAR(20) NOT NULL DEFAULT 'SUB_EVENT'")) {
+            ps.executeUpdate();
+        }
+        try (PreparedStatement ps = conn.prepareStatement(
+                "UPDATE bookings b SET booking_type = 'MAJOR_EVENT' "
+                        + "FROM events e WHERE b.event_id = e.event_id "
+                        + "AND e.parent_event_id IS NULL AND e.event_type = 'MAJOR' AND b.booking_type <> 'MAJOR_EVENT'")) {
+            ps.executeUpdate();
+        }
+        if (isPostgreSql(conn)) {
+            installPostgresCapacityTrigger(conn);
+        }
+    }
+
+    private boolean isPostgreSql(Connection conn) throws SQLException {
+        String databaseName = conn.getMetaData().getDatabaseProductName();
+        return databaseName != null && databaseName.toLowerCase().contains("postgresql");
+    }
+
+    private void installPostgresCapacityTrigger(Connection conn) throws SQLException {
+        try (Statement statement = conn.createStatement()) {
+            statement.execute("CREATE OR REPLACE FUNCTION validate_sub_event_capacity() RETURNS trigger AS $$ "
+                    + "DECLARE parent_limit INTEGER; parent_type VARCHAR(20); sibling_total INTEGER; "
+                    + "BEGIN "
+                    + "IF NEW.parent_event_id IS NOT NULL THEN "
+                    + "SELECT guest_limit, event_type INTO parent_limit, parent_type FROM events WHERE event_id = NEW.parent_event_id; "
+                    + "IF parent_type <> 'MAJOR' THEN RAISE EXCEPTION 'Sub-events must belong to a major event'; END IF; "
+                    + "SELECT COALESCE(SUM(guest_limit), 0) INTO sibling_total FROM events "
+                    + "WHERE parent_event_id = NEW.parent_event_id AND event_id <> COALESCE(NEW.event_id, -1); "
+                    + "IF sibling_total + NEW.guest_limit > parent_limit THEN "
+                    + "RAISE EXCEPTION 'Combined sub-event guest limits cannot exceed parent major event guest limit'; "
+                    + "END IF; "
+                    + "END IF; "
+                    + "RETURN NEW; END; $$ LANGUAGE plpgsql");
+            statement.execute("DROP TRIGGER IF EXISTS trg_validate_sub_event_capacity ON events");
+            statement.execute("CREATE TRIGGER trg_validate_sub_event_capacity BEFORE INSERT OR UPDATE OF guest_limit, parent_event_id ON events "
+                    + "FOR EACH ROW EXECUTE FUNCTION validate_sub_event_capacity()");
+        }
     }
 
     private void insertSubEvents(Connection conn, int parentEventId, List<String> names, List<String> dates,
-            List<String> locations, List<String> descriptions, List<String> guestLimits) throws SQLException {
+            List<String> locations, List<String> descriptions, List<String> guestLimits, List<MultipartFile> images)
+            throws SQLException, IOException {
         if (names == null) {
             return;
         }
@@ -275,26 +412,136 @@ public class AdminController {
                 continue;
             }
 
-            insertSubEvent(conn, parentEventId, subName, subDate, subLocation, valueAt(descriptions, i), subGuestLimit);
+            insertSubEvent(conn, parentEventId, subName, subDate, subLocation, valueAt(descriptions, i), subGuestLimit,
+                    saveEventImage(fileAt(images, i)));
         }
     }
 
     private void insertSubEvent(Connection conn, Integer parentEventId, String name, String date, String location,
-            String description, Integer guestLimit) throws SQLException {
+            String description, Integer guestLimit, String imagePath) throws SQLException {
         if (parentEventId == null || isBlank(name) || isBlank(date) || isBlank(location) || guestLimit == null || guestLimit < 1) {
             throw new SQLException("Sub-event details are incomplete.");
         }
+        if (imagePath == null) {
+            throw new SQLException("Sub-events require an image.");
+        }
+        validateSubEventCapacity(conn, parentEventId, null, guestLimit);
+        int existingMajorPasses = countMajorPassBookings(conn, parentEventId);
+        if (existingMajorPasses > guestLimit) {
+            throw new SQLException("Sub-event guest limit must cover existing major-event pass holders (" + existingMajorPasses + ").");
+        }
 
-        String sql = "INSERT INTO events (name, date, location, description, guest_limit, current_guests, event_type, parent_event_id) "
-                + "VALUES (?, ?, ?, ?, ?, 0, 'SUB', ?)";
+        String sql = "INSERT INTO events (name, date, location, description, guest_limit, current_guests, event_type, parent_event_id, image_path) "
+                + "VALUES (?, ?, ?, ?, ?, ?, 'SUB', ?, ?)";
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setString(1, name);
         ps.setDate(2, java.sql.Date.valueOf(date));
         ps.setString(3, location);
         ps.setString(4, description);
         ps.setInt(5, guestLimit);
-        ps.setInt(6, parentEventId);
+        ps.setInt(6, existingMajorPasses);
+        ps.setInt(7, parentEventId);
+        ps.setString(8, imagePath);
         ps.executeUpdate();
+    }
+
+    private void validateEventInput(String name, String date, String location, Integer guestLimit) throws SQLException {
+        if (isBlank(name) || isBlank(date) || isBlank(location) || guestLimit == null || guestLimit < 1) {
+            throw new SQLException("Event name, date, location, and a positive guest limit are required.");
+        }
+    }
+
+    private void validateNewSubEventTotal(List<String> names, List<String> guestLimits, Integer parentGuestLimit) throws SQLException {
+        int total = 0;
+        if (names == null) {
+            return;
+        }
+        for (int i = 0; i < names.size(); i++) {
+            if (isBlank(names.get(i))) {
+                continue;
+            }
+            Integer subGuestLimit = parsePositiveInteger(valueAt(guestLimits, i));
+            if (subGuestLimit == null || subGuestLimit < 1) {
+                throw new SQLException("Every filled sub-event row needs a positive guest limit.");
+            }
+            total += subGuestLimit;
+        }
+        if (total > parentGuestLimit) {
+            throw new SQLException("Combined sub-event guest limits (" + total + ") cannot exceed major event guest limit (" + parentGuestLimit + ").");
+        }
+    }
+
+    private void validateGuestLimitUpdate(Connection conn, Integer eventId, String eventType, Integer guestLimit) throws SQLException {
+        if (eventId == null) {
+            throw new SQLException("Missing event ID.");
+        }
+        try (PreparedStatement ps = conn.prepareStatement("SELECT current_guests, parent_event_id FROM events WHERE event_id = ? FOR UPDATE")) {
+            ps.setInt(1, eventId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.next()) {
+                    throw new SQLException("Event not found.");
+                }
+                int currentGuests = rs.getInt("current_guests");
+                Integer parentEventId = rs.getObject("parent_event_id") == null ? null : rs.getInt("parent_event_id");
+                if (guestLimit < currentGuests) {
+                    throw new SQLException("Guest limit cannot be lower than current bookings (" + currentGuests + ").");
+                }
+                if ("MAJOR".equalsIgnoreCase(eventType)) {
+                    int subTotal = getSubGuestLimitTotal(conn, eventId, null);
+                    if (guestLimit < subTotal) {
+                        throw new SQLException("Major event guest limit cannot be lower than combined sub-event limits (" + subTotal + ").");
+                    }
+                } else if (parentEventId != null) {
+                    validateSubEventCapacity(conn, parentEventId, eventId, guestLimit);
+                }
+            }
+        }
+    }
+
+    private void validateSubEventCapacity(Connection conn, Integer parentEventId, Integer subEventId, Integer guestLimit) throws SQLException {
+        int parentLimit;
+        try (PreparedStatement ps = conn.prepareStatement("SELECT guest_limit, event_type FROM events WHERE event_id = ? AND parent_event_id IS NULL FOR UPDATE")) {
+            ps.setInt(1, parentEventId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.next()) {
+                    throw new SQLException("Sub-events must belong to a top-level major event.");
+                }
+                if (!"MAJOR".equalsIgnoreCase(rs.getString("event_type"))) {
+                    throw new SQLException("Sub-events must belong to a major event.");
+                }
+                parentLimit = rs.getInt("guest_limit");
+            }
+        }
+        int total = getSubGuestLimitTotal(conn, parentEventId, subEventId) + guestLimit;
+        if (total > parentLimit) {
+            throw new SQLException("Combined sub-event guest limits (" + total + ") cannot exceed parent major event guest limit (" + parentLimit + ").");
+        }
+    }
+
+    private int getSubGuestLimitTotal(Connection conn, Integer parentEventId, Integer excludedSubEventId) throws SQLException {
+        String sql = "SELECT COALESCE(SUM(guest_limit), 0) FROM events WHERE parent_event_id = ?"
+                + (excludedSubEventId == null ? "" : " AND event_id <> ?");
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, parentEventId);
+            if (excludedSubEventId != null) {
+                ps.setInt(2, excludedSubEventId);
+            }
+            try (ResultSet rs = ps.executeQuery()) {
+                rs.next();
+                return rs.getInt(1);
+            }
+        }
+    }
+
+    private int countMajorPassBookings(Connection conn, Integer parentEventId) throws SQLException {
+        try (PreparedStatement ps = conn.prepareStatement(
+                "SELECT COUNT(*) FROM bookings WHERE event_id = ? AND booking_type = 'MAJOR_EVENT'")) {
+            ps.setInt(1, parentEventId);
+            try (ResultSet rs = ps.executeQuery()) {
+                rs.next();
+                return rs.getInt(1);
+            }
+        }
     }
 
     private boolean isBlank(String value) {
@@ -302,6 +549,10 @@ public class AdminController {
     }
 
     private String valueAt(List<String> values, int index) {
+        return values == null || index >= values.size() ? null : values.get(index);
+    }
+
+    private MultipartFile fileAt(List<MultipartFile> values, int index) {
         return values == null || index >= values.size() ? null : values.get(index);
     }
 
@@ -314,5 +565,33 @@ public class AdminController {
         } catch (NumberFormatException e) {
             return null;
         }
+    }
+
+    private String saveEventImage(MultipartFile image) throws IOException {
+        if (image == null || image.isEmpty()) {
+            return null;
+        }
+
+        String contentType = image.getContentType();
+        if (contentType == null || !contentType.toLowerCase().startsWith("image/")) {
+            throw new IOException("Only image files can be uploaded.");
+        }
+
+        String originalName = image.getOriginalFilename();
+        String extension = ".jpg";
+        if (originalName != null && originalName.lastIndexOf('.') >= 0) {
+            extension = originalName.substring(originalName.lastIndexOf('.')).replaceAll("[^A-Za-z0-9.]", "");
+            if (extension.isEmpty()) {
+                extension = ".jpg";
+            }
+        }
+
+        Path uploadDir = Paths.get(System.getProperty("user.dir"), "uploads", "images", "events");
+        Files.createDirectories(uploadDir);
+
+        String fileName = "event-" + System.currentTimeMillis() + "-" + java.util.UUID.randomUUID() + extension;
+        Path target = uploadDir.resolve(fileName);
+        image.transferTo(target.toFile());
+        return "/images/events/" + fileName;
     }
 }

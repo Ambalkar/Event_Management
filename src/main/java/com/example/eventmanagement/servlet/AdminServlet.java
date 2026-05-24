@@ -100,6 +100,26 @@ public class AdminServlet extends HttpServlet {
                         System.out.println("New values - Name: " + name + ", Date: " + date + 
                                          ", Location: " + location + ", Guest Limit: " + guestLimit);
 
+                        String currentGuestsSql = "SELECT current_guests FROM events WHERE event_id = ?";
+                        try (PreparedStatement checkCurrentGuestsStmt = conn.prepareStatement(currentGuestsSql)) {
+                            checkCurrentGuestsStmt.setInt(1, eventId);
+                            try (ResultSet currentGuestsRs = checkCurrentGuestsStmt.executeQuery()) {
+                                if (currentGuestsRs.next()) {
+                                    int currentGuests = currentGuestsRs.getInt("current_guests");
+                                    if (guestLimit < currentGuests) {
+                                        request.setAttribute("error", "Guest limit cannot be lower than current bookings ("
+                                                + currentGuests + ").");
+                                        request.getRequestDispatcher("/WEB-INF/views/admin_dashboard.jsp").forward(request, response);
+                                        return;
+                                    }
+                                } else {
+                                    request.setAttribute("error", "No event found with ID " + eventId + ".");
+                                    request.getRequestDispatcher("/WEB-INF/views/admin_dashboard.jsp").forward(request, response);
+                                    return;
+                                }
+                            }
+                        }
+
                         sql = "UPDATE events SET name=?, date=?, location=?, description=?, guest_limit=? WHERE event_id=?";
                         stmt = conn.prepareStatement(sql);
                         stmt.setString(1, name);

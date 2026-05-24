@@ -3,11 +3,13 @@ C:\Users\deven\Downloads\EMS\src\main\java\com\example\eventmanagement\servlet\T
 C:\Users\deven\Downloads\EMS\src\main\java\com\eventms\controller\UserController.java
 C:\Users\deven\Downloads\EMS\src\main\java\com\example\eventmanagement\servlet\AdminServlet.java
 C:\Users\deven\Downloads\EMS\src\main\java\com\example\eventmanagement\servlet\UserServlet.java
+C:\Users\deven\Downloads\EMS\src\main\java\com\eventms\controller\AuthController.java
 C:\Users\deven\Downloads\EMS\src\main\java\com\eventms\repository\BaseRepository.java
 C:\Users\deven\Downloads\EMS\src\main\java\com\eventms\controller\AdminController.java
 C:\Users\deven\Downloads\EMS\src\main\java\com\example\eventmanagement\model\Event.java
 C:\Users\deven\Downloads\EMS\src\main\java\com\eventms\controller\HealthCheckController.java
 C:\Users\deven\Downloads\EMS\src\main\java\com\eventms\EventManagementSystemApplication.java
+C:\Users\deven\Downloads\EMS\src\main\java\com\eventms\config\WebConfig.java
 C:\Users\deven\Downloads\EMS\src\main\java\com\eventms\model\BaseEntity.java
 C:\Users\deven\Downloads\EMS\src\main\java\com\example\eventmanagement\model\Participation.java
 C:\Users\deven\Downloads\EMS\src\main\java\com\example\eventmanagement\model\User.java

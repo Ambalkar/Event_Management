@@ -82,50 +82,54 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int eventId = Integer.parseInt(request.getParameter("event_id"));
+        String eventIdParam = request.getParameter("event_id");
         String userName = request.getParameter("name");
         String userEmail = request.getParameter("email");
 
+        if (eventIdParam == null || eventIdParam.isBlank() || userName == null || userName.isBlank()
+                || userEmail == null || userEmail.isBlank()) {
+            request.setAttribute("errorMessage", "Please provide your name, email, and select an event.");
+            doGet(request, response);
+            return;
+        }
+
+        int eventId;
+        try {
+            eventId = Integer.parseInt(eventIdParam);
+        } catch (NumberFormatException e) {
+            request.setAttribute("errorMessage", "Invalid event selection.");
+            doGet(request, response);
+            return;
+        }
+
         try (Connection conn = DBConnection.getConnection()) {
-            // Check guest limit
-            String checkSql = "SELECT guest_limit, current_guests FROM events WHERE event_id = ?";
-            PreparedStatement checkStmt = conn.prepareStatement(checkSql);
-            checkStmt.setInt(1, eventId);
-            ResultSet rs = checkStmt.executeQuery();
+            conn.setAutoCommit(false);
 
-            if (rs.next()) {
-                int guestLimit = rs.getInt("guest_limit");
-                int currentGuests = rs.getInt("current_guests");
+            String updateGuestsSql = "UPDATE events SET current_guests = current_guests + 1 "
+                    + "WHERE event_id = ? AND current_guests < guest_limit";
+            try (PreparedStatement updateGuestsStmt = conn.prepareStatement(updateGuestsSql)) {
+                updateGuestsStmt.setInt(1, eventId);
 
-                if (currentGuests >= guestLimit) {
-                    request.setAttribute("errorMessage", "Sorry, the event is fully booked.");
+                int updatedRows = updateGuestsStmt.executeUpdate();
+                if (updatedRows == 0) {
+                    conn.rollback();
+                    request.setAttribute("errorMessage", "Sorry, the event is fully booked or not found.");
                     doGet(request, response);
                     return;
                 }
-            } else {
-                request.setAttribute("errorMessage", "Event not found.");
-                doGet(request, response);
-                return;
             }
 
-            // Generate digital ID
             String digitalId = UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+            String insertSql = "INSERT INTO bookings (event_id, user_name, user_email, digital_id) VALUES (?, ?, ?, ?)";
+            try (PreparedStatement insertStmt = conn.prepareStatement(insertSql)) {
+                insertStmt.setInt(1, eventId);
+                insertStmt.setString(2, userName);
+                insertStmt.setString(3, userEmail);
+                insertStmt.setString(4, digitalId);
+                insertStmt.executeUpdate();
+            }
 
-            // Insert new booking record
-            String insertSql = "INSERT INTO users (name, email, booked_event_id, digital_id) VALUES (?, ?, ?, ?)";
-            PreparedStatement insertStmt = conn.prepareStatement(insertSql);
-            insertStmt.setString(1, userName);
-            insertStmt.setString(2, userEmail);
-            insertStmt.setInt(3, eventId);
-            insertStmt.setString(4, digitalId);
-            insertStmt.executeUpdate();
-
-            // Update current guests count
-            String updateGuestsSql = "UPDATE events SET current_guests = current_guests + 1 WHERE event_id = ?";
-            PreparedStatement updateGuestsStmt = conn.prepareStatement(updateGuestsSql);
-            updateGuestsStmt.setInt(1, eventId);
-            updateGuestsStmt.executeUpdate();
-
+            conn.commit();
             request.setAttribute("successMessage", "Booking successful! Your digital ID: " + digitalId);
             doGet(request, response);
 

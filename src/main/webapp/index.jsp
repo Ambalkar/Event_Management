@@ -681,7 +681,7 @@
                 <a href="${pageContext.request.contextPath}/documentation.jsp" class="nav-link">
                     <i class="fas fa-info-circle"></i> About
                 </a>
-                <a href="${pageContext.request.contextPath}/user" class="nav-link">
+                <a href="${pageContext.request.contextPath}/" class="nav-link">
                     <i class="fas fa-user"></i> User Portal
                 </a>
                 <a href="${pageContext.request.contextPath}/admin" class="nav-link admin-link">
@@ -697,7 +697,7 @@
             <h1 class="hero-title">Plan. Manage. Succeed.</h1>
             <p class="hero-subtitle">A powerful, all-in-one Event Management System for organizers and participants</p>
             <div class="hero-cta">
-                <a href="${pageContext.request.contextPath}/user" class="btn primary-btn">
+                <a href="${pageContext.request.contextPath}/" class="btn primary-btn">
                     <i class="fas fa-rocket"></i> Get Started
                 </a>
                 <a href="#features" class="btn secondary-btn">
