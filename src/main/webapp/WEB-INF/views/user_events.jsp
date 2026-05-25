@@ -675,11 +675,12 @@
 
         .event-image {
             width: 100%;
-            aspect-ratio: 16 / 9;
-            object-fit: cover;
+            height: auto;
+            max-height: none;
             border-radius: 8px;
             border: 1px solid rgba(255, 255, 255, 0.14);
             margin-bottom: 1rem;
+            display: block;
         }
 
         .event-card .date,

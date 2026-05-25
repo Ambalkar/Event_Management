@@ -1,5 +1,6 @@
 package com.eventms.controller;
 
+import com.eventms.service.FileNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,6 +32,9 @@ public class AdminController {
 
     @Autowired
     private DataSource dataSource;
+
+    @Autowired
+    private FileNotificationService fileNotificationService;
 
     public static class Event {
         private int id;
@@ -283,11 +287,11 @@ public class AdminController {
                     insertSubEvents(conn, createdEventId, subNames, subDates, subLocations, subDescriptions, subGuestLimits, subImages);
                 }
                 conn.commit();
-                redirectAttributes.addFlashAttribute("successMessage", "Event added successfully.");
+                addEventNotificationFlash(redirectAttributes, "Event added successfully.", name, date, location, description);
             } else if ("addSubEvent".equals(action)) {
                 insertSubEvent(conn, parentEventId, name, date, location, description, guestLimit, saveEventImage(image));
                 conn.commit();
-                redirectAttributes.addFlashAttribute("successMessage", "Sub-event added successfully.");
+                addEventNotificationFlash(redirectAttributes, "Sub-event added successfully.", name, date, location, description);
             } else if ("update".equals(action)) {
                 String normalizedType;
                 if ("MAJOR".equalsIgnoreCase(eventType)) {
@@ -335,6 +339,19 @@ public class AdminController {
         }
 
         return "redirect:/admin";
+    }
+
+    private void addEventNotificationFlash(RedirectAttributes redirectAttributes, String baseMessage,
+            String eventName, String eventDate, String location, String description) {
+        try {
+            int notifiedUsers = fileNotificationService.notifyRegisteredUsersAboutEvent(eventName, eventDate, location, description);
+            redirectAttributes.addFlashAttribute("successMessage",
+                    baseMessage + " Notification saved for " + notifiedUsers + " registered user(s).");
+        } catch (IOException e) {
+            redirectAttributes.addFlashAttribute("successMessage", baseMessage);
+            redirectAttributes.addFlashAttribute("errorMessage",
+                    "Event was saved, but notification file could not be updated: " + e.getMessage());
+        }
     }
 
     private boolean isAdmin(HttpSession session) {

@@ -1,3 +1,4 @@
+
 package com.example.eventmanagement.model;
 
 import javax.persistence.Entity;

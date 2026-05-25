@@ -1,5 +1,6 @@
 package com.eventms.controller;
 
+import com.eventms.service.FileNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,6 +28,9 @@ public class AuthController {
 
     @Autowired
     private DataSource dataSource;
+
+    @Autowired
+    private FileNotificationService fileNotificationService;
 
     @GetMapping({"/login", "/signin"})
     public String loginPage(@RequestParam(value = "mode", required = false) String mode,
@@ -107,8 +112,12 @@ public class AuthController {
             ps.setString(3, passwordEncoder.encode(password));
             ps.executeUpdate();
 
+            fileNotificationService.saveRegisteredUser(normalizedName, normalizedEmail);
             setSessionUser(session, normalizedName, normalizedEmail, "USER");
             return "redirect:" + safeTarget(target);
+        } catch (IOException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Account created, but could not save user details to file: " + e.getMessage());
+            return "redirect:/login";
         } catch (SQLException e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Could not create account. The email may already be registered.");
             return "redirect:/signup";

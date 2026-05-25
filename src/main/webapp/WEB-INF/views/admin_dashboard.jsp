@@ -431,8 +431,10 @@
         .event-thumb {
             width: 100%;
             max-width: 220px;
-            aspect-ratio: 16 / 9;
-            object-fit: cover;
+            height: 140px;
+            object-fit: contain;
+            object-position: center;
+            background: rgba(255, 255, 255, 0.045);
             border-radius: 8px;
             border: 1px solid var(--panel-line);
             margin-bottom: 10px;
@@ -441,6 +443,7 @@
 
         .event-thumb.small {
             max-width: 150px;
+            height: 96px;
             margin-bottom: 8px;
         }
 
