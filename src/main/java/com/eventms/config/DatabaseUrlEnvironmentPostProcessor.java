@@ -24,11 +24,20 @@ public class DatabaseUrlEnvironmentPostProcessor implements EnvironmentPostProce
 
         environment.getPropertySources().addFirst(
                 new MapPropertySource("resolvedDatabaseUrl", datasourceProperties));
+        System.out.println("Resolved datasource from " + resolved.get("source")
+                + " as " + maskDatasourceUrl(resolved.get("url")));
     }
 
     private void putIfPresent(Map<String, Object> properties, String key, String value) {
         if (value != null && !value.isBlank()) {
             properties.put(key, value);
         }
+    }
+
+    private String maskDatasourceUrl(String url) {
+        if (url == null || url.isBlank()) {
+            return "(not configured)";
+        }
+        return url.replaceAll("(?i)(password=)[^&]+", "$1***");
     }
 }

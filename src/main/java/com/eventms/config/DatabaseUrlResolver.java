@@ -3,6 +3,7 @@ package com.eventms.config;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ public final class DatabaseUrlResolver {
         String datasourceUrl = blankToNull(env.get("SPRING_DATASOURCE_URL"));
         String databaseUrl = blankToNull(env.get("DATABASE_URL"));
         String rawUrl = datasourceUrl != null ? datasourceUrl : databaseUrl;
+        String source = datasourceUrl != null ? "SPRING_DATASOURCE_URL" : "DATABASE_URL";
 
         Map<String, String> properties = new HashMap<>();
         if (rawUrl == null) {
@@ -22,7 +24,8 @@ public final class DatabaseUrlResolver {
         }
 
         if (rawUrl.startsWith("jdbc:")) {
-            properties.put("url", rawUrl);
+            properties.put("url", normalizeJdbcPostgresUrl(rawUrl));
+            properties.put("source", source);
             putIfPresent(properties, "username", env.get("SPRING_DATASOURCE_USERNAME"));
             putIfPresent(properties, "password", env.get("SPRING_DATASOURCE_PASSWORD"));
             return properties;
@@ -30,6 +33,7 @@ public final class DatabaseUrlResolver {
 
         if (!rawUrl.startsWith("postgres://") && !rawUrl.startsWith("postgresql://")) {
             properties.put("url", rawUrl);
+            properties.put("source", source);
             putIfPresent(properties, "username", env.get("SPRING_DATASOURCE_USERNAME"));
             putIfPresent(properties, "password", env.get("SPRING_DATASOURCE_PASSWORD"));
             return properties;
@@ -46,7 +50,8 @@ public final class DatabaseUrlResolver {
             jdbcUrl.append("?").append(uri.getRawQuery());
         }
 
-        properties.put("url", jdbcUrl.toString());
+        properties.put("url", normalizeJdbcPostgresUrl(jdbcUrl.toString()));
+        properties.put("source", source);
         if (uri.getUserInfo() != null) {
             String[] credentials = uri.getUserInfo().split(":", 2);
             properties.put("username", decode(credentials[0]));
@@ -72,5 +77,47 @@ public final class DatabaseUrlResolver {
 
     private static String decode(String value) {
         return URLDecoder.decode(value, StandardCharsets.UTF_8);
+    }
+
+    private static String normalizeJdbcPostgresUrl(String url) {
+        if (!url.startsWith("jdbc:postgresql://") || isLocalPostgresUrl(url) || hasQueryParameter(url, "sslmode")) {
+            return url;
+        }
+
+        return url + (url.contains("?") ? "&" : "?") + "sslmode=require";
+    }
+
+    private static boolean isLocalPostgresUrl(String url) {
+        String host = extractHost(url);
+        return "localhost".equalsIgnoreCase(host)
+                || "127.0.0.1".equals(host)
+                || "::1".equals(host);
+    }
+
+    private static String extractHost(String jdbcUrl) {
+        try {
+            URI uri = URI.create(jdbcUrl.substring("jdbc:".length()));
+            return uri.getHost();
+        } catch (IllegalArgumentException e) {
+            return "";
+        }
+    }
+
+    private static boolean hasQueryParameter(String url, String parameterName) {
+        int queryStart = url.indexOf('?');
+        if (queryStart < 0) {
+            return false;
+        }
+
+        String normalizedName = parameterName.toLowerCase(Locale.ROOT);
+        String[] queryParts = url.substring(queryStart + 1).split("&");
+        for (String queryPart : queryParts) {
+            int valueStart = queryPart.indexOf('=');
+            String name = valueStart >= 0 ? queryPart.substring(0, valueStart) : queryPart;
+            if (name.toLowerCase(Locale.ROOT).equals(normalizedName)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
