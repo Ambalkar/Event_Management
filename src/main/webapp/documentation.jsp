@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Event Management System - Documentation</title>
+    <title>SEVENT-MS - Documentation</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
@@ -374,7 +374,7 @@
 
     <div class="container">
         <div class="doc-header">
-            <h1>Event Management System Documentation</h1>
+            <h1>SEVENT-MS Documentation</h1>
         </div>
 
         <div class="doc-nav">
@@ -394,14 +394,12 @@
             <div class="about-content">
                 <div class="developer-info">
                     <h3>Developer</h3>
-<p class="highlight-text">This Event Management System is developed by Devendra Ambalkar, showcasing expertise in Java, Spring Framework, and full-stack web development.</p>
+<p class="highlight-text">This SEVENT-MS platform is developed by Devendra Ambalkar, showcasing expertise in Java, Spring Framework, and full-stack web development.</p>
                 </div>
                 
                 <div class="project-overview">
                     <h3>Project Overview</h3>
-                    <p>The Event Management System is a comprehensive web application designed to streamline the process of managing events, registrations, and attendee tracking. Built from the ground up, this project demonstrates expertise in both frontend and backend development.</p>
-                </div>
-
+                        <p>SEVENT-MS is a comprehensive web application designed to streamline the process of managing events, registrations, and attendee tracking. Built from the ground up, this project demonstrates expertise in both frontend and backend development.</p>
                 <div class="about-grid">
                     <div class="about-card">
                         <h3><i class="fas fa-bullseye"></i> Project Mission</h3>

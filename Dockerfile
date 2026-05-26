@@ -1,4 +1,4 @@
-# Optimized Dockerfile for Render Free Tier (Maven direct, stable JVM flags)
+# Dockerfile for SEVENT-MS deployment on AWS App Runner, Elastic Beanstalk, or ECS
 # Stage 1: Builder
 FROM eclipse-temurin:17-jdk-alpine AS builder
 
@@ -12,7 +12,7 @@ RUN mvn clean package -DskipTests -B
 # Stage 2: Runtime
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
-COPY --from=builder /app/target/EventManagementSystem.war app.war
+COPY --from=builder /app/target/SEVENT-MS.war app.war
 
 EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \

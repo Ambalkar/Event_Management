@@ -3,7 +3,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>User Event Booking - Event Management System</title>
+    <title>User Event Booking - SEVENT-MS</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user.css">
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }

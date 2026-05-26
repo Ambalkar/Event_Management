@@ -50,7 +50,12 @@ public class FileNotificationService {
         if (users.isEmpty()) {
             return 0;
         }
+        writeNotificationBatch(users, eventName, eventDate, location, description);
+        return users.size();
+    }
 
+    private void writeNotificationBatch(Map<String, RegisteredUser> users, String eventName, String eventDate,
+            String location, String description) throws IOException {
         StringBuilder batch = new StringBuilder();
         String sentAt = LocalDateTime.now().format(TIMESTAMP_FORMAT);
         for (RegisteredUser user : users.values()) {
@@ -65,13 +70,13 @@ public class FileNotificationService {
                 batch.append(" Details: ").append(description.trim());
             }
             batch.append(System.lineSeparator())
+                    .append("status=file_notification_recorded").append(System.lineSeparator())
                     .append("---")
                     .append(System.lineSeparator());
         }
 
         Files.writeString(notificationsFile, batch.toString(), StandardCharsets.UTF_8,
                 StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-        return users.size();
     }
 
     private void ensureDataFiles() throws IOException {

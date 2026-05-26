@@ -21,7 +21,7 @@ import java.sql.SQLException;
 @Controller
 public class AuthController {
 
-    private static final String ADMIN_EMAIL = "admin@devevent.gmail.com";
+    private static final String ADMIN_EMAIL = "devendraambalkar11@gmail.com";
     private static final String ADMIN_PASSWORD = "Koo4mTjBtfT1W2EQ";
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();

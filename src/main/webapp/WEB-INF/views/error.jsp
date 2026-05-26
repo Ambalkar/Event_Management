@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Error - Event Management System</title>
+    <title>Error - SEVENT-MS</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user.css">
 </head>
 <body>

@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin Dashboard - Event Management System</title>
+    <title>Admin Dashboard - SEVENT-MS</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin.css">
     
     <style>

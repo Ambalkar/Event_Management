@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Event Management System</title>
+    <title>SEVENT-MS</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -695,7 +695,7 @@
     <div class="hero-section" style="background-image: url('${pageContext.request.contextPath}/images/eventbg0.jpg')">
         <div class="hero-content">
             <h1 class="hero-title">Plan. Manage. Succeed.</h1>
-            <p class="hero-subtitle">A powerful, all-in-one Event Management System for organizers and participants</p>
+            <p class="hero-subtitle">A powerful, all-in-one SEVENT-MS platform for organizers and participants</p>
             <div class="hero-cta">
                 <a href="${pageContext.request.contextPath}/" class="btn primary-btn">
                     <i class="fas fa-rocket"></i> Get Started
@@ -822,7 +822,7 @@
                                 is a software developer specializing in Java, Spring Framework, and full-stack web development. He builds secure, scalable applications with a strong focus on user experience and system performance.
                             </p>
                             <p style="color: #d4d4d8; line-height: 1.6; margin-top: 0.5rem;">
-                                With hands-on experience in Spring Security, JWT, Hibernate, and relational databases, he has developed production-ready systems like the Event Management System.
+                                With hands-on experience in Spring Security, JWT, Hibernate, and relational databases, he has developed production-ready systems like SEVENT-MS.
                             </p>
 <div class="developer-skills" style="margin-top: 1rem;">
                                 <span style="background: rgba(170, 175, 184, 0.18); color: #f4f4f5; padding: 0.3rem 0.8rem; border-radius: 15px; margin-right: 0.5rem; font-size: 0.9rem;">Java</span>
@@ -1011,7 +1011,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2024 Event Management System. All rights reserved.</p>
+            <p>&copy; 2024 SEVENT-MS. All rights reserved.</p>
             <div class="footer-meta">
                 <a href="${pageContext.request.contextPath}/sitemap">Sitemap</a>
                 <span class="separator">|</span>

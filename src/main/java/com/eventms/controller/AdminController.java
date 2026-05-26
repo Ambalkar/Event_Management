@@ -350,7 +350,7 @@ public class AdminController {
         } catch (IOException e) {
             redirectAttributes.addFlashAttribute("successMessage", baseMessage);
             redirectAttributes.addFlashAttribute("errorMessage",
-                    "Event was saved, but notification file could not be updated: " + e.getMessage());
+                    "Event was saved, but notification records could not be written: " + e.getMessage());
         }
     }
 

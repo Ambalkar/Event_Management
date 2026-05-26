@@ -12,11 +12,11 @@
     </parent>
 
     <groupId>com.eventms</groupId>
-    <artifactId>event-management-system</artifactId>
+    <artifactId>sevent-ms</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>Event Management System</name>
+    <name>SEVENT-MS</name>
 
     <properties>
         <java.version>17</java.version>
@@ -103,7 +103,7 @@
     </dependencies>
 
     <build>
-        <finalName>EventManagementSystem</finalName>
+        <finalName>SEVENT-MS</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -134,7 +134,6 @@
                 <version>3.3.2</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
-                    <warName>EventManagementSystem</warName>
                 </configuration>
             </plugin>
         </plugins>

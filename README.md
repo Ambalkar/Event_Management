@@ -1,6 +1,6 @@
-# Event Management System (EMS)
+# SEVENT-MS
 
-Event Management System is a Java 17 web application for creating events, publishing them to users, and tracking event bookings. It is built with Spring Boot, JSP views, PostgreSQL, and Maven, and can run locally with Docker Compose, Maven, or the included Windows development script.
+SEVENT-MS is a Java 17 web application for creating events, publishing them to users, and tracking event bookings. It is built with Spring Boot, JSP views, PostgreSQL, and Maven, and can run locally with Docker Compose, Maven, or the included Windows development script.
 
 <img width="1440" height="852" alt="EMS landing page screenshot" src="https://github.com/user-attachments/assets/592c4b3a-fd5a-49fa-bf98-a1d423447eef" />
 <img width="1440" height="852" alt="EMS user events screenshot" src="https://github.com/user-attachments/assets/5ba8f13d-8f2a-4ee9-9c74-68bf80846994" />
@@ -35,7 +35,7 @@ Event Management System is a Java 17 web application for creating events, publis
 ## Project Structure
 
 ```text
-EMS/
+SEVENT-MS/
 |-- src/main/java/
 |   |-- com/eventms/
 |   |   |-- EventManagementSystemApplication.java
@@ -131,7 +131,7 @@ Build and run:
 
 ```bash
 ./mvnw.cmd clean package -DskipTests
-java -jar target/EventManagementSystem.war
+java -jar target/SEVENT-MS.war
 ```
 
 Open:
@@ -179,7 +179,7 @@ See `.env.example` for deployment-oriented values.
 The packaged application is created at:
 
 ```text
-target/EventManagementSystem.war
+target/SEVENT-MS.war
 ```
 
 ## Deployment
@@ -187,12 +187,12 @@ target/EventManagementSystem.war
 ### Docker
 
 ```bash
-docker build -t event-management-system .
+docker build -t sevent-ms .
 docker run -p 8080:8080 \
   -e SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/event_ms_db \
   -e SPRING_DATASOURCE_USERNAME=postgres \
   -e SPRING_DATASOURCE_PASSWORD=postgres \
-  event-management-system
+  sevent-ms
 ```
 
 ### Render
