@@ -80,18 +80,22 @@ public final class DatabaseUrlResolver {
     }
 
     private static String normalizeJdbcPostgresUrl(String url) {
-        if (!url.startsWith("jdbc:postgresql://") || isLocalPostgresUrl(url) || hasQueryParameter(url, "sslmode")) {
+        if (!url.startsWith("jdbc:postgresql://") || isLocalOrInternalPostgresUrl(url) || hasQueryParameter(url, "sslmode")) {
             return url;
         }
 
         return url + (url.contains("?") ? "&" : "?") + "sslmode=require";
     }
 
-    private static boolean isLocalPostgresUrl(String url) {
+    private static boolean isLocalOrInternalPostgresUrl(String url) {
         String host = extractHost(url);
+        if (host == null || host.isBlank()) {
+            return false;
+        }
         return "localhost".equalsIgnoreCase(host)
                 || "127.0.0.1".equals(host)
-                || "::1".equals(host);
+                || "::1".equals(host)
+                || !host.contains(".");
     }
 
     private static String extractHost(String jdbcUrl) {

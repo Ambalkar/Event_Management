@@ -16,10 +16,12 @@ com\eventms\controller\ApiController$ParticipationDto.class
 com\example\eventmanagement\servlet\AdminServlet.class
 com\eventms\controller\ApiController.class
 com\eventms\config\WebConfig.class
+com\eventms\config\DatabaseUrlEnvironmentPostProcessor.class
 com\example\eventmanagement\util\DBConnection.class
 com\eventms\controller\UserController$EventRow.class
 com\eventms\service\FileNotificationService.class
 com\example\eventmanagement\model\User.class
+com\eventms\config\DatabaseUrlResolver.class
 com\eventms\controller\UserController$BookingPlan.class
 com\example\eventmanagement\model\Event.class
 com\eventms\controller\ApiController$BookingPlan.class

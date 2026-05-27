@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS events (
     parent_event_id INTEGER REFERENCES events(event_id) ON DELETE CASCADE,
     image_path VARCHAR(500),
     CHECK (current_guests <= guest_limit)
-);
+);;
 
 CREATE TABLE IF NOT EXISTS bookings (
     booking_id SERIAL PRIMARY KEY,
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS bookings (
     booking_type VARCHAR(20) NOT NULL DEFAULT 'SUB_EVENT',
     booking_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(user_email, event_id)
-);
+);;
 
 CREATE TABLE IF NOT EXISTS app_users (
     user_id SERIAL PRIMARY KEY,
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS app_users (
     email VARCHAR(255) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+);;
 
 CREATE OR REPLACE FUNCTION validate_sub_event_capacity() RETURNS trigger AS $$
 DECLARE
@@ -56,11 +56,9 @@ BEGIN
     END IF;
     RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql;;
 
-DROP TRIGGER IF EXISTS trg_validate_sub_event_capacity ON events;
+DROP TRIGGER IF EXISTS trg_validate_sub_event_capacity ON events;;
 CREATE TRIGGER trg_validate_sub_event_capacity
 BEFORE INSERT OR UPDATE OF guest_limit, parent_event_id ON events
-FOR EACH ROW EXECUTE FUNCTION validate_sub_event_capacity();
-
-
+FOR EACH ROW EXECUTE FUNCTION validate_sub_event_capacity();;
