@@ -14,6 +14,8 @@ SEVENT-MS is a Java 17 web application for creating events, publishing them to u
 - Event booking with participant name, email, generated digital ID, and booking date.
 - "My Events" lookup at `/myEvents` by participant email.
 - Admin dashboard at `/admin` for managing event records and viewing bookings.
+- Token-Based Authentication flow (Bearer tokens in `Authorization` headers) for secure REST APIs.
+- Global fetch interceptor on the frontend to automatically inject tokens from `localStorage`.
 - Simple events, major events, and sub-events.
 - Capacity tracking with "housefull" handling.
 - PostgreSQL schema for events and bookings.
@@ -26,7 +28,8 @@ SEVENT-MS is a Java 17 web application for creating events, publishing them to u
 - Spring Boot 2.7.0
 - Spring MVC
 - Spring Data JPA dependency with direct JDBC usage in controllers
-- Spring Security configured to permit all requests
+- Spring Security configured to permit all requests (with controller-level token authentication)
+- Token-Based Auth (In-memory UUID Token Store with `localStorage` persistence)
 - JSP and JSTL
 - PostgreSQL
 - Maven
@@ -39,6 +42,7 @@ SEVENT-MS/
 |-- src/main/java/
 |   |-- com/eventms/
 |   |   |-- EventManagementSystemApplication.java
+|   |   |-- auth/TokenStore.java
 |   |   |-- config/SecurityConfig.java
 |   |   |-- controller/
 |   |   `-- repository/
@@ -213,7 +217,8 @@ Health check:
 
 ## Notes
 
-- The app currently permits all requests in `SecurityConfig`, including `/admin`.
+- The app supports stateless token-based authentication (via custom Bearer headers) for the REST APIs, and falls back to HTTP session storage (`HttpSession`) for first-party access (like direct JSP flow).
+- The app currently permits all requests in `SecurityConfig` and handles validation checks manually at the controller level.
 - Controllers mostly use `DataSource`, `Connection`, and prepared SQL directly.
 - `spring.jpa.hibernate.ddl-auto=update` is enabled, but the checked-in SQL schema is still the clearest source for the database tables expected by the controllers.
 - `target/` contains generated build output and should not be edited manually.
