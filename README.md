@@ -2,10 +2,10 @@
 
 SEVENT-MS is a Java 17 web application for creating events, publishing them to users, and tracking event bookings. It is built with Spring Boot, JSP views, PostgreSQL, and Maven, and can run locally with Docker Compose, Maven, or the included Windows development script.
 
-<img width="1440" height="852" alt="EMS landing page screenshot" src="https://github.com/user-attachments/assets/592c4b3a-fd5a-49fa-bf98-a1d423447eef" />
-<img width="1440" height="852" alt="EMS user events screenshot" src="https://github.com/user-attachments/assets/5ba8f13d-8f2a-4ee9-9c74-68bf80846994" />
-<img width="1440" height="852" alt="EMS admin dashboard screenshot" src="https://github.com/user-attachments/assets/b4ea4422-73ac-4238-af77-94cb223565df" />
-<img width="1440" height="852" alt="EMS bookings screenshot" src="https://github.com/user-attachments/assets/50df2b03-8362-41ae-93f9-36f7e856f08d" />
+<img width="1440" height="852" alt="EMS landing page screenshot" src="screenshots/landing_page.png" />
+<img width="1440" height="852" alt="EMS user events screenshot" src="screenshots/browse_events.png" />
+<img width="1440" height="852" alt="EMS admin dashboard screenshot" src="screenshots/admin_dashboard.png" />
+<img width="1440" height="852" alt="EMS bookings screenshot" src="screenshots/my_bookings.png" />
 
 ## Features
 
