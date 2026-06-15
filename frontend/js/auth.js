@@ -1,14 +1,23 @@
+let authPromise = null;
+
 async function checkAuth() {
-    try {
-        const res = await fetch(CONFIG.API_BASE_URL + '/api/auth/me', { credentials: 'include' });
-        const data = await res.json();
-        renderNavbar(data);
-        return data;
-    } catch (err) {
-        console.error('Error checking auth:', err);
-        renderNavbar({ authenticated: false });
-        return { authenticated: false };
-    }
+    if (authPromise) return authPromise;
+
+    authPromise = (async () => {
+        try {
+            const res = await fetch(CONFIG.API_BASE_URL + '/api/auth/me', { credentials: 'include' });
+            const data = await res.json();
+            renderNavbar(data);
+            return data;
+        } catch (err) {
+            console.error('Error checking auth:', err);
+            const fallback = { authenticated: false };
+            renderNavbar(fallback);
+            return fallback;
+        }
+    })();
+
+    return authPromise;
 }
 
 function renderNavbar(user) {
@@ -65,6 +74,7 @@ function renderNavbar(user) {
                     method: 'POST',
                     credentials: 'include'
                 });
+                authPromise = null; // Clear cached auth promise on logout
                 window.location.href = 'index.html';
             } catch (err) {
                 console.error('Logout error:', err);
