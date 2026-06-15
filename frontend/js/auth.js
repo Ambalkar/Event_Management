@@ -1,3 +1,26 @@
+// Intercept fetch requests globally to inject Bearer token automatically
+(function() {
+    const originalFetch = window.fetch;
+    window.fetch = async function(resource, init) {
+        const token = localStorage.getItem("token");
+        if (token) {
+            init = init || {};
+            init.credentials = 'include';
+            init.headers = init.headers || {};
+            if (init.headers instanceof Headers) {
+                if (!init.headers.has('Authorization')) {
+                    init.headers.set('Authorization', 'Bearer ' + token);
+                }
+            } else {
+                if (!init.headers['Authorization'] && !init.headers['authorization']) {
+                    init.headers['Authorization'] = 'Bearer ' + token;
+                }
+            }
+        }
+        return originalFetch(resource, init);
+    };
+})();
+
 let authPromise = null;
 
 async function checkAuth() {
@@ -107,6 +130,7 @@ function renderNavbar(user) {
                     console.log("RESPONSE BODY = (failed to read body text)", e);
                 }
                 
+                localStorage.removeItem("token");
                 authPromise = null; // Clear cached auth promise on logout
                 window.location.href = 'index.html';
             } catch (err) {

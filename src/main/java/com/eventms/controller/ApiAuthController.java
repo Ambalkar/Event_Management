@@ -1,5 +1,6 @@
 package com.eventms.controller;
 
+import com.eventms.auth.TokenStore;
 import com.eventms.service.FileNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -17,6 +19,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -35,6 +38,9 @@ public class ApiAuthController {
 
     @Autowired
     private FileNotificationService fileNotificationService;
+
+    @Autowired
+    private HttpServletRequest httpServletRequest;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpSession session) {
@@ -116,6 +122,11 @@ public class ApiAuthController {
         if (session != null) {
             session.invalidate();
         }
+        String authHeader = httpServletRequest.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            TokenStore.removeToken(token);
+        }
         Map<String, Object> res = new HashMap<>();
         res.put("success", true);
         res.put("message", "Logged out successfully.");
@@ -124,16 +135,36 @@ public class ApiAuthController {
 
     @GetMapping("/me")
     public ResponseEntity<?> me(HttpSession session) {
+        TokenStore.UserInfo user = getAuthenticatedUser(session);
         Map<String, Object> res = new HashMap<>();
-        if (session != null && session.getAttribute("authEmail") != null) {
+        if (user != null) {
             res.put("authenticated", true);
-            res.put("name", session.getAttribute("authName"));
-            res.put("email", session.getAttribute("authEmail"));
-            res.put("role", session.getAttribute("authRole"));
+            res.put("name", user.getName());
+            res.put("email", user.getEmail());
+            res.put("role", user.getRole());
         } else {
             res.put("authenticated", false);
         }
         return ResponseEntity.ok(res);
+    }
+
+    private TokenStore.UserInfo getAuthenticatedUser(HttpSession session) {
+        String authHeader = httpServletRequest.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            TokenStore.UserInfo user = TokenStore.getUser(token);
+            if (user != null) {
+                return user;
+            }
+        }
+        if (session != null && session.getAttribute("authEmail") != null) {
+            return new TokenStore.UserInfo(
+                (String) session.getAttribute("authName"),
+                (String) session.getAttribute("authEmail"),
+                (String) session.getAttribute("authRole")
+            );
+        }
+        return null;
     }
 
     private void setSessionUser(HttpSession session, String name, String email, String role) {
@@ -143,11 +174,15 @@ public class ApiAuthController {
     }
 
     private ResponseEntity<?> successResponse(String name, String email, String role) {
+        String token = UUID.randomUUID().toString();
+        TokenStore.saveToken(token, new TokenStore.UserInfo(name, email, role));
+
         Map<String, Object> res = new HashMap<>();
         res.put("success", true);
         res.put("name", name);
         res.put("email", email);
         res.put("role", role);
+        res.put("token", token);
         return ResponseEntity.ok(res);
     }
 

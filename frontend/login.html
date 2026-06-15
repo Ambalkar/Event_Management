@@ -192,6 +192,9 @@
                 });
                 const data = await res.json();
                 if (res.ok && data.success) {
+                    if (data.token) {
+                        localStorage.setItem("token", data.token);
+                    }
                     console.log("LOGIN SUCCESS");
                     console.log("localStorage =", {...localStorage});
                     console.log("sessionStorage =", {...sessionStorage});
@@ -242,6 +245,9 @@
                 });
                 const data = await res.json();
                 if (res.ok && data.success) {
+                    if (data.token) {
+                        localStorage.setItem("token", data.token);
+                    }
                     if (target) {
                         window.location.href = target;
                     } else {

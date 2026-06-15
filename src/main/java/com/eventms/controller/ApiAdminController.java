@@ -1,5 +1,6 @@
 package com.eventms.controller;
 
+import com.eventms.auth.TokenStore;
 import com.eventms.service.FileNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -7,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -34,8 +36,31 @@ public class ApiAdminController {
     @Autowired
     private FileNotificationService fileNotificationService;
 
+    @Autowired
+    private HttpServletRequest request;
+
+    private TokenStore.UserInfo getAuthenticatedUser(HttpSession session) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            TokenStore.UserInfo user = TokenStore.getUser(token);
+            if (user != null) {
+                return user;
+            }
+        }
+        if (session != null && session.getAttribute("authEmail") != null) {
+            return new TokenStore.UserInfo(
+                (String) session.getAttribute("authName"),
+                (String) session.getAttribute("authEmail"),
+                (String) session.getAttribute("authRole")
+            );
+        }
+        return null;
+    }
+
     private boolean isAdmin(HttpSession session) {
-        return session != null && "ADMIN".equals(session.getAttribute("authRole"));
+        TokenStore.UserInfo user = getAuthenticatedUser(session);
+        return user != null && "ADMIN".equals(user.getRole());
     }
 
     @GetMapping("/dashboard")
