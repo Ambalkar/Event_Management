@@ -6,166 +6,166 @@
 <head>
     <title>Event Booking - SEVENT-MS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/tokens.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/layout.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/components.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-color: #d1d5db;
-            --secondary-color: #9ca3af;
-            --accent-teal: #2dd4bf;
-            --accent-green: #22c55e;
-            --accent-gold: #fbbf24;
-            --accent-coral: #fb7185;
-            --success-color: #34d399;
-            --danger-color: #f87171;
-            --dark-color: #07080a;
-            --light-color: #f4f4f5;
-            --gradient-start: #6b7280;
-            --gradient-end: #374151;
-            --card-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
-            --hover-transform: translateY(-5px);
-            --background-color: #07080a;
-            --card-background: rgba(8, 9, 11, 0.96);
-            --text-primary: #f4f4f5;
-            --text-secondary: #d4d4d8;
-            --border-color: rgba(255, 255, 255, 0.3);
-            --input-background: rgba(24, 26, 31, 0.82);
-            --hover-background: rgba(255, 255, 255, 0.1);
-            --container-background: rgba(8, 9, 11, 0.82);
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            background:
-                linear-gradient(115deg, rgba(45, 212, 191, 0.08), transparent 28%),
-                linear-gradient(245deg, rgba(251, 191, 36, 0.08), transparent 30%),
-                linear-gradient(135deg, var(--background-color) 0%, #15171c 100%);
-            color: var(--text-primary);
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-            background: var(--container-background);
-            border-radius: 8px;
-            box-shadow: var(--card-shadow);
-            border: 1px solid var(--border-color);
-            backdrop-filter: blur(10px);
-        }
-
         .header-section {
+            min-height: 430px;
+            display: flex;
+            align-items: flex-end;
+            padding: 3rem;
+            margin-bottom: 1.5rem;
             background:
-                linear-gradient(135deg, rgba(45, 212, 191, 0.20), transparent 36%),
-                linear-gradient(225deg, rgba(251, 191, 36, 0.18), transparent 40%),
-                linear-gradient(135deg, #181a1f 0%, #090a0d 100%);
-            color: var(--text-primary);
-            padding: 2rem;
-            border-radius: 8px;
-            margin-bottom: 2rem;
-            position: relative;
-            box-shadow: var(--card-shadow);
-            overflow: hidden;
-            border: 1px solid var(--border-color);
+                linear-gradient(90deg, rgba(7, 8, 10, 0.92), rgba(7, 8, 10, 0.58) 52%, rgba(7, 8, 10, 0.72)),
+                linear-gradient(180deg, rgba(7, 8, 10, 0.05), rgba(7, 8, 10, 0.86)),
+                url('${pageContext.request.contextPath}/images/eventbg0.jpg') center/cover no-repeat;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
         }
 
-        .header-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%),
-                        linear-gradient(-45deg, rgba(255,255,255,0.1) 25%, transparent 25%);
-            background-size: 60px 60px;
-            opacity: 0.1;
+        .hero-content {
+            width: min(720px, 100%);
+            position: relative;
+            z-index: 1;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.45rem 0.7rem;
+            margin: 0 0 1rem;
+            border-radius: 999px;
+            color: #a7f3d0;
+            background: rgba(45, 212, 191, 0.12);
+            border: 1px solid rgba(45, 212, 191, 0.28);
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
         }
 
         .header-section h1 {
+            text-align: left;
+            max-width: 680px;
+            font-size: clamp(2.2rem, 7vw, 4.6rem);
+            line-height: 1.02;
+            letter-spacing: 0;
+            text-shadow: 0 18px 34px rgba(0, 0, 0, 0.48);
             margin: 0;
-            font-size: 2.5em;
-            text-align: center;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            position: relative;
-            color: var(--text-primary);
         }
 
-        .home-btn {
-            position: absolute;
-            right: 20px;
-            top: 20px;
-            color: var(--text-primary);
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 25px;
-            background: rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255,255,255,0.4);
+        .hero-copy {
+            max-width: 620px;
+            margin: 1.2rem 0 0;
+            color: #e4e4e7;
+            font-size: 1.06rem;
+            line-height: 1.7;
         }
 
-        .home-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: var(--hover-transform);
-            box-shadow: var(--card-shadow);
-        }
-
-        .navigation-bar {
-            background: var(--card-background);
-            padding: 1.5rem;
-            border-radius: 8px;
-            box-shadow: var(--card-shadow);
-            margin-bottom: 2rem;
-            border: 1px solid var(--border-color);
-            backdrop-filter: blur(10px);
-        }
-
-        .nav-links {
+        .hero-actions {
             display: flex;
+            flex-wrap: wrap;
+            gap: 0.85rem;
+            margin-top: 1.7rem;
+        }
+
+        .hero-btn {
+            display: inline-flex;
+            align-items: center;
             justify-content: center;
-            gap: 2rem;
-        }
-
-        .nav-link {
+            gap: 0.6rem;
+            min-height: 46px;
+            padding: 0.75rem 1.1rem;
+            border-radius: var(--radius);
+            color: #04110e;
+            background: linear-gradient(135deg, #5eead4, #86efac);
             text-decoration: none;
-            color: var(--text-primary);
-            padding: 12px 24px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            position: relative;
-            overflow: hidden;
-            background: rgba(255, 255, 255, 0.07);
-            border: 1px solid rgba(255, 255, 255, 0.14);
+            font-weight: 700;
+            box-shadow: 0 18px 44px rgba(45, 212, 191, 0.22);
         }
 
-        .nav-link:hover {
-            background: rgba(45, 212, 191, 0.14);
-            border-color: rgba(45, 212, 191, 0.45);
-            transform: var(--hover-transform);
-            box-shadow: 0 14px 30px rgba(45, 212, 191, 0.12);
+        .hero-btn.secondary {
+            color: var(--color-text-primary);
+            background: rgba(255, 255, 255, 0.10);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            box-shadow: none;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.85rem;
+            margin-top: 2rem;
+            max-width: 640px;
+        }
+
+        .hero-stat {
+            padding: 0.9rem;
+            border-radius: var(--radius);
+            background: rgba(7, 8, 10, 0.58);
+            border: 1px solid var(--color-border);
+        }
+
+        .hero-stat strong {
+            display: block;
+            color: var(--color-text-primary);
+            font-size: 1.35rem;
+        }
+
+        .hero-stat span {
+            color: var(--color-text-secondary);
+            font-size: 0.82rem;
+        }
+
+        .events-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 1rem;
+            margin: 2rem 0 0;
+        }
+
+        .events-heading h2 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: var(--color-text-primary);
+        }
+
+        .events-heading p {
+            margin: 0.45rem 0 0;
+            color: var(--color-text-secondary);
+        }
+
+        .event-count {
+            flex: 0 0 auto;
+            padding: 0.65rem 0.9rem;
+            border-radius: var(--radius);
+            color: var(--color-accent-gold);
+            background: rgba(251, 191, 36, 0.08);
+            border: 1px solid rgba(251, 191, 36, 0.24);
+            font-weight: 700;
         }
 
         .events-list {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.25rem;
+            margin-top: 1.25rem;
         }
 
         .event-card {
+            display: flex;
+            flex-direction: column;
+            padding: 1.25rem;
             background: linear-gradient(145deg, rgba(20, 23, 28, 0.98), rgba(7, 8, 10, 0.96));
-            border-radius: 8px;
+            border-radius: var(--radius);
             box-shadow: var(--card-shadow);
-            padding: 1.5rem;
-            transition: all 0.3s ease;
+            border: 1px solid var(--color-border);
             position: relative;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.14);
             backdrop-filter: blur(10px);
         }
 
@@ -174,37 +174,53 @@
             position: absolute;
             inset: 0 0 auto 0;
             height: 4px;
-            background: linear-gradient(90deg, var(--accent-teal), var(--accent-gold), var(--accent-green));
+            background: linear-gradient(90deg, var(--color-accent-teal), var(--color-accent-gold), var(--color-accent-green));
         }
 
         .event-card:hover {
             transform: translateY(-8px);
-            border-color: rgba(255, 255, 255, 0.32);
+            border-color: var(--color-border-strong);
             box-shadow: 0 24px 54px -14px rgba(45, 212, 191, 0.28);
         }
 
         .event-card h2 {
-            color: var(--text-primary);
-            margin: 0 0 1.5rem 0;
-            font-size: 1.5em;
-            position: relative;
+            font-size: 1.35rem;
+            line-height: 1.3;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            color: var(--color-text-primary);
             padding-bottom: 1rem;
-            border-bottom: 1px solid var(--border-color);
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            border-bottom: 1px solid var(--color-border);
         }
 
         .event-card p {
             margin: 1rem 0;
-            color: var(--text-secondary);
+            color: var(--color-text-secondary);
             display: flex;
             align-items: center;
             gap: 0.75rem;
         }
 
+        .event-image {
+            width: 100%;
+            height: auto;
+            border-radius: var(--radius);
+            border: 1px solid var(--color-border);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .event-card .date,
+        .event-card .location,
+        .event-card .guests {
+            width: fit-content;
+            max-width: 100%;
+            border-radius: var(--radius);
+        }
+
         .event-card .date, .event-card .location {
             background: rgba(45, 212, 191, 0.10);
             padding: 0.75rem 1.25rem;
-            border-radius: 20px;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
@@ -213,14 +229,13 @@
         }
 
         .event-card .date i, .event-card .location i {
-            color: var(--accent-teal);
+            color: var(--color-accent-teal);
         }
 
         .event-card .guests {
             background: rgba(52, 211, 153, 0.15);
-            color: var(--success-color);
+            color: var(--color-success);
             padding: 0.75rem 1.25rem;
-            border-radius: 20px;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
@@ -230,69 +245,20 @@
         }
 
         .booking-form {
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.045);
+            margin-top: 1.25rem;
+            padding: 1rem;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
         }
 
-        .form-group {
-            margin-bottom: 1.25rem;
-            position: relative;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            font-size: 0.875rem;
-            transition: all 0.3s ease;
-            background: var(--input-background);
-            color: var(--text-primary);
-        }
-
-        .form-group input:focus {
-            border-color: var(--accent-teal);
-            outline: none;
-            background: var(--input-background);
-            box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.18);
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--accent-teal), var(--accent-green));
-            color: #04110e;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-            font-size: 1rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-        }
-
-        .btn-primary:hover {
-            transform: var(--hover-transform);
-            box-shadow: 0 18px 44px rgba(34, 197, 94, 0.28);
-            background: linear-gradient(135deg, #5eead4, #86efac);
-        }
-
-        .fully-booked {
-            background: rgba(248, 113, 113, 0.15);
-            color: var(--danger-color);
-            padding: 0.75rem;
-            border-radius: 10px;
-            text-align: center;
-            margin-top: 1rem;
-            font-weight: 500;
+        .booking-form-title {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            border: 1px solid rgba(248, 113, 113, 0.3);
+            gap: 0.55rem;
+            margin: 0 0 0.9rem;
+            color: var(--color-text-primary);
+            font-weight: 700;
         }
 
         .event-kind {
@@ -301,13 +267,14 @@
             gap: 0.5rem;
             margin-bottom: 1rem;
             padding: 0.45rem 0.7rem;
-            border-radius: 8px;
+            border-radius: var(--radius);
             border: 1px solid rgba(251, 191, 36, 0.28);
-            color: var(--accent-gold);
+            color: var(--color-accent-gold);
             background: rgba(251, 191, 36, 0.08);
             font-size: 0.78rem;
             font-weight: 700;
             text-transform: uppercase;
+            width: fit-content;
         }
 
         .booking-status {
@@ -318,83 +285,58 @@
             max-width: 100%;
             margin: 0.4rem 0 0.8rem;
             padding: 0.55rem 0.75rem;
-            border-radius: 8px;
-            color: var(--accent-gold);
+            border-radius: var(--radius);
+            color: var(--color-accent-gold);
             background: rgba(251, 191, 36, 0.09);
             border: 1px solid rgba(251, 191, 36, 0.26);
             font-size: 0.82rem;
             font-weight: 700;
         }
 
+        .fully-booked {
+            background: rgba(248, 113, 113, 0.15);
+            color: var(--color-danger);
+            padding: 0.75rem;
+            border-radius: var(--radius);
+            text-align: center;
+            margin-top: 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            border: 1px solid rgba(248, 113, 113, 0.3);
+        }
+
         .sub-events {
             margin-top: 1.5rem;
             padding-top: 1rem;
-            border-top: 1px solid var(--border-color);
+            border-top: 1px solid var(--color-border);
         }
 
         .sub-events h3 {
             margin: 0 0 1rem;
-            color: var(--text-primary);
+            color: var(--color-text-primary);
             font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
         }
 
         .sub-event-card {
             margin-top: 1rem;
             padding: 1rem;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.055);
-            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: var(--radius);
+            background: rgba(255, 255, 255, 0.065);
+            border: 1px solid var(--color-border);
         }
 
         .sub-event-card h4 {
             margin: 0 0 0.75rem;
-            color: var(--text-primary);
+            color: var(--color-text-primary);
             font-size: 1.05rem;
         }
 
-        .alert {
-            padding: 1rem 1.25rem;
-            border-radius: 10px;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            animation: slideIn 0.3s ease;
-            border: 1px solid var(--border-color);
-            backdrop-filter: blur(10px);
-        }
-
-        .alert.success {
-            background: rgba(52, 211, 153, 0.15);
-            color: var(--success-color);
-            border-color: rgba(52, 211, 153, 0.3);
-        }
-
-        .alert.error {
-            background: rgba(248, 113, 113, 0.15);
-            color: var(--danger-color);
-            border-color: rgba(248, 113, 113, 0.3);
-        }
-
-        .no-events {
-            text-align: center;
-            color: var(--text-secondary);
-            padding: 3rem;
-            background: var(--card-background);
-            border-radius: 15px;
-            grid-column: 1 / -1;
-            box-shadow: var(--card-shadow);
-            animation: fadeIn 0.5s ease;
-            border: 1px solid var(--border-color);
-            backdrop-filter: blur(10px);
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
                 opacity: 1;
                 transform: translateY(0);
             }
@@ -768,9 +710,9 @@
             <a href="${pageContext.request.contextPath}/" class="nav-logo">
                 <i class="fas fa-calendar-alt"></i> EventMS
             </a>
-            <div class="nav-toggle" id="navToggle">
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
                 <i class="fas fa-bars"></i>
-            </div>
+            </button>
             <div class="nav-links" id="navLinks">
                 <a href="${pageContext.request.contextPath}/" class="nav-link active">
                     <i class="fas fa-home"></i> Home
@@ -836,13 +778,13 @@
         </div>
         
         <c:if test="${not empty successMessage}">
-            <div class="alert success">
+            <div class="alert success" role="alert" aria-live="polite">
                 <i class="fas fa-check-circle"></i> ${successMessage}
             </div>
         </c:if>
         
         <c:if test="${not empty errorMessage}">
-            <div class="alert error">
+            <div class="alert error" role="alert" aria-live="polite">
                 <i class="fas fa-exclamation-circle"></i> ${errorMessage}
             </div>
         </c:if>
@@ -903,12 +845,14 @@
                                 </c:choose>
                             </div>
                             <div class="form-group">
-                                <input type="text" name="name" placeholder="Your Name" value="${sessionScope.authName}" required>
+                                <label for="name-${event.id}" class="form-label">Your Name</label>
+                                <input type="text" id="name-${event.id}" name="name" placeholder="e.g. John Doe" value="${sessionScope.authName}" required>
                             </div>
                             <div class="form-group">
-                                <input type="email" name="email" placeholder="Your Email" value="${sessionScope.authEmail}" required>
+                                <label for="email-${event.id}" class="form-label">Your Email</label>
+                                <input type="email" id="email-${event.id}" name="email" placeholder="e.g. john@example.com" value="${sessionScope.authEmail}" required>
                             </div>
-                            <button type="submit" class="btn-primary">
+                            <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-ticket-alt"></i>
                                 <c:choose>
                                     <c:when test="${event.bookingStatus == 'Upgrade Available'}">Upgrade Pass</c:when>
@@ -959,12 +903,14 @@
                                                 <i class="fas fa-pen"></i> Reserve this sub event
                                             </div>
                                             <div class="form-group">
-                                                <input type="text" name="name" placeholder="Your Name" value="${sessionScope.authName}" required>
+                                                <label for="name-${subEvent.id}" class="form-label">Your Name</label>
+                                                <input type="text" id="name-${subEvent.id}" name="name" placeholder="e.g. John Doe" value="${sessionScope.authName}" required>
                                             </div>
                                             <div class="form-group">
-                                                <input type="email" name="email" placeholder="Your Email" value="${sessionScope.authEmail}" required>
+                                                <label for="email-${subEvent.id}" class="form-label">Your Email</label>
+                                                <input type="email" id="email-${subEvent.id}" name="email" placeholder="e.g. john@example.com" value="${sessionScope.authEmail}" required>
                                             </div>
-                                            <button type="submit" class="btn-primary">
+                                            <button type="submit" class="btn btn-primary">
                                                 <i class="fas fa-ticket-alt"></i> Book Sub Event
                                             </button>
                                         </form>
@@ -996,14 +942,28 @@
         const navLinks = document.getElementById('navLinks');
 
         navToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
+            const active = navLinks.classList.toggle('active');
+            navToggle.setAttribute('aria-expanded', active);
         });
 
         // Close mobile menu when clicking outside
         document.addEventListener('click', (e) => {
             if (!navToggle.contains(e.target) && !navLinks.contains(e.target)) {
                 navLinks.classList.remove('active');
+                navToggle.setAttribute('aria-expanded', 'false');
             }
+        });
+
+        // Form submit loading states
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function() {
+                const btn = this.querySelector('button[type="submit"]');
+                if (btn) {
+                    btn.classList.add('loading');
+                    // We must wait briefly or use a hidden input before disabling to prevent submit cancel
+                    setTimeout(() => { btn.disabled = true; }, 10);
+                }
+            });
         });
     </script>
 </body>

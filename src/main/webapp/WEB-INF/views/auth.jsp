@@ -5,26 +5,17 @@
 <head>
     <title>Sign In - SEVENT-MS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/tokens.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/layout.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/components.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --accent-teal: #2dd4bf;
-            --accent-green: #22c55e;
-            --accent-gold: #fbbf24;
-            --background-color: #07080a;
-            --text-primary: #f4f4f5;
-            --text-secondary: #d4d4d8;
-            --border-color: rgba(255, 255, 255, 0.22);
-            --card-shadow: 0 22px 60px rgba(0, 0, 0, 0.34);
-        }
-
         body {
             margin: 0;
             min-height: 100vh;
             font-family: 'Poppins', sans-serif;
-            color: var(--text-primary);
+            color: var(--color-text-primary);
             background:
                 linear-gradient(90deg, rgba(7, 8, 10, 0.92), rgba(7, 8, 10, 0.72)),
                 url('${pageContext.request.contextPath}/images/eventbg0.jpg') center/cover fixed no-repeat;
@@ -37,8 +28,8 @@
         .auth-shell {
             width: min(100%, 440px);
             background: linear-gradient(145deg, rgba(20, 23, 28, 0.98), rgba(7, 8, 10, 0.96));
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
             box-shadow: var(--card-shadow);
             padding: 2rem;
         }
@@ -47,7 +38,7 @@
             display: inline-flex;
             align-items: center;
             gap: 0.75rem;
-            color: var(--text-primary);
+            color: var(--color-text-primary);
             text-decoration: none;
             font-size: 1.4rem;
             font-weight: 700;
@@ -55,86 +46,29 @@
         }
 
         .brand i {
-            color: var(--accent-teal);
+            color: var(--color-accent-teal);
         }
 
         h1 {
             margin: 0;
             font-size: 2rem;
+            color: var(--color-text-primary);
         }
 
         .lede {
-            color: var(--text-secondary);
+            color: var(--color-text-secondary);
             margin: 0.6rem 0 1.5rem;
             line-height: 1.6;
         }
 
-        .alert {
-            padding: 0.85rem 1rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            border: 1px solid var(--border-color);
-        }
-
-        .alert.error {
-            color: #fecaca;
-            background: rgba(248, 113, 113, 0.15);
-            border-color: rgba(248, 113, 113, 0.3);
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.45rem;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        input {
-            width: 100%;
-            box-sizing: border-box;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 0.8rem 0.95rem;
-            color: var(--text-primary);
-            background: rgba(24, 26, 31, 0.86);
-            font: inherit;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--accent-teal);
-            box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.16);
-        }
-
-        .btn {
-            width: 100%;
-            min-height: 46px;
-            border: 0;
-            border-radius: 8px;
-            cursor: pointer;
-            color: #04110e;
-            background: linear-gradient(135deg, var(--accent-teal), var(--accent-green));
-            font: inherit;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.55rem;
-        }
-
         .switch-link {
             margin: 1.25rem 0 0;
-            color: var(--text-secondary);
+            color: var(--color-text-secondary);
             text-align: center;
         }
 
         .switch-link a {
-            color: var(--accent-gold);
+            color: var(--color-accent-gold);
             text-decoration: none;
             font-weight: 700;
         }
@@ -158,7 +92,7 @@
         </c:choose>
 
         <c:if test="${not empty errorMessage}">
-            <div class="alert error">
+            <div class="alert error" role="alert" aria-live="polite">
                 <i class="fas fa-exclamation-circle"></i> ${errorMessage}
             </div>
         </c:if>
@@ -168,18 +102,18 @@
                 <form method="post" action="${pageContext.request.contextPath}/signup">
                     <input type="hidden" name="target" value="${target}">
                     <div class="form-group">
-                        <label for="name">Name</label>
-                        <input id="name" type="text" name="name" required>
+                        <label for="name" class="form-label">Name</label>
+                        <input id="name" type="text" name="name" required autocomplete="name">
                     </div>
                     <div class="form-group">
-                        <label for="email">Email</label>
-                        <input id="email" type="email" name="email" required>
+                        <label for="email" class="form-label">Email</label>
+                        <input id="email" type="email" name="email" required autocomplete="email">
                     </div>
                     <div class="form-group">
-                        <label for="password">Password</label>
-                        <input id="password" type="password" name="password" minlength="6" required>
+                        <label for="password" class="form-label">Password</label>
+                        <input id="password" type="password" name="password" minlength="6" required autocomplete="new-password">
                     </div>
-                    <button type="submit" class="btn">
+                    <button type="submit" class="btn btn-primary">
                         <i class="fas fa-user-plus"></i> Sign Up
                     </button>
                 </form>
@@ -192,14 +126,14 @@
                 <form method="post" action="${pageContext.request.contextPath}/login">
                     <input type="hidden" name="target" value="${target}">
                     <div class="form-group">
-                        <label for="email">Email</label>
-                        <input id="email" type="email" name="email" required>
+                        <label for="email" class="form-label">Email</label>
+                        <input id="email" type="email" name="email" required autocomplete="email">
                     </div>
                     <div class="form-group">
-                        <label for="password">Password</label>
-                        <input id="password" type="password" name="password" required>
+                        <label for="password" class="form-label">Password</label>
+                        <input id="password" type="password" name="password" required autocomplete="current-password">
                     </div>
-                    <button type="submit" class="btn">
+                    <button type="submit" class="btn btn-primary">
                         <i class="fas fa-sign-in-alt"></i> Log In
                     </button>
                 </form>
@@ -210,5 +144,18 @@
             </c:otherwise>
         </c:choose>
     </main>
+
+    <script>
+        // Form submit loading states
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function() {
+                const btn = this.querySelector('button[type="submit"]');
+                if (btn) {
+                    btn.classList.add('loading');
+                    setTimeout(() => { btn.disabled = true; }, 10);
+                }
+            });
+        });
+    </script>
 </body>
 </html>

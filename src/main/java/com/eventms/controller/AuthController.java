@@ -2,6 +2,7 @@ package com.eventms.controller;
 
 import com.eventms.service.FileNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,8 +22,11 @@ import java.sql.SQLException;
 @Controller
 public class AuthController {
 
-    private static final String ADMIN_EMAIL = "devendraambalkar11@gmail.com";
-    private static final String ADMIN_PASSWORD = "Koo4mTjBtfT1W2EQ";
+    @Value("${admin.email:admin@eventms.com}")
+    private String adminEmail;
+
+    @Value("${admin.password.hash}")
+    private String adminPasswordHash;
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -56,9 +60,14 @@ public class AuthController {
             RedirectAttributes redirectAttributes) {
         String normalizedEmail = normalize(email);
 
-        if (ADMIN_EMAIL.equalsIgnoreCase(normalizedEmail) && ADMIN_PASSWORD.equals(password)) {
-            setSessionUser(session, "Admin", ADMIN_EMAIL, "ADMIN");
-            return "redirect:/admin";
+        if (adminEmail.equalsIgnoreCase(normalizedEmail)) {
+            if (passwordEncoder.matches(password, adminPasswordHash)) {
+                setSessionUser(session, "Admin", adminEmail, "ADMIN");
+                return "redirect:/admin";
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage", "Invalid email or password.");
+                return "redirect:/login";
+            }
         }
 
         try (Connection conn = dataSource.getConnection()) {
@@ -97,7 +106,7 @@ public class AuthController {
             return "redirect:/signup";
         }
 
-        if (ADMIN_EMAIL.equalsIgnoreCase(normalizedEmail)) {
+        if (adminEmail.equalsIgnoreCase(normalizedEmail)) {
             redirectAttributes.addFlashAttribute("errorMessage", "That email is reserved for admin login.");
             return "redirect:/signup";
         }

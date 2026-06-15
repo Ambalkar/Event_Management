@@ -376,9 +376,9 @@ public class AdminController {
             ps.executeUpdate();
         }
         try (PreparedStatement ps = conn.prepareStatement(
-                "UPDATE bookings b SET booking_type = 'MAJOR_EVENT' "
-                        + "FROM events e WHERE b.event_id = e.event_id "
-                        + "AND e.parent_event_id IS NULL AND e.event_type = 'MAJOR' AND b.booking_type <> 'MAJOR_EVENT'")) {
+                "UPDATE bookings SET booking_type = 'MAJOR_EVENT' "
+                        + "WHERE event_id IN (SELECT event_id FROM events WHERE parent_event_id IS NULL AND event_type = 'MAJOR') "
+                        + "AND booking_type <> 'MAJOR_EVENT'")) {
             ps.executeUpdate();
         }
         if (isPostgreSql(conn)) {

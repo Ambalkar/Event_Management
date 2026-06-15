@@ -8,10 +8,23 @@ echo Stopping existing EventMS Java processes...
 powershell -NoProfile -ExecutionPolicy Bypass -Command "Get-CimInstance Win32_Process | Where-Object { $_.Name -like 'java*.exe' -and ($_.CommandLine -like '*SEVENT-MS.war*' -or $_.CommandLine -like '*WarLauncher*') } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }" >nul 2>&1
 
 echo Checking port %PORT%...
+echo Looking for processes listening on port %PORT%...
+set FOUND=0
 for /f "tokens=5" %%a in ('netstat -aon ^| findstr ":%PORT% " ^| findstr LISTENING') do (
-    echo Port %PORT% is already in use by process %%a. Please stop that process or change PORT in run-dev.bat.
-    pause
-    exit /b 1
+    set FOUND=1
+    echo Found process %%a listening on port %PORT%. Attempting to stop it...
+    taskkill /PID %%a /F >nul 2>&1
+    if errorlevel 1 (
+        echo Failed to kill process %%a. You may need to run this script as Administrator.
+    ) else (
+        echo Successfully killed process %%a.
+    )
+)
+if "%FOUND%"=="1" (
+    echo Waiting a moment for ports to free up...
+    timeout /t 2 /nobreak >nul
+) else (
+    echo No process found listening on port %PORT%.
 )
 
 echo Step 1: Clean package...

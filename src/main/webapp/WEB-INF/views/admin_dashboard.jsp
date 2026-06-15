@@ -4,47 +4,13 @@
 <html>
 <head>
     <title>Admin Portal - SEVENT-MS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/tokens.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/layout.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/components.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --page-bg: #060708;
-            --panel-bg: rgba(14, 15, 18, 0.96);
-            --panel-soft: rgba(26, 28, 33, 0.9);
-            --panel-line: rgba(230, 230, 230, 0.16);
-            --panel-line-strong: rgba(230, 230, 230, 0.28);
-            --metal-1: #e5e7eb;
-            --metal-2: #a3a8b0;
-            --metal-3: #656b75;
-            --metal-4: #30343a;
-            --accent-teal: #2dd4bf;
-            --accent-green: #22c55e;
-            --accent-gold: #fbbf24;
-            --accent-coral: #fb7185;
-            --ink: #f4f4f5;
-            --muted: #b8bbc2;
-            --muted-dark: #7e838c;
-            --success: #8dd5a5;
-            --danger: #f87171;
-            --shadow: 0 24px 60px rgba(0, 0, 0, 0.42);
-            --radius: 8px;
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            min-height: 100vh;
-            font-family: 'Poppins', sans-serif;
-            color: var(--ink);
-            background:
-                radial-gradient(circle at 18% 0%, rgba(45, 212, 191, 0.14), transparent 30%),
-                radial-gradient(circle at 82% 6%, rgba(251, 191, 36, 0.12), transparent 28%),
-                linear-gradient(135deg, #050607 0%, #111318 50%, #050607 100%);
-        }
-
         body::before {
             content: '';
             position: fixed;
@@ -60,142 +26,9 @@
         .admin-shell {
             width: min(1440px, calc(100% - 32px));
             margin: 0 auto;
-            padding: 24px 0 48px;
+            padding: 100px 0 48px;
             position: relative;
             z-index: 1;
-        }
-
-        .topbar {
-            min-height: 72px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            padding: 16px 20px;
-            background: rgba(8, 9, 11, 0.88);
-            border: 1px solid var(--panel-line);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            backdrop-filter: blur(14px);
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            min-width: 0;
-        }
-
-        .brand-mark {
-            width: 46px;
-            height: 46px;
-            display: grid;
-            place-items: center;
-            border-radius: var(--radius);
-            background: linear-gradient(145deg, var(--accent-teal), var(--accent-green));
-            color: #04110e;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), 0 12px 28px rgba(45, 212, 191, 0.28);
-        }
-
-        .brand h1 {
-            margin: 0;
-            font-size: 1.35rem;
-            letter-spacing: 0;
-        }
-
-        .brand p {
-            margin: 0.15rem 0 0;
-            color: var(--muted);
-            font-size: 0.9rem;
-        }
-
-        .top-actions {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: flex-end;
-        }
-
-        .nav-pill,
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            min-height: 40px;
-            padding: 0.7rem 1rem;
-            border-radius: var(--radius);
-            border: 1px solid var(--panel-line-strong);
-            color: var(--ink);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
-            background: rgba(255,255,255,0.06);
-        }
-
-        .nav-pill:hover,
-        .btn:hover {
-            transform: translateY(-2px);
-            border-color: rgba(45, 212, 191,0.45);
-            background: rgba(45, 212, 191,0.14);
-        }
-
-        .hero-panel {
-            margin-top: 20px;
-            padding: 28px;
-            border-radius: var(--radius);
-            border: 1px solid var(--panel-line);
-            background:
-                linear-gradient(135deg, rgba(45, 212, 191, 0.16), transparent 35%),
-                linear-gradient(225deg, rgba(251, 191, 36, 0.14), transparent 40%),
-                linear-gradient(135deg, rgba(28, 30, 35, 0.96), rgba(7, 8, 10, 0.98));
-            box-shadow: var(--shadow);
-            overflow: hidden;
-            position: relative;
-        }
-
-        .hero-panel::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            background: linear-gradient(115deg, transparent 0%, rgba(255,255,255,0.08) 45%, transparent 55%);
-            opacity: 0.7;
-        }
-
-        .hero-copy {
-            position: relative;
-            z-index: 1;
-            max-width: 760px;
-        }
-
-        .eyebrow {
-            margin: 0 0 8px;
-            color: var(--accent-teal);
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 0.78rem;
-            letter-spacing: 0;
-        }
-
-        .hero-copy h2 {
-            margin: 0;
-            font-size: 3.75rem;
-            line-height: 1.02;
-            letter-spacing: 0;
-            background: linear-gradient(90deg, #ffffff 0%, var(--accent-teal) 42%, var(--accent-gold) 78%, #f5f5f5 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero-copy p:last-child {
-            max-width: 660px;
-            margin: 14px 0 0;
-            color: var(--muted);
-            font-size: 1rem;
-            line-height: 1.7;
         }
 
         .stats-grid {
@@ -209,9 +42,9 @@
             min-height: 132px;
             padding: 18px;
             border-radius: var(--radius);
-            border: 1px solid var(--panel-line);
-            background: linear-gradient(145deg, rgba(24, 26, 31, 0.96), rgba(10, 11, 13, 0.96));
-            box-shadow: 0 16px 38px rgba(0,0,0,0.25);
+            border: 1px solid var(--color-border);
+            background: var(--color-surface);
+            box-shadow: var(--card-shadow);
             position: relative;
             overflow: hidden;
         }
@@ -221,11 +54,11 @@
             position: absolute;
             inset: 0 0 auto 0;
             height: 3px;
-            background: linear-gradient(90deg, var(--accent-teal), var(--accent-gold), var(--accent-green));
+            background: linear-gradient(90deg, var(--color-accent-teal), var(--color-accent-gold), var(--color-accent-green));
         }
 
         .stat-card i {
-            color: var(--accent-gold);
+            color: var(--color-accent-gold);
             font-size: 1.25rem;
         }
 
@@ -234,12 +67,13 @@
             margin-top: 18px;
             font-size: 2rem;
             line-height: 1;
+            color: var(--color-text-primary);
         }
 
         .stat-card span {
             display: block;
             margin-top: 8px;
-            color: var(--muted);
+            color: var(--color-text-secondary);
             font-size: 0.9rem;
         }
 
@@ -253,9 +87,9 @@
 
         .panel {
             border-radius: var(--radius);
-            border: 1px solid var(--panel-line);
-            background: var(--panel-bg);
-            box-shadow: var(--shadow);
+            border: 1px solid var(--color-border);
+            background: var(--color-surface);
+            box-shadow: var(--card-shadow);
             overflow: hidden;
         }
 
@@ -265,7 +99,7 @@
             justify-content: space-between;
             gap: 14px;
             padding: 18px 20px;
-            border-bottom: 1px solid var(--panel-line);
+            border-bottom: 1px solid var(--color-border);
             background:
                 linear-gradient(135deg, rgba(45, 212, 191, 0.08), transparent),
                 linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
@@ -274,11 +108,12 @@
         .panel-header h2 {
             margin: 0;
             font-size: 1.1rem;
+            color: var(--color-text-primary);
         }
 
         .panel-header p {
             margin: 4px 0 0;
-            color: var(--muted);
+            color: var(--color-text-secondary);
             font-size: 0.86rem;
         }
 
@@ -287,68 +122,15 @@
             padding: 0.45rem 0.7rem;
             border-radius: var(--radius);
             background: rgba(255,255,255,0.08);
-            border: 1px solid var(--panel-line);
-            color: var(--accent-teal);
+            border: 1px solid var(--color-border);
+            color: var(--color-accent-teal);
             font-size: 0.78rem;
             font-weight: 700;
             text-transform: uppercase;
         }
 
-        form {
-            margin: 0;
-        }
-
         .event-form {
             padding: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--metal-1);
-            font-weight: 600;
-            font-size: 0.9rem;
-            margin-bottom: 8px;
-        }
-
-        input,
-        textarea,
-        select {
-            width: 100%;
-            border: 1px solid var(--panel-line);
-            border-radius: var(--radius);
-            background: #101217;
-            color: var(--ink);
-            padding: 0.85rem 0.9rem;
-            font-family: inherit;
-            font-size: 0.95rem;
-            outline: none;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-        }
-
-        textarea {
-            min-height: 106px;
-            resize: vertical;
-        }
-
-        input:focus,
-        textarea:focus,
-        select:focus {
-            border-color: rgba(229, 231, 235, 0.65);
-            box-shadow: 0 0 0 3px rgba(229, 231, 235, 0.12);
-            background: #14171d;
-        }
-
-        .form-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 18px;
-            flex-wrap: wrap;
         }
 
         .sub-event-builder {
@@ -356,7 +138,7 @@
             margin-top: 8px;
             padding: 14px;
             border-radius: var(--radius);
-            border: 1px solid var(--panel-line);
+            border: 1px solid var(--color-border);
             background: rgba(255,255,255,0.045);
         }
 
@@ -365,28 +147,11 @@
             grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 10px;
             padding: 12px 0;
-            border-bottom: 1px solid var(--panel-line);
+            border-bottom: 1px solid var(--color-border);
         }
 
         .sub-event-row:last-child {
             border-bottom: 0;
-        }
-
-        .sub-event-row textarea {
-            min-height: 82px;
-        }
-
-        .sub-event-row .wide {
-            grid-column: 1 / -1;
-        }
-
-        .sub-event-actions {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            justify-content: space-between;
-            margin-top: 12px;
-            flex-wrap: wrap;
         }
 
         .event-type-chip {
@@ -394,16 +159,10 @@
             align-items: center;
             gap: 6px;
             margin-top: 8px;
-            color: var(--accent-gold);
+            color: var(--color-accent-gold);
             font-size: 0.78rem;
             font-weight: 700;
             text-transform: uppercase;
-        }
-
-        .sub-event-list {
-            margin-top: 12px;
-            padding-left: 14px;
-            border-left: 2px solid rgba(45, 212, 191, 0.35);
         }
 
         .sub-event-item {
@@ -411,7 +170,7 @@
             padding: 12px;
             border-radius: var(--radius);
             background: rgba(255,255,255,0.045);
-            border: 1px solid var(--panel-line);
+            border: 1px solid var(--color-border);
         }
 
         .sub-event-form {
@@ -420,7 +179,7 @@
             gap: 10px;
             margin-top: 12px;
             padding-top: 12px;
-            border-top: 1px solid var(--panel-line);
+            border-top: 1px solid var(--color-border);
         }
 
         .sub-event-form textarea,
@@ -436,7 +195,7 @@
             object-position: center;
             background: rgba(255, 255, 255, 0.045);
             border-radius: 8px;
-            border: 1px solid var(--panel-line);
+            border: 1px solid var(--color-border);
             margin-bottom: 10px;
             display: block;
         }
@@ -447,62 +206,10 @@
             margin-bottom: 8px;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, var(--accent-teal), var(--accent-green));
-            color: #04110e;
-            border-color: rgba(45,212,191,0.45);
-        }
-
-        .btn-secondary {
-            background: linear-gradient(135deg, #4b515b, #242830);
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, #6f1d1d, #3d1010);
-            border-color: rgba(248, 113, 113, 0.35);
-        }
-
-        .btn-danger:hover {
-            border-color: rgba(248, 113, 113, 0.65);
-            background: linear-gradient(135deg, #842323, #4a1212);
-        }
-
-        .table-wrap {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 920px;
-        }
-
-        th,
-        td {
-            padding: 14px 16px;
-            text-align: left;
-            border-bottom: 1px solid var(--panel-line);
-            vertical-align: top;
-        }
-
         th {
             position: sticky;
             top: 0;
-            background: #181b21;
-            color: var(--metal-1);
-            font-size: 0.76rem;
-            text-transform: uppercase;
-            letter-spacing: 0;
             z-index: 1;
-        }
-
-        td {
-            color: var(--muted);
-            font-size: 0.92rem;
-        }
-
-        tbody tr {
-            transition: background 0.2s ease;
         }
 
         tbody tr:hover {
@@ -511,18 +218,18 @@
 
         .id-cell,
         .count-cell {
-            color: var(--metal-1);
+            color: var(--color-accent-teal);
             font-weight: 700;
         }
 
         .event-name,
         .user-name {
-            color: var(--ink);
+            color: var(--color-text-primary);
             font-weight: 700;
         }
 
         .muted {
-            color: var(--muted-dark);
+            color: var(--color-text-muted);
         }
 
         .status-chip,
@@ -532,18 +239,18 @@
             gap: 6px;
             padding: 0.42rem 0.65rem;
             border-radius: var(--radius);
-            border: 1px solid var(--panel-line);
+            border: 1px solid var(--color-border);
             background: rgba(255,255,255,0.065);
-            color: var(--metal-1);
+            color: var(--color-text-primary);
             font-weight: 700;
             font-size: 0.78rem;
             white-space: nowrap;
         }
 
         .status-chip.good {
-            color: var(--success);
-            border-color: rgba(141, 213, 165, 0.28);
-            background: rgba(141, 213, 165, 0.08);
+            color: var(--color-success);
+            border-color: rgba(52, 211, 153, 0.28);
+            background: rgba(52, 211, 153, 0.08);
         }
 
         .row-actions {
@@ -560,38 +267,15 @@
 
         .empty-state {
             text-align: center;
-            color: var(--muted);
+            color: var(--color-text-secondary);
             padding: 34px 16px;
         }
 
         .empty-state i {
             display: block;
             margin-bottom: 10px;
-            color: var(--metal-2);
+            color: var(--color-text-muted);
             font-size: 1.6rem;
-        }
-
-        .alert {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 20px;
-            padding: 14px 16px;
-            border-radius: var(--radius);
-            border: 1px solid var(--panel-line);
-            background: var(--panel-bg);
-        }
-
-        .alert-danger {
-            color: #ffc9c9;
-            border-color: rgba(248, 113, 113, 0.35);
-            background: rgba(120, 30, 30, 0.18);
-        }
-
-        .alert-success {
-            color: #b8f0c8;
-            border-color: rgba(141, 213, 165, 0.3);
-            background: rgba(50, 110, 70, 0.16);
         }
 
         @media (max-width: 980px) {
@@ -599,26 +283,12 @@
             .stats-grid {
                 grid-template-columns: 1fr;
             }
-
-            .topbar {
-                align-items: flex-start;
-                flex-direction: column;
-            }
-
-            .top-actions {
-                width: 100%;
-                justify-content: stretch;
-            }
-
-            .nav-pill {
-                flex: 1;
-            }
         }
 
         @media (max-width: 640px) {
             .admin-shell {
                 width: min(100% - 20px, 1440px);
-                padding-top: 10px;
+                padding-top: 100px;
             }
 
             .hero-panel,
@@ -627,8 +297,7 @@
                 padding: 16px;
             }
 
-            .form-actions .btn,
-            .nav-pill {
+            .form-actions .btn {
                 width: 100%;
             }
 
@@ -639,32 +308,36 @@
     </style>
 </head>
 <body>
-    <main class="admin-shell">
-        <nav class="topbar">
-            <div class="brand">
-                <div class="brand-mark">
-                    <i class="fas fa-user-shield"></i>
-                </div>
-                <div>
-                    <h1>EventMS Admin</h1>
-                    <p>Manage events, seats, and participant records.</p>
-                </div>
-            </div>
-            <div class="top-actions">
-                <a href="${pageContext.request.contextPath}/" class="nav-pill">
+    <!-- Navigation Bar -->
+    <nav class="nav-bar">
+        <div class="nav-container">
+            <a href="${pageContext.request.contextPath}/" class="nav-logo">
+                <i class="fas fa-calendar-alt"></i> EventMS Admin
+            </a>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="nav-links" id="navLinks">
+                <a href="${pageContext.request.contextPath}/" class="nav-link">
                     <i class="fas fa-home"></i> Home
                 </a>
-                <a href="${pageContext.request.contextPath}/" class="nav-pill">
-                    <i class="fas fa-calendar-alt"></i> User Portal
+                <a href="${pageContext.request.contextPath}/documentation.jsp" class="nav-link">
+                    <i class="fas fa-info-circle"></i> About
                 </a>
-                <a href="#bookings" class="nav-pill">
-                    <i class="fas fa-users"></i> Bookings
+                <a href="${pageContext.request.contextPath}/myEvents" class="nav-link">
+                    <i class="fas fa-ticket-alt"></i> My Events
                 </a>
-                <a href="${pageContext.request.contextPath}/logout" class="nav-pill">
+                <a href="${pageContext.request.contextPath}/admin" class="nav-link active">
+                    <i class="fas fa-user-shield"></i> Admin
+                </a>
+                <a href="${pageContext.request.contextPath}/logout" class="nav-link">
                     <i class="fas fa-sign-out-alt"></i> Logout
                 </a>
             </div>
-        </nav>
+        </div>
+    </nav>
+
+    <main class="admin-shell">
 
         <section class="hero-panel">
             <div class="hero-copy">
@@ -698,13 +371,13 @@
         </section>
 
         <c:if test="${not empty successMessage}">
-            <div class="alert alert-success">
+            <div class="alert success" role="alert" aria-live="polite">
                 <i class="fas fa-check-circle"></i> ${successMessage}
             </div>
         </c:if>
-
+        
         <c:if test="${not empty errorMessage}">
-            <div class="alert alert-danger">
+            <div class="alert error" role="alert" aria-live="polite">
                 <i class="fas fa-exclamation-circle"></i> ${errorMessage}
             </div>
         </c:if>
@@ -809,8 +482,8 @@
                         <tbody>
                             <c:forEach var="event" items="${events}">
                                 <tr>
-                                    <td class="id-cell">#${event.id}</td>
-                                    <td>
+                                    <td class="id-cell" data-label="ID">#${event.id}</td>
+                                    <td class="wide-cell" data-label="Event">
                                         <c:if test="${not empty event.imagePath}">
                                             <img src="${pageContext.request.contextPath}${event.imagePath}" alt="${event.name}" class="event-thumb">
                                         </c:if>
@@ -866,15 +539,15 @@
                                             </div>
                                         </c:if>
                                     </td>
-                                    <td>${event.date}</td>
-                                    <td>${event.location}</td>
-                                    <td class="count-cell">
+                                    <td data-label="Date">${event.date}</td>
+                                    <td data-label="Location">${event.location}</td>
+                                    <td class="count-cell" data-label="Capacity">
                                         ${event.currentGuests} / ${event.guestLimit}
                                         <c:if test="${event.majorEvent}">
                                             <div class="muted">Sub limits: ${event.subGuestLimitTotal} / ${event.guestLimit}</div>
                                         </c:if>
                                     </td>
-                                    <td>
+                                    <td data-label="Status">
                                         <c:choose>
                                             <c:when test="${event.currentGuests lt event.guestLimit}">
                                                 <span class="status-chip good"><i class="fas fa-circle"></i> Open</span>
@@ -884,7 +557,7 @@
                                             </c:otherwise>
                                         </c:choose>
                                     </td>
-                                    <td>
+                                    <td data-label="Actions">
                                         <div class="row-actions">
                                             <button type="button" class="btn btn-primary update-btn"
                                                 data-id="${event.id}"
@@ -947,14 +620,14 @@
                     <tbody>
                         <c:forEach var="booking" items="${bookings}">
                             <tr>
-                                <td class="id-cell">#${booking.id}</td>
-                                <td class="user-name">${booking.userName}</td>
-                                <td>${booking.userEmail}</td>
-                                <td>${booking.eventName}</td>
-                                <td>${booking.eventDate}</td>
-                                <td><span class="digital-chip">${booking.digitalId}</span></td>
-                                <td>${booking.bookingType}</td>
-                                <td>${booking.bookingDate}</td>
+                                <td class="id-cell" data-label="ID">#${booking.id}</td>
+                                <td class="user-name" data-label="User">${booking.userName}</td>
+                                <td data-label="Email">${booking.userEmail}</td>
+                                <td data-label="Event">${booking.eventName}</td>
+                                <td data-label="Event Date">${booking.eventDate}</td>
+                                <td data-label="Digital ID"><span class="digital-chip">${booking.digitalId}</span></td>
+                                <td data-label="Type">${booking.bookingType}</td>
+                                <td data-label="Booked On">${booking.bookingDate}</td>
                             </tr>
                         </c:forEach>
                         <c:if test="${empty bookings}">
@@ -973,6 +646,26 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Mobile navigation toggle
+            const navToggle = document.getElementById('navToggle');
+            const navLinks = document.getElementById('navLinks');
+
+            if (navToggle && navLinks) {
+                navToggle.addEventListener('click', () => {
+                    const active = navLinks.classList.toggle('active');
+                    navToggle.setAttribute('aria-expanded', active);
+                });
+
+                // Close mobile menu when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!navToggle.contains(e.target) && !navLinks.contains(e.target)) {
+                        navLinks.classList.remove('active');
+                        navToggle.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            }
+
+            // Update event click listener
             document.querySelectorAll('.update-btn').forEach(button => {
                 button.addEventListener('click', function() {
                     const eventData = {
@@ -1001,21 +694,51 @@
                 });
             });
 
-            document.getElementById('event_type').addEventListener('change', toggleSubEventBuilder);
-            document.getElementById('guest_limit').addEventListener('input', updateSubCapacityHint);
-            document.getElementById('eventForm').addEventListener('submit', function(event) {
-                const selectedType = document.getElementById('event_type').value;
-                if (selectedType === 'MAJOR' && !isSubCapacityValid()) {
-                    event.preventDefault();
-                    alert('Combined sub-event guest limits cannot exceed the major event guest limit.');
-                    return;
-                }
-                if (selectedType === 'MAJOR' && document.getElementById('formAction').value === 'add'
-                        && !document.getElementById('image').value) {
-                    event.preventDefault();
-                    alert('Major events require an image.');
-                }
+            // Form validation and input listeners
+            const eventTypeEl = document.getElementById('event_type');
+            if (eventTypeEl) {
+                eventTypeEl.addEventListener('change', toggleSubEventBuilder);
+            }
+            const guestLimitEl = document.getElementById('guest_limit');
+            if (guestLimitEl) {
+                guestLimitEl.addEventListener('input', updateSubCapacityHint);
+            }
+            
+            const eventForm = document.getElementById('eventForm');
+            if (eventForm) {
+                eventForm.addEventListener('submit', function(event) {
+                    const selectedType = document.getElementById('event_type').value;
+                    if (selectedType === 'MAJOR' && !isSubCapacityValid()) {
+                        event.preventDefault();
+                        alert('Combined sub-event guest limits cannot exceed the major event guest limit.');
+                        return;
+                    }
+                    if (selectedType === 'MAJOR' && document.getElementById('formAction').value === 'add'
+                             && !document.getElementById('image').value) {
+                        event.preventDefault();
+                        alert('Major events require an image.');
+                        return;
+                    }
+                    
+                    const btn = this.querySelector('button[type="submit"]');
+                    if (btn) {
+                        btn.classList.add('loading');
+                        setTimeout(() => { btn.disabled = true; }, 10);
+                    }
+                });
+            }
+            
+            // Other forms loading states
+            document.querySelectorAll('form:not(#eventForm)').forEach(form => {
+                form.addEventListener('submit', function() {
+                    const btn = this.querySelector('button[type="submit"]');
+                    if (btn) {
+                        btn.classList.add('loading');
+                        setTimeout(() => { btn.disabled = true; }, 10);
+                    }
+                });
             });
+
             toggleSubEventBuilder();
             updateSubCapacityHint();
         });
