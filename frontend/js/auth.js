@@ -5,7 +5,23 @@ async function checkAuth() {
 
     authPromise = (async () => {
         try {
-            const res = await fetch(CONFIG.API_BASE_URL + '/api/auth/me', { credentials: 'include' });
+            const url = CONFIG.API_BASE_URL + '/api/auth/me';
+            const headers = {};
+            console.log("REQUEST URL =", url);
+            console.log("AUTH HEADER =", headers.Authorization);
+            console.log("REQUEST HEADERS =", headers);
+            
+            const res = await fetch(url, { credentials: 'include' });
+            console.log("RESPONSE STATUS =", res.status);
+            
+            const resClone = res.clone();
+            try {
+                const bodyText = await resClone.text();
+                console.log("RESPONSE BODY =", bodyText);
+            } catch (e) {
+                console.log("RESPONSE BODY = (failed to read body text)", e);
+            }
+            
             const data = await res.json();
             renderNavbar(data);
             return data;
@@ -69,11 +85,28 @@ function renderNavbar(user) {
     if (logoutBtn) {
         logoutBtn.addEventListener('click', async (e) => {
             e.preventDefault();
+            console.trace("LOGOUT CALLED");
             try {
-                await fetch(CONFIG.API_BASE_URL + '/api/auth/logout', { 
+                const url = CONFIG.API_BASE_URL + '/api/auth/logout';
+                const headers = {};
+                console.log("REQUEST URL =", url);
+                console.log("AUTH HEADER =", headers.Authorization);
+                console.log("REQUEST HEADERS =", headers);
+                
+                const res = await fetch(url, { 
                     method: 'POST',
                     credentials: 'include'
                 });
+                console.log("RESPONSE STATUS =", res.status);
+                
+                const resClone = res.clone();
+                try {
+                    const bodyText = await resClone.text();
+                    console.log("RESPONSE BODY =", bodyText);
+                } catch (e) {
+                    console.log("RESPONSE BODY = (failed to read body text)", e);
+                }
+                
                 authPromise = null; // Clear cached auth promise on logout
                 window.location.href = 'index.html';
             } catch (err) {

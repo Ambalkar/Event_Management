@@ -399,12 +399,35 @@
     <script>
         // Security check
         async function runAdminGuard() {
+            console.log("AUTH CHECK START");
+            console.log("localStorage =", {...localStorage});
+            console.log("sessionStorage =", {...sessionStorage});
+            console.log("COOKIES =", document.cookie);
+            
             const user = await checkAuth();
+            
+            const token1 = localStorage.getItem("token") || null;
+            const isAuthenticated1 = user ? user.authenticated : false;
+            console.log("AUTH CHECK START");
+            console.log("token =", token1);
+            console.log("user =", user);
+            console.log("isAuthenticated =", isAuthenticated1);
+            
             if (!user.authenticated) {
+                console.log("REDIRECTING TO LOGIN: !user.authenticated");
                 window.location.href = 'login.html?target=admin.html';
                 return;
             }
+            
+            const token2 = localStorage.getItem("token") || null;
+            const isAuthenticated2 = user ? user.authenticated : false;
+            console.log("AUTH CHECK START");
+            console.log("token =", token2);
+            console.log("user =", user);
+            console.log("isAuthenticated =", isAuthenticated2);
+            
             if (user.role !== 'ADMIN') {
+                console.log("REDIRECTING TO EVENTS: user.role !== ADMIN");
                 alert('Admin permissions required.');
                 window.location.href = 'events.html';
                 return;
@@ -414,12 +437,36 @@
 
         async function loadDashboard() {
             try {
-                const res = await fetch(CONFIG.API_BASE_URL + '/api/admin/dashboard', { credentials: 'include' });
+                const url = CONFIG.API_BASE_URL + '/api/admin/dashboard';
+                const headers = {};
+                console.log("REQUEST URL =", url);
+                console.log("AUTH HEADER =", headers.Authorization);
+                console.log("REQUEST HEADERS =", headers);
+                
+                const res = await fetch(url, { credentials: 'include' });
+                console.log("RESPONSE STATUS =", res.status);
+                
+                const resClone = res.clone();
+                try {
+                    const bodyText = await resClone.text();
+                    console.log("RESPONSE BODY =", bodyText);
+                } catch (e) {
+                    console.log("RESPONSE BODY = (failed to read body text)", e);
+                }
+                
                 if (res.status === 401) {
+                    const token3 = localStorage.getItem("token") || null;
+                    const isAuthenticated3 = false;
+                    console.log("AUTH CHECK START");
+                    console.log("token =", token3);
+                    console.log("user =", null);
+                    console.log("isAuthenticated =", isAuthenticated3);
+                    console.log("REDIRECTING TO LOGIN: res.status === 401");
                     window.location.href = 'login.html?target=admin.html';
                     return;
                 }
                 const data = await res.json();
+                console.log("DASHBOARD DATA RECEIVED =", data);
                 renderDashboard(data);
             } catch (err) {
                 console.error(err);
@@ -582,6 +629,7 @@
         });
 
         document.addEventListener('DOMContentLoaded', () => {
+            console.log("TOKEN AFTER PAGE LOAD =", localStorage.getItem("token"));
             runAdminGuard();
         });
     </script>

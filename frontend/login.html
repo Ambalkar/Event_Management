@@ -192,6 +192,12 @@
                 });
                 const data = await res.json();
                 if (res.ok && data.success) {
+                    console.log("LOGIN SUCCESS");
+                    console.log("localStorage =", {...localStorage});
+                    console.log("sessionStorage =", {...sessionStorage});
+                    console.log("COOKIES =", document.cookie);
+                    const token = localStorage.getItem("token");
+                    console.log("TOKEN BEFORE REDIRECT =", token);
                     if (target) {
                         window.location.href = target;
                     } else if (data.role === 'ADMIN') {
