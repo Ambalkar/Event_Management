@@ -1,0 +1,878 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SEVENT-MS - Event Management Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/tokens.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/layout.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Hero Section Custom Styles */
+        .hero-section {
+            position: relative;
+            min-height: 92vh;
+            background:
+                linear-gradient(90deg, rgba(5, 6, 8, 0.95) 0%, rgba(5, 6, 8, 0.72) 42%, rgba(5, 6, 8, 0.88) 100%),
+                linear-gradient(135deg, rgba(45, 212, 191, 0.24), transparent 38%),
+                linear-gradient(315deg, rgba(251, 191, 36, 0.18), transparent 42%),
+                url('${pageContext.request.contextPath}/images/eventbg0.jpg') center/cover fixed no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            overflow: hidden;
+        }
+
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 160px;
+            background: linear-gradient(to bottom, transparent, var(--color-bg));
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 960px;
+            padding: 5rem 2rem 3rem;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 6rem);
+            font-weight: 800;
+            line-height: 0.95;
+            margin: 0 0 1.5rem;
+            background: linear-gradient(90deg, #ffffff 0%, var(--color-accent-teal) 36%, var(--color-accent-gold) 72%, #f5f5f5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 18px 40px rgba(0, 0, 0, 0.55));
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 3vw, 1.45rem);
+            margin-bottom: 2.5rem;
+            color: var(--color-text-primary);
+            text-shadow: 0 8px 24px rgba(0,0,0,0.7);
+            max-width: 760px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Features Section Custom Styles */
+        .features-section {
+            background: var(--color-surface);
+            padding: 5rem 1.5rem;
+            margin: 2rem 0;
+            border-radius: var(--radius);
+            border: 1px solid var(--color-border);
+            box-shadow: var(--card-shadow);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--color-text-primary);
+            font-weight: 800;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 110px;
+            height: 4px;
+            background: linear-gradient(to right, var(--color-accent-teal), var(--color-accent-gold), var(--color-accent-green));
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--color-text-secondary);
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 2.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--color-border);
+            transition: all var(--transition-speed) ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--color-accent-teal), var(--color-accent-gold));
+        }
+
+        .feature-card:nth-child(2)::before {
+            background: linear-gradient(90deg, var(--color-accent-green), var(--color-accent-teal));
+        }
+
+        .feature-card:nth-child(3)::before {
+            background: linear-gradient(90deg, var(--color-accent-gold), var(--color-accent-coral));
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--color-border-strong);
+            box-shadow: 0 24px 54px -14px rgba(45, 212, 191, 0.28);
+        }
+
+        .feature-card i {
+            font-size: 3rem;
+            color: var(--color-accent-teal);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card:nth-child(2) i {
+            color: var(--color-accent-green);
+        }
+
+        .feature-card:nth-child(3) i {
+            color: var(--color-accent-gold);
+        }
+
+        .feature-card h3 {
+            color: var(--color-text-primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: var(--color-text-secondary);
+        }
+
+        /* How it works, benefits, support */
+        .how-it-works-section,
+        .benefits-section,
+        .internship-section {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            margin: 2rem 0;
+            padding: 5rem 1.5rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .steps-container,
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .step,
+        .benefit-card {
+            position: relative;
+            padding: 2rem;
+            border-radius: var(--radius);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--color-border);
+            overflow: hidden;
+        }
+
+        .step::before,
+        .benefit-card::before {
+            content: '';
+            position: absolute;
+            inset: 0 0 auto 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-accent-teal), var(--color-accent-gold), var(--color-accent-green));
+        }
+
+        .step-number {
+            width: 46px;
+            height: 46px;
+            display: grid;
+            place-items: center;
+            border-radius: var(--radius);
+            background: linear-gradient(135deg, var(--color-accent-teal), var(--color-accent-green));
+            color: #05100d;
+            font-weight: 800;
+            box-shadow: 0 10px 22px rgba(45, 212, 191, 0.24);
+        }
+
+        .step-icon {
+            color: var(--color-accent-gold);
+            font-size: 2rem;
+            margin: 1.5rem 0 0.5rem;
+        }
+
+        .benefit-card h3 i {
+            color: var(--color-accent-teal);
+        }
+
+        .benefit-card ul {
+            padding-left: 1.25rem;
+            color: var(--color-text-secondary);
+        }
+
+        .benefit-card li {
+            margin-bottom: 0.7rem;
+        }
+
+        /* About & Developer Section */
+        .about-section {
+            margin: 2rem 0;
+        }
+
+        .about-content {
+            background: var(--color-surface);
+            padding: 2.5rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--color-border);
+            box-shadow: var(--card-shadow);
+        }
+
+        .about-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-card h3 {
+            color: var(--color-accent-teal);
+            font-size: 1.4rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .developer-section {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .developer-info {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .developer-image img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--color-accent-teal);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .developer-details h4 {
+            color: var(--color-text-primary);
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .developer-details p {
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+        }
+
+        .developer-skills {
+            margin-top: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .developer-skills span {
+            background: rgba(45, 212, 191, 0.12);
+            color: var(--color-accent-teal);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border: 1px solid rgba(45, 212, 191, 0.28);
+        }
+
+        /* Contact Details */
+        .contact-section {
+            background: var(--color-surface);
+            padding: 5rem 1.5rem;
+            margin-top: 4rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--color-border);
+            box-shadow: var(--card-shadow);
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .contact-card {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 2rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--color-border);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .contact-card h3 {
+            color: var(--color-accent-teal);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .contact-card a {
+            color: var(--color-text-primary);
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .contact-card a:hover {
+            color: var(--color-accent-teal);
+            transform: translateX(5px);
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(6, 7, 8, 0.96);
+            padding: 6rem 1.5rem 2rem;
+            margin-top: 6rem;
+            border-top: 1px solid var(--color-border);
+            position: relative;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--color-accent-teal), var(--color-accent-gold), var(--color-accent-green));
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 4rem;
+            margin-bottom: 4rem;
+        }
+
+        .footer-section h4 {
+            color: var(--color-text-primary);
+            font-size: 1.4rem;
+            margin-bottom: 2rem;
+            position: relative;
+            padding-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .footer-section h4::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-accent-teal), var(--color-accent-gold));
+            border-radius: 3px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 1.2rem;
+        }
+
+        .footer-section ul li a {
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .footer-section ul li a:hover {
+            color: var(--color-accent-teal);
+            transform: translateX(8px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.2rem;
+            margin-top: 2rem;
+        }
+
+        .social-link {
+            color: var(--color-text-secondary);
+            font-size: 1.5rem;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius);
+            transition: all var(--transition-speed) ease;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--color-border);
+        }
+
+        .social-link:hover {
+            color: var(--color-accent-teal);
+            transform: translateY(-5px);
+            background: rgba(45, 212, 191, 0.1);
+            border-color: var(--color-accent-teal);
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2.5rem;
+            margin-top: 2.5rem;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .footer-bottom p {
+            color: var(--color-text-secondary);
+            font-size: 1rem;
+        }
+
+        .footer-meta {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .footer-meta a {
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .footer-meta a:hover {
+            color: var(--color-accent-teal);
+        }
+
+        .footer-meta .separator {
+            color: var(--color-border);
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .developer-info {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="nav-bar">
+        <div class="nav-container">
+            <a href="${pageContext.request.contextPath}/" class="nav-logo">
+                <i class="fas fa-calendar-alt"></i> EventMS
+            </a>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="nav-links" id="navLinks">
+                <a href="${pageContext.request.contextPath}/" class="nav-link">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="${pageContext.request.contextPath}/documentation.jsp" class="nav-link">
+                    <i class="fas fa-info-circle"></i> About
+                </a>
+                <a href="${pageContext.request.contextPath}/myEvents" class="nav-link">
+                    <i class="fas fa-ticket-alt"></i> My Events
+                </a>
+                <c:choose>
+                    <c:when test="${not empty sessionScope.authEmail}">
+                        <c:if test="${sessionScope.authRole == 'ADMIN'}">
+                            <a href="${pageContext.request.contextPath}/admin" class="nav-link">
+                                <i class="fas fa-user-shield"></i> Admin
+                            </a>
+                        </c:if>
+                        <a href="${pageContext.request.contextPath}/logout" class="nav-link">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </c:when>
+                    <c:otherwise>
+                        <a href="${pageContext.request.contextPath}/login" class="nav-link">
+                            <i class="fas fa-sign-in-alt"></i> Sign In
+                        </a>
+                    </c:otherwise>
+                </c:choose>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">Plan. Manage. Succeed.</h1>
+            <p class="hero-subtitle">A powerful, all-in-one SEVENT-MS platform for organizers and participants</p>
+            <div class="hero-cta">
+                <a href="${pageContext.request.contextPath}/" class="btn btn-primary" style="min-height: 48px;">
+                    <i class="fas fa-rocket"></i> Get Started
+                </a>
+                <a href="#features" class="btn btn-secondary" style="min-height: 48px;">
+                    <i class="fas fa-play-circle"></i> View Features
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+        <div class="container">
+            <h2 class="section-title">Powerful Features</h2>
+            <p class="section-subtitle">Everything you need to manage successful events</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-calendar-plus"></i>
+                    <h3>Easy Event Creation</h3>
+                    <p>Create and customize events in minutes with our intuitive interface</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Real-Time Tracking</h3>
+                    <p>Monitor registrations and attendance in real-time</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-user-lock"></i>
+                    <h3>Role-Based Access</h3>
+                    <p>Secure and flexible access control for different user types</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Secure Authentication</h3>
+                    <p>Enterprise-grade security for your events and data</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-chart-bar"></i>
+                    <h3>Analytics & Reporting</h3>
+                    <p>Comprehensive insights and detailed event reports</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-mobile-alt"></i>
+                    <h3>Responsive Design</h3>
+                    <p>Perfect experience on any device</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works-section">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <i class="fas fa-edit step-icon"></i>
+                    <h3>Create Event</h3>
+                    <p>Set up your event with all the details in minutes</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <i class="fas fa-user-plus step-icon"></i>
+                    <h3>Invite & Register</h3>
+                    <p>Manage registrations and send invitations</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <i class="fas fa-chart-pie step-icon"></i>
+                    <h3>Track & Optimize</h3>
+                    <p>Monitor success and improve future events</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section">
+        <div class="container">
+            <h2 class="section-title">About The Project</h2>
+            <p class="section-subtitle">
+                A Solo Developer Initiative for Advanced Event Management
+            </p>
+            
+            <div class="about-content">
+                <div class="mission-vision">
+                    <div class="about-card">
+                        <h3><i class="fas fa-bullseye"></i> Project Mission</h3>
+                        <p>
+                            To revolutionize event management through innovative technology, making it accessible and efficient for everyone.
+                        </p>
+                    </div>
+                    
+                    <div class="about-card">
+                        <h3><i class="fas fa-eye"></i> Development Vision</h3>
+                        <p>
+                            Creating a robust, scalable, and user-friendly platform that sets new standards in event management solutions.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="developer-section">
+                    <h3><i class="fas fa-code"></i> About the Developer</h3>
+                    <div class="developer-info">
+                        <div class="developer-image">
+                            <img src="${pageContext.request.contextPath}/images/developer.jpg" alt="Developer Profile">
+                        </div>
+                        <div class="developer-details">
+                            <h4>Devendra Ambalkar</h4>
+                            <p>
+                                Devendra is a software developer specializing in Java, Spring Framework, and full-stack web development. He builds secure, scalable applications with a strong focus on user experience and system performance.
+                            </p>
+                            <p style="margin-top: 0.5rem;">
+                                With hands-on experience in Spring Boot, Spring Security, Hibernate, and relational databases, he has developed production-ready systems like SEVENT-MS.
+                            </p>
+                            <div class="developer-skills">
+                                <span>Java</span>
+                                <span>Spring Boot</span>
+                                <span>Hibernate</span>
+                                <span>H2 / PostgreSQL</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits-section">
+        <div class="container">
+            <h2 class="section-title">Benefits</h2>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <h3><i class="fas fa-users"></i> For Organizers</h3>
+                    <ul>
+                        <li>Streamlined event creation</li>
+                        <li>Automated registration</li>
+                        <li>Real-time analytics</li>
+                    </ul>
+                </div>
+                <div class="benefit-card">
+                    <h3><i class="fas fa-ticket-alt"></i> For Participants</h3>
+                    <ul>
+                        <li>Easy registration process</li>
+                        <li>Event recommendations</li>
+                        <li>Mobile access</li>
+                    </ul>
+                </div>
+                <div class="benefit-card">
+                    <h3><i class="fas fa-user-shield"></i> For Admins</h3>
+                    <ul>
+                        <li>Complete control</li>
+                        <li>Security management</li>
+                        <li>System insights</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Internship Section -->
+    <section class="internship-section">
+        <div class="container" style="text-align: center;">
+            <h2 class="section-title">Join Our Team</h2>
+            <p class="section-subtitle">Explore exciting internship opportunities</p>
+            <a href="https://credora.space" target="_blank" class="btn btn-primary" style="min-height: 48px;">
+                <i class="fas fa-graduation-cap"></i> View Opportunities
+            </a>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section">
+        <div class="container">
+            <h2 class="section-title">Contact</h2>
+            <p class="section-subtitle">Get in touch for support or collaboration</p>
+            
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <h3><i class="fas fa-envelope"></i> Email Support</h3>
+                    <a href="mailto:devendraambalkar11@gmail.com">
+                        <i class="fas fa-paper-plane"></i> devendraambalkar11@gmail.com
+                    </a>
+                </div>
+                
+                <div class="contact-card">
+                    <h3><i class="fas fa-code-branch"></i> GitHub Codebase</h3>
+                    <a href="https://github.com/Ambalkar/Event_Management.git" target="_blank">
+                        <i class="fab fa-github"></i> Open Source Repository
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>Documentation</h4>
+                    <ul>
+                        <li><a href="${pageContext.request.contextPath}/documentation.jsp#overview">
+                            <i class="fas fa-book"></i> Project Overview
+                        </a></li>
+                        <li><a href="${pageContext.request.contextPath}/documentation.jsp#user-features">
+                            <i class="fas fa-user"></i> User Features
+                        </a></li>
+                        <li><a href="${pageContext.request.contextPath}/documentation.jsp#event-management">
+                            <i class="fas fa-calendar-alt"></i> Event Setup
+                        </a></li>
+                        <li><a href="${pageContext.request.contextPath}/documentation.jsp#registration">
+                            <i class="fas fa-ticket-alt"></i> Booking System
+                        </a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Technical Resources</h4>
+                    <ul>
+                        <li><a href="${pageContext.request.contextPath}/documentation.jsp#technical">
+                            <i class="fas fa-cogs"></i> System Details
+                        </a></li>
+                        <li><a href="${pageContext.request.contextPath}/documentation.jsp#security">
+                            <i class="fas fa-shield-alt"></i> Security
+                        </a></li>
+                        <li><a href="${pageContext.request.contextPath}/documentation.jsp#admin-features">
+                            <i class="fas fa-user-shield"></i> Admin Guide
+                        </a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="mailto:devendraambalkar11@gmail.com">
+                            <i class="fas fa-question-circle"></i> Contact Support
+                        </a></li>
+                        <li><a href="https://github.com/Ambalkar/Event_Management.git" target="_blank">
+                            <i class="fab fa-github"></i> Report Bug
+                        </a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Stay Connected</h4>
+                    <div class="social-links">
+                        <a href="mailto:devendraambalkar11@gmail.com" class="social-link" title="Email">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                        <a href="https://github.com/Ambalkar/Event_Management.git" target="_blank" class="social-link" title="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SEVENT-MS. All rights reserved.</p>
+                <div class="footer-meta">
+                    <a href="${pageContext.request.contextPath}/">Home</a>
+                    <span class="separator">|</span>
+                    <a href="${pageContext.request.contextPath}/documentation.jsp">About</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile navigation toggle
+        const navToggle = document.getElementById('navToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        navToggle.addEventListener('click', () => {
+            const active = navLinks.classList.toggle('active');
+            navToggle.setAttribute('aria-expanded', active);
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!navToggle.contains(e.target) && !navLinks.contains(e.target)) {
+                navLinks.classList.remove('active');
+                navToggle.setAttribute('aria-expanded', 'false');
+            }
+        });
+    </script>
+</body>
+</html>

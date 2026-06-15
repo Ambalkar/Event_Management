@@ -1,0 +1,30 @@
+:root {
+    --color-bg: #07080a;
+    --color-surface: rgba(14, 15, 18, 0.96);
+    --color-surface-soft: rgba(26, 28, 33, 0.9);
+    --color-surface-hover: rgba(255, 255, 255, 0.05);
+    --color-text-primary: #f4f4f5;
+    --color-text-secondary: #d4d4d8;
+    --color-text-muted: #7e838c;
+    
+    /* Brand Accents */
+    --color-accent-teal: #2dd4bf;
+    --color-accent-green: #22c55e;
+    --color-accent-gold: #fbbf24;
+    --color-accent-coral: #fb7185;
+    
+    /* Status Colors */
+    --color-success: #34d399;
+    --color-danger: #f87171;
+    --color-focus: #2dd4bf;
+    
+    /* Borders & Lines */
+    --color-border: rgba(255, 255, 255, 0.14);
+    --color-border-strong: rgba(255, 255, 255, 0.28);
+    
+    /* Layout Constants */
+    --card-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+    --hover-transform: translateY(-5px);
+    --radius: 8px;
+    --transition-speed: 0.3s;
+}

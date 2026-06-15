@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign In - SEVENT-MS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            color: var(--color-text-primary);
+            background:
+                linear-gradient(90deg, rgba(7, 8, 10, 0.92), rgba(7, 8, 10, 0.72)),
+                url('images/eventbg0.jpg') center/cover fixed no-repeat;
+            display: grid;
+            place-items: center;
+            padding: 1.5rem;
+            box-sizing: border-box;
+        }
+
+        .auth-shell {
+            width: min(100%, 440px);
+            background: linear-gradient(145deg, rgba(20, 23, 28, 0.98), rgba(7, 8, 10, 0.96));
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            box-shadow: var(--card-shadow);
+            padding: 2rem;
+            box-sizing: border-box;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--color-text-primary);
+            text-decoration: none;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .brand i {
+            color: var(--color-accent-teal);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2rem;
+            color: var(--color-text-primary);
+        }
+
+        .lede {
+            color: var(--color-text-secondary);
+            margin: 0.6rem 0 1.5rem;
+            line-height: 1.6;
+        }
+
+        .switch-link {
+            margin: 1.25rem 0 0;
+            color: var(--color-text-secondary);
+            text-align: center;
+        }
+
+        .switch-link a {
+            color: var(--color-accent-gold);
+            text-decoration: none;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .alert {
+            margin-bottom: 1rem;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <main class="auth-shell">
+        <a href="index.html" class="brand">
+            <i class="fas fa-calendar-alt"></i> EventMS
+        </a>
+
+        <!-- Login Container -->
+        <div id="loginContainer">
+            <h1>Sign in</h1>
+            <p class="lede">Log in as a participant, or use the admin credentials to open the dashboard.</p>
+            
+            <div id="loginAlert" class="alert error hidden">
+                <i class="fas fa-exclamation-circle"></i> <span class="alert-message"></span>
+            </div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail" class="form-label">Email</label>
+                    <input id="loginEmail" type="email" required autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword" class="form-label">Password</label>
+                    <input id="loginPassword" type="password" required autocomplete="current-password">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; min-height: 48px;">
+                    <i class="fas fa-sign-in-alt"></i> Log In
+                </button>
+            </form>
+            <p class="switch-link">
+                New here?
+                <a id="showSignup">Create an account</a>
+            </p>
+        </div>
+
+        <!-- Signup Container -->
+        <div id="signupContainer" class="hidden">
+            <h1>Create account</h1>
+            <p class="lede">Sign up to book events faster and keep your event details connected to your email.</p>
+            
+            <div id="signupAlert" class="alert error hidden">
+                <i class="fas fa-exclamation-circle"></i> <span class="alert-message"></span>
+            </div>
+
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="signupName" class="form-label">Name</label>
+                    <input id="signupName" type="text" required autocomplete="name">
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail" class="form-label">Email</label>
+                    <input id="signupEmail" type="email" required autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword" class="form-label">Password (Min 6 chars)</label>
+                    <input id="signupPassword" type="password" minlength="6" required autocomplete="new-password">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; min-height: 48px;">
+                    <i class="fas fa-user-plus"></i> Sign Up
+                </button>
+            </form>
+            <p class="switch-link">
+                Already have an account?
+                <a id="showLogin">Log in</a>
+            </p>
+        </div>
+    </main>
+
+    <script src="js/config.js"></script>
+    <script>
+        const loginContainer = document.getElementById('loginContainer');
+        const signupContainer = document.getElementById('signupContainer');
+        const showSignup = document.getElementById('showSignup');
+        const showLogin = document.getElementById('showLogin');
+
+        showSignup.addEventListener('click', () => {
+            loginContainer.classList.add('hidden');
+            signupContainer.classList.remove('hidden');
+        });
+
+        showLogin.addEventListener('click', () => {
+            signupContainer.classList.add('hidden');
+            loginContainer.classList.remove('hidden');
+        });
+
+        // Parse query params for target
+        const params = new URLSearchParams(window.location.search);
+        const target = params.get('target') || '';
+
+        // Login Handler
+        const loginForm = document.getElementById('loginForm');
+        const loginAlert = document.getElementById('loginAlert');
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const submitBtn = loginForm.querySelector('button[type="submit"]');
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+            loginAlert.classList.add('hidden');
+
+            try {
+                const res = await fetch(CONFIG.API_BASE_URL + '/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password }),
+                    credentials: 'include'
+                });
+                const data = await res.json();
+                if (res.ok && data.success) {
+                    if (target) {
+                        window.location.href = target;
+                    } else if (data.role === 'ADMIN') {
+                        window.location.href = 'admin.html';
+                    } else {
+                        window.location.href = 'events.html';
+                    }
+                } else {
+                    loginAlert.querySelector('.alert-message').textContent = data.message || 'Login failed.';
+                    loginAlert.classList.remove('hidden');
+                }
+            } catch (err) {
+                console.error(err);
+                loginAlert.querySelector('.alert-message').textContent = 'Network error. Make sure backend is running.';
+                loginAlert.classList.remove('hidden');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Log In';
+            }
+        });
+
+        // Signup Handler
+        const signupForm = document.getElementById('signupForm');
+        const signupAlert = document.getElementById('signupAlert');
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const submitBtn = signupForm.querySelector('button[type="submit"]');
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
+            signupAlert.classList.add('hidden');
+
+            try {
+                const res = await fetch(CONFIG.API_BASE_URL + '/api/auth/signup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password }),
+                    credentials: 'include'
+                });
+                const data = await res.json();
+                if (res.ok && data.success) {
+                    if (target) {
+                        window.location.href = target;
+                    } else {
+                        window.location.href = 'events.html';
+                    }
+                } else {
+                    signupAlert.querySelector('.alert-message').textContent = data.message || 'Registration failed.';
+                    signupAlert.classList.remove('hidden');
+                }
+            } catch (err) {
+                console.error(err);
+                signupAlert.querySelector('.alert-message').textContent = 'Network error. Make sure backend is running.';
+                signupAlert.classList.remove('hidden');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Sign Up';
+            }
+        });
+    </script>
+</body>
+</html>
