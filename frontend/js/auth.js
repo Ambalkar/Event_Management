@@ -21,36 +21,68 @@
     };
 })();
 
+// Start performance tracking
+console.time("Navbar Initial Render");
+console.time("Navbar Verified Render");
+const initStartTime = performance.now();
+
 let authPromise = null;
 
 async function checkAuth() {
+    // 1. Instant Cache-First Render
+    let initialUser = { authenticated: false };
+    if (localStorage.getItem("token")) {
+        try {
+            const cachedUserStr = localStorage.getItem("user");
+            if (cachedUserStr) {
+                initialUser = JSON.parse(cachedUserStr);
+                console.log("[Performance Audit] Loaded cached user session instantly:", initialUser);
+            }
+        } catch (e) {
+            console.warn("[Performance Audit] Failed to parse cached user:", e);
+        }
+    }
+    
+    // Render immediately from cache/fallback
+    renderNavbar(initialUser);
+    const initEndTime = performance.now();
+    console.timeEnd("Navbar Initial Render");
+    console.log(`[Performance Audit] Navbar rendered instantly in ${(initEndTime - initStartTime).toFixed(2)}ms.`);
+
     if (authPromise) return authPromise;
 
+    // 2. Async Background Network Verification
     authPromise = (async () => {
+        const netStartTime = performance.now();
         try {
             const url = CONFIG.API_BASE_URL + '/api/auth/me';
-            const headers = {};
-            console.log("REQUEST URL =", url);
-            console.log("AUTH HEADER =", headers.Authorization);
-            console.log("REQUEST HEADERS =", headers);
-            
             const res = await fetch(url, { credentials: 'include' });
-            console.log("RESPONSE STATUS =", res.status);
+            if (!res.ok) {
+                throw new Error("HTTP " + res.status);
+            }
+            const data = await res.json();
             
-            const resClone = res.clone();
-            try {
-                const bodyText = await resClone.text();
-                console.log("RESPONSE BODY =", bodyText);
-            } catch (e) {
-                console.log("RESPONSE BODY = (failed to read body text)", e);
+            // Sync status to cache
+            if (data.authenticated) {
+                localStorage.setItem("user", JSON.stringify({ 
+                    name: data.name, 
+                    email: data.email, 
+                    role: data.role, 
+                    authenticated: true 
+                }));
+            } else {
+                localStorage.removeItem("user");
+                localStorage.removeItem("token");
             }
             
-            const data = await res.json();
             renderNavbar(data);
+            const netEndTime = performance.now();
+            console.timeEnd("Navbar Verified Render");
+            console.log(`[Performance Audit] Network verification completed in ${(netEndTime - netStartTime).toFixed(2)}ms (Server Roundtrip).`);
             return data;
         } catch (err) {
-            console.error('Error checking auth:', err);
-            const fallback = { authenticated: false };
+            console.warn('[Performance Audit] Network verification failed, keeping cached view:', err);
+            const fallback = initialUser;
             renderNavbar(fallback);
             return fallback;
         }
@@ -111,27 +143,13 @@ function renderNavbar(user) {
             console.trace("LOGOUT CALLED");
             try {
                 const url = CONFIG.API_BASE_URL + '/api/auth/logout';
-                const headers = {};
-                console.log("REQUEST URL =", url);
-                console.log("AUTH HEADER =", headers.Authorization);
-                console.log("REQUEST HEADERS =", headers);
-                
-                const res = await fetch(url, { 
+                await fetch(url, { 
                     method: 'POST',
                     credentials: 'include'
                 });
-                console.log("RESPONSE STATUS =", res.status);
-                
-                const resClone = res.clone();
-                try {
-                    const bodyText = await resClone.text();
-                    console.log("RESPONSE BODY =", bodyText);
-                } catch (e) {
-                    console.log("RESPONSE BODY = (failed to read body text)", e);
-                }
-                
                 localStorage.removeItem("token");
-                authPromise = null; // Clear cached auth promise on logout
+                localStorage.removeItem("user");
+                authPromise = null;
                 window.location.href = 'index.html';
             } catch (err) {
                 console.error('Logout error:', err);
@@ -140,7 +158,10 @@ function renderNavbar(user) {
     }
 }
 
-// Mobile toggle setup
+// Perform instant rendering immediately as script runs (no DOMContentLoaded blocking)
+checkAuth();
+
+// Setup UI toggle event listeners once DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
     const navToggle = document.getElementById('navToggle');
     const navLinks = document.getElementById('navLinks');
@@ -151,5 +172,5 @@ document.addEventListener('DOMContentLoaded', () => {
             navToggle.setAttribute('aria-expanded', !expanded);
         });
     }
-    checkAuth();
 });
+
