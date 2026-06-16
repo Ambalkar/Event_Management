@@ -2,10 +2,10 @@
 
 SEVENT-MS is a Java 17 web application for creating events, publishing them to users, and tracking event bookings. It is built with Spring Boot, JSP views, PostgreSQL, and Maven, and can run locally with Docker Compose, Maven, or the included Windows development script.
 
-<img width="1440" height="852" alt="EMS landing page screenshot" src="screenshots/landing_page.png" />
-<img width="1440" height="852" alt="EMS user events screenshot" src="screenshots/browse_events.png" />
-<img width="1440" height="852" alt="EMS admin dashboard screenshot" src="screenshots/admin_dashboard.png" />
-<img width="1440" height="852" alt="EMS bookings screenshot" src="screenshots/my_bookings.png" />
+<img width="1440" height="852" alt="EMS landing page screenshot" src="https://github.com/user-attachments/assets/592c4b3a-fd5a-49fa-bf98-a1d423447eef" />
+<img width="1440" height="852" alt="EMS user events screenshot" src="https://github.com/user-attachments/assets/5ba8f13d-8f2a-4ee9-9c74-68bf80846994" />
+<img width="1440" height="852" alt="EMS admin dashboard screenshot" src="https://github.com/user-attachments/assets/b4ea4422-73ac-4238-af77-94cb223565df" />
+<img width="1440" height="852" alt="EMS bookings screenshot" src="https://github.com/user-attachments/assets/50df2b03-8362-41ae-93f9-36f7e856f08d" />
 
 ## Features
 
@@ -14,8 +14,6 @@ SEVENT-MS is a Java 17 web application for creating events, publishing them to u
 - Event booking with participant name, email, generated digital ID, and booking date.
 - "My Events" lookup at `/myEvents` by participant email.
 - Admin dashboard at `/admin` for managing event records and viewing bookings.
-- Token-Based Authentication flow (Bearer tokens in `Authorization` headers) for secure REST APIs.
-- Global fetch interceptor on the frontend to automatically inject tokens from `localStorage`.
 - Simple events, major events, and sub-events.
 - Capacity tracking with "housefull" handling.
 - PostgreSQL schema for events and bookings.
@@ -28,8 +26,7 @@ SEVENT-MS is a Java 17 web application for creating events, publishing them to u
 - Spring Boot 2.7.0
 - Spring MVC
 - Spring Data JPA dependency with direct JDBC usage in controllers
-- Spring Security configured to permit all requests (with controller-level token authentication)
-- Token-Based Auth (In-memory UUID Token Store with `localStorage` persistence)
+- Spring Security configured to permit all requests
 - JSP and JSTL
 - PostgreSQL
 - Maven
@@ -42,7 +39,6 @@ SEVENT-MS/
 |-- src/main/java/
 |   |-- com/eventms/
 |   |   |-- EventManagementSystemApplication.java
-|   |   |-- auth/TokenStore.java
 |   |   |-- config/SecurityConfig.java
 |   |   |-- controller/
 |   |   `-- repository/
@@ -217,8 +213,7 @@ Health check:
 
 ## Notes
 
-- The app supports stateless token-based authentication (via custom Bearer headers) for the REST APIs, and falls back to HTTP session storage (`HttpSession`) for first-party access (like direct JSP flow).
-- The app currently permits all requests in `SecurityConfig` and handles validation checks manually at the controller level.
+- The app currently permits all requests in `SecurityConfig`, including `/admin`.
 - Controllers mostly use `DataSource`, `Connection`, and prepared SQL directly.
 - `spring.jpa.hibernate.ddl-auto=update` is enabled, but the checked-in SQL schema is still the clearest source for the database tables expected by the controllers.
 - `target/` contains generated build output and should not be edited manually.

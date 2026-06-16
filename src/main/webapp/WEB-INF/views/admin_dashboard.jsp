@@ -431,7 +431,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="image"><i class="fas fa-image"></i> Event Image</label>
+                        <label for="image"><i class="fas fa-image"></i> Event Image (1700 x 950 px recommended)</label>
                         <input type="file" id="image" name="image" accept="image/*">
                     </div>
 
@@ -530,6 +530,7 @@
                                                     <input type="number" name="guest_limit" min="1" max="${event.subCapacityRemaining}" placeholder="Guest limit, max ${event.subCapacityRemaining}" required>
                                                     <input type="text" name="location" placeholder="Location" class="wide" required>
                                                     <textarea name="description" placeholder="Description" class="wide"></textarea>
+                                                    <span class="muted wide">Sub-Event Image (1700 x 950 px recommended)</span>
                                                     <input type="file" name="image" accept="image/*" class="wide" required>
                                                     <span class="muted wide">Remaining sub-event capacity: ${event.subCapacityRemaining}</span>
                                                     <button type="submit" class="btn btn-primary wide">
@@ -771,6 +772,7 @@
                 <input type="text" name="sub_location" placeholder="Location" class="wide">
                 <textarea name="sub_description" placeholder="Description" class="wide"></textarea>
                 <input type="number" name="sub_guest_limit" min="1" placeholder="Guest limit" class="sub-guest-limit" oninput="updateSubCapacityHint()">
+                <span class="muted wide" style="margin-top: 5px;">Sub-Event Image (1700 x 950 px recommended)</span>
                 <input type="file" name="sub_image" accept="image/*" class="wide" required>
                 <button type="button" class="btn btn-danger" onclick="this.closest('.sub-event-row').remove(); updateSubCapacityHint();">
                     <i class="fas fa-trash"></i> Remove

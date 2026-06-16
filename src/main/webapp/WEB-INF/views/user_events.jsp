@@ -446,7 +446,7 @@
         }
 
         .container {
-            max-width: 1240px;
+            max-width: 1700px;
             padding: 6.25rem 1.5rem 3rem;
             background: transparent;
             border: 0;
@@ -593,36 +593,101 @@
         }
 
         .events-list {
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.25rem;
-            margin-top: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+            margin-top: 1.5rem;
         }
 
         .event-card {
             display: flex;
             flex-direction: column;
-            padding: 1.25rem;
+            padding: 1.5rem;
+            background: linear-gradient(145deg, rgba(20, 23, 28, 0.98), rgba(7, 8, 10, 0.96));
+            border-radius: var(--radius);
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--color-border);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            transition: all var(--transition-speed) ease;
+        }
+
+        .event-card::before {
+            content: '';
+            position: absolute;
+            inset: 0 0 auto 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--color-accent-teal), var(--color-accent-gold), var(--color-accent-green));
+        }
+
+        .event-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--color-border-strong);
+            box-shadow: 0 24px 54px -14px rgba(45, 212, 191, 0.28);
         }
 
         .event-card h2 {
-            font-size: 1.35rem;
+            font-size: 1.8rem;
             line-height: 1.3;
+            margin-top: 0;
             margin-bottom: 1rem;
+            color: var(--color-text-primary);
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--color-border);
         }
 
         .event-card .description {
-            flex: 1;
-            line-height: 1.65;
+            margin: 1rem 0;
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+            font-size: 1.05rem;
         }
 
         .event-image {
             width: 100%;
-            height: auto;
-            max-height: none;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.14);
-            margin-bottom: 1rem;
+            aspect-ratio: 1700 / 950;
+            object-fit: cover;
+            border-radius: var(--radius);
+            border: 1px solid var(--color-border);
+            margin-bottom: 0;
             display: block;
+        }
+
+        .event-main-split {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .event-image-container {
+            width: 100%;
+        }
+
+        .event-details-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        @media (min-width: 1025px) {
+            .event-card {
+                padding: 2.5rem;
+            }
+            .event-main-split {
+                flex-direction: row;
+                gap: 2.5rem;
+                align-items: stretch;
+            }
+            .event-image-container {
+                flex: 1 1 60%;
+                max-width: 60%;
+            }
+            .event-details-container {
+                flex: 1 1 40%;
+                max-width: 40%;
+            }
         }
 
         .event-card .date,
@@ -800,126 +865,148 @@
         <div class="events-list">
             <c:forEach var="event" items="${events}">
                 <div class="event-card">
-                    <c:if test="${not empty event.imagePath}">
-                        <img src="${pageContext.request.contextPath}${event.imagePath}" alt="${event.name}" class="event-image">
-                    </c:if>
-                    <div class="event-kind">
-                        <c:choose>
-                            <c:when test="${event.majorEvent}">
-                                <i class="fas fa-layer-group"></i> Major Event
-                            </c:when>
-                            <c:otherwise>
-                                <i class="fas fa-calendar-day"></i> Simple Event
-                            </c:otherwise>
-                        </c:choose>
-                    </div>
-                    <h2>${event.name}</h2>
-                    <p class="date">
-                        <i class="far fa-calendar-alt"></i>
-                        Date: ${event.date}
-                    </p>
-                    <p class="location">
-                        <i class="fas fa-map-marker-alt"></i>
-                        Location: ${event.location}
-                    </p>
-                    <p class="description">${event.description}</p>
-                    <p class="guests">
-                        <i class="fas fa-users"></i>
-                        Available Spots: ${event.availableSpots}
-                    </p>
-
-                    <c:if test="${not empty event.bookingStatus}">
-                        <div class="booking-status">
-                            <i class="fas fa-check-circle"></i> ${event.bookingStatus}
+                    <div class="event-main-split">
+                        <div class="event-image-container">
+                            <c:choose>
+                                <c:when test="${not empty event.imagePath}">
+                                    <img src="${pageContext.request.contextPath}${event.imagePath}" alt="${event.name}" class="event-image">
+                                </c:when>
+                                <c:otherwise>
+                                    <img src="${pageContext.request.contextPath}/images/eventbg0.jpg" alt="${event.name}" class="event-image">
+                                </c:otherwise>
+                            </c:choose>
                         </div>
-                    </c:if>
-                    
-                    <c:if test="${event.canBook}">
-                        <form method="post" action="${pageContext.request.contextPath}/" class="booking-form">
-                            <input type="hidden" name="event_id" value="${event.id}">
-                            <div class="booking-form-title">
-                                <i class="fas fa-pen"></i>
+                        <div class="event-details-container">
+                            <div class="event-kind">
                                 <c:choose>
-                                    <c:when test="${event.bookingStatus == 'Upgrade Available'}">Upgrade to major event pass</c:when>
-                                    <c:otherwise>Reserve your spot</c:otherwise>
+                                    <c:when test="${event.majorEvent}">
+                                        <i class="fas fa-layer-group"></i> Major Event
+                                    </c:when>
+                                    <c:otherwise>
+                                        <i class="fas fa-calendar-day"></i> Simple Event
+                                    </c:otherwise>
                                 </c:choose>
                             </div>
-                            <div class="form-group">
-                                <label for="name-${event.id}" class="form-label">Your Name</label>
-                                <input type="text" id="name-${event.id}" name="name" placeholder="e.g. John Doe" value="${sessionScope.authName}" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="email-${event.id}" class="form-label">Your Email</label>
-                                <input type="email" id="email-${event.id}" name="email" placeholder="e.g. john@example.com" value="${sessionScope.authEmail}" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-ticket-alt"></i>
-                                <c:choose>
-                                    <c:when test="${event.bookingStatus == 'Upgrade Available'}">Upgrade Pass</c:when>
-                                    <c:otherwise>Book Event</c:otherwise>
-                                </c:choose>
-                            </button>
-                        </form>
-                    </c:if>
-                    <c:if test="${not event.canBook and empty event.bookingStatus}">
-                        <p class="fully-booked">
-                            <i class="fas fa-exclamation-circle"></i> The event is Housefull you can explore other events
-                        </p>
-                    </c:if>
+                            <h2>${event.name}</h2>
+                            <p class="date">
+                                <i class="far fa-calendar-alt"></i>
+                                Date: ${event.date}
+                            </p>
+                            <p class="location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                Location: ${event.location}
+                            </p>
+                            <p class="description">${event.description}</p>
+                            <p class="guests">
+                                <i class="fas fa-users"></i>
+                                Available Spots: ${event.availableSpots}
+                            </p>
 
+                            <c:if test="${not empty event.bookingStatus}">
+                                <div class="booking-status">
+                                    <i class="fas fa-check-circle"></i> ${event.bookingStatus}
+                                </div>
+                            </c:if>
+                            
+                            <c:if test="${event.canBook}">
+                                <form method="post" action="${pageContext.request.contextPath}/" class="booking-form">
+                                    <input type="hidden" name="event_id" value="${event.id}">
+                                    <div class="booking-form-title">
+                                        <i class="fas fa-pen"></i>
+                                        <c:choose>
+                                            <c:when test="${event.bookingStatus == 'Upgrade Available'}">Upgrade to major event pass</c:when>
+                                            <c:otherwise>Reserve your spot</c:otherwise>
+                                        </c:choose>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="name-${event.id}" class="form-label">Your Name</label>
+                                        <input type="text" id="name-${event.id}" name="name" placeholder="e.g. John Doe" value="${sessionScope.authName}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email-${event.id}" class="form-label">Your Email</label>
+                                        <input type="email" id="email-${event.id}" name="email" placeholder="e.g. john@example.com" value="${sessionScope.authEmail}" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-ticket-alt"></i>
+                                        <c:choose>
+                                            <c:when test="${event.bookingStatus == 'Upgrade Available'}">Upgrade Pass</c:when>
+                                            <c:otherwise>Book Event</c:otherwise>
+                                        </c:choose>
+                                    </button>
+                                </form>
+                            </c:if>
+                            <c:if test="${not event.canBook and empty event.bookingStatus}">
+                                <p class="fully-booked">
+                                    <i class="fas fa-exclamation-circle"></i> The event is Housefull you can explore other events
+                                </p>
+                            </c:if>
+                        </div>
+                    </div>
+                    
                     <c:if test="${event.majorEvent}">
                         <div class="sub-events">
                             <h3><i class="fas fa-stream"></i> Sub Events</h3>
                             <c:forEach var="subEvent" items="${event.subEvents}">
                                 <div class="sub-event-card">
-                                    <c:if test="${not empty subEvent.imagePath}">
-                                        <img src="${pageContext.request.contextPath}${subEvent.imagePath}" alt="${subEvent.name}" class="event-image">
-                                    </c:if>
-                                    <h4>${subEvent.name}</h4>
-                                    <p class="date">
-                                        <i class="far fa-calendar-alt"></i>
-                                        Date: ${subEvent.date}
-                                    </p>
-                                    <p class="location">
-                                        <i class="fas fa-map-marker-alt"></i>
-                                        Location: ${subEvent.location}
-                                    </p>
-                                    <p class="description">${subEvent.description}</p>
-                                    <p class="guests">
-                                        <i class="fas fa-users"></i>
-                                        Available Spots: ${subEvent.availableSpots}
-                                    </p>
-
-                                    <c:if test="${not empty subEvent.bookingStatus}">
-                                        <div class="booking-status">
-                                            <i class="fas fa-check-circle"></i> ${subEvent.bookingStatus}
+                                    <div class="event-main-split">
+                                        <div class="event-image-container">
+                                            <c:choose>
+                                                <c:when test="${not empty subEvent.imagePath}">
+                                                    <img src="${pageContext.request.contextPath}${subEvent.imagePath}" alt="${subEvent.name}" class="event-image">
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <img src="${pageContext.request.contextPath}/images/eventbg0.jpg" alt="${subEvent.name}" class="event-image">
+                                                </c:otherwise>
+                                            </c:choose>
                                         </div>
-                                    </c:if>
+                                        <div class="event-details-container">
+                                            <h4>${subEvent.name}</h4>
+                                            <p class="date">
+                                                <i class="far fa-calendar-alt"></i>
+                                                Date: ${subEvent.date}
+                                            </p>
+                                            <p class="location">
+                                                <i class="fas fa-map-marker-alt"></i>
+                                                Location: ${subEvent.location}
+                                            </p>
+                                            <p class="description">${subEvent.description}</p>
+                                            <p class="guests">
+                                                <i class="fas fa-users"></i>
+                                                Available Spots: ${subEvent.availableSpots}
+                                            </p>
 
-                                    <c:if test="${subEvent.canBook}">
-                                        <form method="post" action="${pageContext.request.contextPath}/" class="booking-form">
-                                            <input type="hidden" name="event_id" value="${subEvent.id}">
-                                            <div class="booking-form-title">
-                                                <i class="fas fa-pen"></i> Reserve this sub event
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="name-${subEvent.id}" class="form-label">Your Name</label>
-                                                <input type="text" id="name-${subEvent.id}" name="name" placeholder="e.g. John Doe" value="${sessionScope.authName}" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="email-${subEvent.id}" class="form-label">Your Email</label>
-                                                <input type="email" id="email-${subEvent.id}" name="email" placeholder="e.g. john@example.com" value="${sessionScope.authEmail}" required>
-                                            </div>
-                                            <button type="submit" class="btn btn-primary">
-                                                <i class="fas fa-ticket-alt"></i> Book Sub Event
-                                            </button>
-                                        </form>
-                                    </c:if>
-                                    <c:if test="${not subEvent.canBook and empty subEvent.bookingStatus}">
-                                        <p class="fully-booked">
-                                            <i class="fas fa-exclamation-circle"></i> The event is Housefull you can explore other events
-                                        </p>
-                                    </c:if>
+                                            <c:if test="${not empty subEvent.bookingStatus}">
+                                                <div class="booking-status">
+                                                    <i class="fas fa-check-circle"></i> ${subEvent.bookingStatus}
+                                                </div>
+                                            </c:if>
+
+                                            <c:if test="${subEvent.canBook}">
+                                                <form method="post" action="${pageContext.request.contextPath}/" class="booking-form">
+                                                    <input type="hidden" name="event_id" value="${subEvent.id}">
+                                                    <div class="booking-form-title">
+                                                        <i class="fas fa-pen"></i> Reserve this sub event
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="name-${subEvent.id}" class="form-label">Your Name</label>
+                                                        <input type="text" id="name-${subEvent.id}" name="name" placeholder="e.g. John Doe" value="${sessionScope.authName}" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="email-${subEvent.id}" class="form-label">Your Email</label>
+                                                        <input type="email" id="email-${subEvent.id}" name="email" placeholder="e.g. john@example.com" value="${sessionScope.authEmail}" required>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary">
+                                                        <i class="fas fa-ticket-alt"></i> Book Sub Event
+                                                    </button>
+                                                </form>
+                                            </c:if>
+                                            <c:if test="${not subEvent.canBook and empty subEvent.bookingStatus}">
+                                                <p class="fully-booked">
+                                                    <i class="fas fa-exclamation-circle"></i> The event is Housefull you can explore other events
+                                                </p>
+                                            </c:if>
+                                        </div>
+                                    </div>
                                 </div>
                             </c:forEach>
                         </div>

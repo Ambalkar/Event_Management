@@ -22,6 +22,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpSession;
+import javax.imageio.ImageIO;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -594,21 +598,50 @@ public class AdminController {
             throw new IOException("Only image files can be uploaded.");
         }
 
-        String originalName = image.getOriginalFilename();
-        String extension = ".jpg";
-        if (originalName != null && originalName.lastIndexOf('.') >= 0) {
-            extension = originalName.substring(originalName.lastIndexOf('.')).replaceAll("[^A-Za-z0-9.]", "");
-            if (extension.isEmpty()) {
-                extension = ".jpg";
-            }
+        BufferedImage originalImage = ImageIO.read(image.getInputStream());
+        if (originalImage == null) {
+            throw new IOException("Could not decode image file.");
         }
+
+        int targetWidth = 1700;
+        int targetHeight = 950;
+
+        BufferedImage resizedImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2d = resizedImage.createGraphics();
+
+        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        int originalWidth = originalImage.getWidth();
+        int originalHeight = originalImage.getHeight();
+        double targetAspect = (double) targetWidth / targetHeight;
+        double originalAspect = (double) originalWidth / originalHeight;
+
+        int srcX = 0, srcY = 0, srcWidth = originalWidth, srcHeight = originalHeight;
+
+        if (originalAspect > targetAspect) {
+            srcWidth = (int) (originalHeight * targetAspect);
+            srcX = (originalWidth - srcWidth) / 2;
+        } else {
+            srcHeight = (int) (originalWidth / targetAspect);
+            srcY = (originalHeight - srcHeight) / 2;
+        }
+
+        g2d.drawImage(originalImage, 0, 0, targetWidth, targetHeight, srcX, srcY, srcX + srcWidth, srcY + srcHeight, null);
+        g2d.dispose();
 
         Path uploadDir = Paths.get(System.getProperty("user.dir"), "uploads", "images", "events");
         Files.createDirectories(uploadDir);
 
-        String fileName = "event-" + System.currentTimeMillis() + "-" + java.util.UUID.randomUUID() + extension;
+        String fileName = "event-" + System.currentTimeMillis() + "-" + java.util.UUID.randomUUID() + ".jpg";
         Path target = uploadDir.resolve(fileName);
-        image.transferTo(target.toFile());
+
+        boolean written = ImageIO.write(resizedImage, "jpg", target.toFile());
+        if (!written) {
+            throw new IOException("Failed to write image file.");
+        }
+
         return "/images/events/" + fileName;
     }
 }
